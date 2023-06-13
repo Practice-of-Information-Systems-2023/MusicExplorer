@@ -1,7 +1,7 @@
-const URL = "ws://localhost:3000/";
+const URL = "ws://localhost:3000/websocket/test";
 const PROTOCOL = "ws-sample";
 
-const socket = new WebSocket(URL, PROTOCOL);
+const socket = new WebSocket(URL);
 
 // ------------------------------
 // WebSocket イベント
