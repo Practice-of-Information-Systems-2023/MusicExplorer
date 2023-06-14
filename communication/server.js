@@ -12,6 +12,9 @@ expressWs(app);
 const websocketRouter = require("./websocket");
 app.use("/websocket", websocketRouter);
 
+const httpRouter = require("./http");
+app.use("/http", httpRouter);
+
 app.get("*", (req, res) => {
   res.sendStatus(404);
 });
