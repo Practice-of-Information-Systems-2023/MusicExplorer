@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+    <head>
+        <title>Youtubeの動画のテスト</title>
+    </head>
+    <body>
+        <center>
+            <div id="player" height=320 width=480></div>
+            <br>
+            <button type="button" onclick='playMusic("gdqGq0rZ5LU")'>曲1を再生</button>
+            <button type="button" onclick='playMusic("1weNnjzaXbY")'>曲2を再生</button>
+            <button type="button" onclick='playMusic("DeBG1g1BRMA")'>曲3を再生</button>
+        </center>
+
+        <script src="https://www.youtube.com/iframe_api"></script>
+        <script src="YoutubePlayer.js"></script>
+        <script>
+            var player = new YoutubePlayer("player", function(){});
+            function playMusic(videoId){
+                player.playVideoById(videoId);
+            }
+        </script>
+        
+    </body>
+</html>
