@@ -1,9 +1,14 @@
 class Scene{
+    mainCamera;
     constructor(){
         this.gameObjects = [];
     }
     addGameObject(gameObject){
         this.gameObjects.push(gameObject);
+        gameObject.scene = this;
+        if(gameObject.camera != null){
+            this.mainCamera = gameObject.camera;
+        }
         return gameObject;
     }
     update(dt){
@@ -14,12 +19,14 @@ class Scene{
 };
 
 class GameObject{
+    scene;
     constructor(transform){
         this.transform = transform;
         this.transform.gameObject = this;
-        this.controller = Component.empty();
-        this.animator = Component.empty();
-        this.renderer = Component.empty();
+        this.controller = null;
+        this.animator = null;
+        this.renderer = null;
+        this.camera = null;
     }
     setAnimator(animator){
         this.animator = animator;
@@ -33,10 +40,15 @@ class GameObject{
         this.renderer = renderer;
         renderer.gameObject = this;
     }
+    setCamera(camera){
+        this.camera = camera;
+        camera.gameObject = this;
+    }
     update(dt){
-        this.controller.update(dt);
-        this.animator.update(dt);
-        this.renderer.update(dt);
+        if(this.controller != null) this.controller.update(dt);
+        if(this.animator != null) this.animator.update(dt);
+        if(this.renderer != null) this.renderer.update(dt);
+        if(this.camera != null) this.camera.update(dt);
     }
 };
 

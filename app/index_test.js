@@ -5,20 +5,32 @@ var width = canvas.width;
 var fps = 30;
 
 function init(){
-    var scene = new Scene();
-    scene.addGameObject(Prefabs.playerCharacter(
-        new Vector2(width/2, height/2),
+    const scene = new Scene();
+    const camera = scene.addGameObject(Prefabs.camera(
+        Vector2.zero,
+    )); 
+    const background = scene.addGameObject(Prefabs.spriteObject(
+        Vector2.zero,
+        context,
+        BACK_SPRITE
+    )); 
+    const player = scene.addGameObject(Prefabs.playerCharacter(
+        Vector2.zero,
         context,
         KeyConfig.ARROW
     )); 
-    scene.addGameObject(Prefabs.playerCharacter(
-        new Vector2(width/2+100, height/2),
+    const other = scene.addGameObject(Prefabs.playerCharacter(
+        new Vector2(100, 0),
         context,
         KeyConfig.ASDW
     ));
+    camera.camera.updateProcess = function(){
+        camera.transform.position.set(player.transform.position);
+    }
     setInterval(function(){
         context.clearRect(0,0,width,height);
         scene.update(1/fps);
+        //scene.mainCamera.gameObject.transform.position.set(player.transform.position);
     },1000/fps);
 }
 init();

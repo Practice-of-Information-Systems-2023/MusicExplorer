@@ -77,6 +77,11 @@ class Vector2{
     clone(){
         return new Vector2(this.x, this.y);
     }
+    set(v){
+        this.x = v.x;
+        this.y = v.y;
+        return this;
+    }
     add(v){
         this.x += v.x;
         this.y += v.y;

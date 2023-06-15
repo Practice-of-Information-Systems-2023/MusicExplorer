@@ -3,16 +3,31 @@ const CHARA_SPRITE_1 = new Sprite(
     192, 192,
     4, 6
 );
+const BACK_SPRITE = new Sprite(
+    "background.png",
+    512, 512,
+    1, 1
+);
 
 class Prefabs{
     static playerCharacter(position, context, keyConfig){
-        const obj = new GameObject(new Transform(position, Vector2.one))
-        obj.setAnimator(new CharacterAnimator(Prefabs.charachipAnimations(),"down"));
-        obj.setRenderer(new CharacterRenderer(context, CHARA_SPRITE_1));
+        const obj = new GameObject(new Transform(position, Vector2.one));
+        obj.setAnimator(new CharacterAnimator(Prefabs.CHARACHIP_ANIMATIONS,"down"));
+        obj.setRenderer(new Renderer(context, CHARA_SPRITE_1));
         obj.setController(new CharacterController(keyConfig));
         return obj;
     }
-    static charachipAnimations(){
+    static spriteObject(position, context, sprite){
+        const obj = new GameObject(new Transform(position, Vector2.one));
+        obj.setRenderer(new Renderer(context, sprite));
+        return obj;
+    }
+    static camera(position){
+        const obj = new GameObject(new Transform(position, Vector2.one));
+        obj.setCamera(new Camera(1,480,320));
+        return obj;
+    }
+    static get CHARACHIP_ANIMATIONS(){
         return {
             'up':           new Animation([19],[3]),
             'down':         new Animation([ 1],[3]),

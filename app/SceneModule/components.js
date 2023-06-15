@@ -1,7 +1,14 @@
 class Component{
     gameObject;
-    constructor(){}
-    update(dt){}
+    updateProcess;
+    constructor(){
+        this.updateProcess = null;
+    }
+    update(dt){
+        if(this.updateProcess != null){
+            this.updateProcess();
+        }
+    }
     static empty(){return new Component();}
 }
 class Transform extends Component{
@@ -12,6 +19,23 @@ class Transform extends Component{
     }
     translate(vector){
         this.position.add(vector);
+    }
+}
+
+class Camera extends Component{
+    constructor(zoomRate, width, height){
+        super();
+        this.zoomRate = zoomRate;
+        this.width = width;
+        this.height = height;
+    }
+    projection(position, scale){
+        const canvasPosition = position.clone()
+            .sub(this.gameObject.transform.position)
+            .times(this.zoomRate)
+            .add(new Vector2(this.width/2, this.height/2));
+        const canvasScale = scale.clone().times(this.zoomRate);
+        return [canvasPosition, canvasScale];
     }
 }
 
@@ -65,7 +89,7 @@ class CharacterAnimator extends Component{
     }
 }
 
-class CharacterRenderer extends Component{
+class Renderer extends Component{
     constructor(context, sprite){
         super();
         this.context = context;
@@ -73,11 +97,16 @@ class CharacterRenderer extends Component{
     }
     update(dt){
         const obj = this.gameObject;
+        const positionAndScale = obj.scene.mainCamera.projection(obj.transform.position, obj.transform.scale);
+        var state = 0;
+        if(obj.animator != null){
+            state = obj.animator.state;
+        }
         this.sprite.drawSprite(
             this.context,
-            obj.animator.state,
-            obj.transform.position,
-            obj.transform.scale
+            state,
+            positionAndScale[0],
+            positionAndScale[1]
         );
     }
 }
@@ -106,15 +135,11 @@ class CharacterController extends Component{
         this.isMoving = false;
     }
     getKeyForce(){
-        const up = new Vector2(0, -100);
-        const down = new Vector2(0, 100);
-        const right = new Vector2(100, 0);
-        const left = new Vector2(-100, 0);
         return {
-            'UP':      up,
-            'DOWN':    down,
-            'RIGHT':   right,
-            'LEFT':    left,
+            'UP':      new Vector2(0, -120),
+            'DOWN':    new Vector2(0, 120),
+            'RIGHT':   new Vector2(120, 0),
+            'LEFT':    new Vector2(-120, 0),
         }
     }
     onKeyDown(event){
