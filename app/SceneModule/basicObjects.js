@@ -43,6 +43,7 @@ class GameObject{
         this.animator = null;
         this.renderer = null;
         this.camera = null;
+        this.musicObject = null;
     }
     setAnimator(animator){
         this.animator = animator;
@@ -60,11 +61,40 @@ class GameObject{
         this.camera = camera;
         camera.gameObject = this;
     }
+    setMusicObject(musicObject){
+        this.musicObject = musicObject;
+        musicObject.gameObject = this;
+    }
     update(dt){
         if(this.controller != null) this.controller.update(dt);
         if(this.animator != null) this.animator.update(dt);
         //if(this.renderer != null) this.renderer.update(dt);
         if(this.camera != null) this.camera.update(dt);
+        if(this.musicObject != null) this.musicObject.update(dt);
     }
 };
 
+class AudioController{
+    constructor(youtubePlayer){
+        this.preVideoId = null;
+        this.init();
+        this.youtubePlayer = youtubePlayer;
+    }
+    init(){
+        this.videoId = null;
+        this.minDistance = -1;
+    }
+    registerAudioSource(dist, videoId){
+        if(this.minDistance<0 || dist<this.minDistance){
+            this.videoId = videoId;
+            this.minDistance = dist;
+        }
+    }
+    playVideo(){
+        if(this.preVideoId != this.videoId && this.videoId != ""){
+            this.preVideoId = this.videoId;
+            this.youtubePlayer.playVideoById(this.videoId);
+        }
+        this.init();
+    }
+}

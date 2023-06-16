@@ -119,10 +119,18 @@ class SpriteRenderer extends Component{
     }
 }
 
-class YoutubePlayer extends Component{
-    constructor(videoId){
+class MusicObject extends Component{
+    constructor(videoId, player, audioController){
         super();
         this.videoId = videoId;
+        this.player = player;
+        this.audioController = audioController;
+    }
+    update(dt){
+        const sqDist = this.player.transform.position.clone()
+                        .sub(this.gameObject.transform.position)
+                        .sqMagnitude
+        this.audioController.registerAudioSource(sqDist, this.videoId);
     }
 };
 

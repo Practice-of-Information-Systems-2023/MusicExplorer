@@ -19,13 +19,13 @@ class KeyConfig{
 }
 
 class Sprite{
-    constructor(filename, width, height, row, column){
+    constructor(filename, width, height, row, column, pivot){
         this.image = new Image(width, height);
         this.image.src = filename;
         this.row = row;
         this.column = column;
         this.size = new Vector2(width/column, height/row);
-        this.pivot = this.size.clone().times(0.5);
+        this.pivot = this.size.clone().timesVector2(pivot);
     }
     drawSprite(context, index, position, scale){
         context.drawImage(
