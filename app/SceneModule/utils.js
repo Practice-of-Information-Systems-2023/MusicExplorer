@@ -82,6 +82,11 @@ class Vector2{
         this.y = v.y;
         return this;
     }
+    setValue(x,y){
+        this.x = x;
+        this.y = y;
+        return this;
+    }
     add(v){
         this.x += v.x;
         this.y += v.y;

@@ -66,6 +66,7 @@ class GameObject{
         musicObject.gameObject = this;
     }
     update(dt){
+        if(this.transform != null) this.transform.update(dt);
         if(this.controller != null) this.controller.update(dt);
         if(this.animator != null) this.animator.update(dt);
         //if(this.renderer != null) this.renderer.update(dt);

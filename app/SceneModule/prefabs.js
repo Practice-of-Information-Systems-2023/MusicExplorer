@@ -6,7 +6,7 @@ const CHARA_SPRITE_1 = new Sprite(
 );
 const BACK_SPRITE = new Sprite(
     "background.png",
-    512, 512,
+    576, 512,
     1, 1,
     new Vector2(0.5,0.5)
 );

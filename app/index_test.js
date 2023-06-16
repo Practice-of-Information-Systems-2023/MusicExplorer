@@ -31,13 +31,14 @@ function init(){
         context,
         KeyConfig.ASDW
     ));
-    /*const audioSource = scene.addGameObject(Prefabs.spriteObject(
-        Vector2.zero,
-        context,
-        BACK_SPRITE
-    ));*/
     camera.camera.updateProcess = function(){
         camera.transform.position.set(player.transform.position);
+    };
+    background.transform.updateProcess = function(){
+        background.transform.position.setValue(
+            player.transform.position.x - player.transform.position.x % 32,
+            player.transform.position.y - player.transform.position.y % 32
+        );
     };
 
     scene.addGameObject(Prefabs.audioPlayer(
@@ -64,10 +65,12 @@ function init(){
     ));
 
     var time = 0;
+    var t = 0;
     setInterval(function(){
         context.clearRect(0,0,width,height);
         scene.update(1/fps);
-        //camera.camera.zoomRate = 1.5+Math.cos(time);
+        //camera.camera.zoomRate = 1.5+Math.cos(t);
+        t += 0.05;
         time += 1000/fps;
         if(time > 500){
             audioController.playVideo();
