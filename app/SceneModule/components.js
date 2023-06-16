@@ -39,7 +39,7 @@ class Camera extends Component{
     }
 }
 
-class CharacterAnimator extends Component{
+class Animator extends Component{
     constructor(animations, initState){
         super();
         this.animations = animations;
@@ -59,6 +59,12 @@ class CharacterAnimator extends Component{
         this.time = this.nowAnimation.update(this.time + dt);
         this.state = this.nowAnimation.state;
     }
+    getStateName(){
+        return "";
+    }
+}
+
+class CharacterAnimator extends Animator{
     getStateName(){
         var stateName;
         const controller = this.gameObject.controller;
@@ -89,15 +95,17 @@ class CharacterAnimator extends Component{
     }
 }
 
-class Renderer extends Component{
-    constructor(context, sprite){
+class SpriteRenderer extends Component{
+    constructor(context, sprite, renderingOrder = 0){
         super();
         this.context = context;
         this.sprite = sprite;
+        this.renderingOrder = renderingOrder;
     }
     update(dt){
         const obj = this.gameObject;
-        const positionAndScale = obj.scene.mainCamera.projection(obj.transform.position, obj.transform.scale);
+        const positionAndScale 
+            = obj.scene.mainCamera.projection(obj.transform.position, obj.transform.scale);
         var state = 0;
         if(obj.animator != null){
             state = obj.animator.state;
@@ -110,6 +118,13 @@ class Renderer extends Component{
         );
     }
 }
+
+class YoutubePlayer extends Component{
+    constructor(videoId){
+        super();
+        this.videoId = videoId;
+    }
+};
 
 class CharacterController extends Component{
     constructor(keyConfig){

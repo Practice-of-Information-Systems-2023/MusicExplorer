@@ -2,6 +2,7 @@ class Scene{
     mainCamera;
     constructor(){
         this.gameObjects = [];
+        this.renderers = [];
     }
     addGameObject(gameObject){
         this.gameObjects.push(gameObject);
@@ -9,11 +10,26 @@ class Scene{
         if(gameObject.camera != null){
             this.mainCamera = gameObject.camera;
         }
+        if(gameObject.renderer != null){
+            this.renderers.push(gameObject.renderer);
+        }
         return gameObject;
     }
     update(dt){
         for(let i=0; i<this.gameObjects.length; i+=1){
             this.gameObjects[i].update(dt);
+        }
+        this.renderers.sort(function(a,b){
+            if(a.renderingOrder < b.renderingOrder)return -1;
+            else if(a.renderingOrder > b.renderingOrder)return 1;
+            else{
+                if(a.gameObject.transform.position.y < b.gameObject.transform.position.y)return -1;
+                else if(a.gameObject.transform.position.y > b.gameObject.transform.position.y)return 1;
+            }
+            return 0;
+        });
+        for(let i=0; i<this.renderers.length; i+=1){
+            this.renderers[i].update(dt);
         }
     }
 };
@@ -47,7 +63,7 @@ class GameObject{
     update(dt){
         if(this.controller != null) this.controller.update(dt);
         if(this.animator != null) this.animator.update(dt);
-        if(this.renderer != null) this.renderer.update(dt);
+        //if(this.renderer != null) this.renderer.update(dt);
         if(this.camera != null) this.camera.update(dt);
     }
 };

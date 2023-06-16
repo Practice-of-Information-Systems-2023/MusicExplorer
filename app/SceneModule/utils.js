@@ -34,8 +34,8 @@ class Sprite{
             this.size.y * Math.floor(index/this.column),
             this.size.x,
             this.size.y,
-            position.x - this.pivot.x,
-            position.y - this.pivot.y,
+            position.x - this.pivot.x * scale.x,
+            position.y - this.pivot.y * scale.y,
             this.size.x * scale.x,
             this.size.y * scale.y,
         );

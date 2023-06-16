@@ -13,13 +13,19 @@ class Prefabs{
     static playerCharacter(position, context, keyConfig){
         const obj = new GameObject(new Transform(position, Vector2.one));
         obj.setAnimator(new CharacterAnimator(Prefabs.CHARACHIP_ANIMATIONS,"down"));
-        obj.setRenderer(new Renderer(context, CHARA_SPRITE_1));
+        obj.setRenderer(new SpriteRenderer(context, CHARA_SPRITE_1, 10));
         obj.setController(new CharacterController(keyConfig));
         return obj;
     }
-    static spriteObject(position, context, sprite){
+    static spriteObject(position, context, sprite, renderingOrder){
         const obj = new GameObject(new Transform(position, Vector2.one));
-        obj.setRenderer(new Renderer(context, sprite));
+        obj.setRenderer(new SpriteRenderer(context, sprite, renderingOrder));
+        return obj;
+    }
+    static audioPlayer(position, context, sprite, videoId){
+        const obj = new GameObject(new Transform(position, Vector2.one));
+        obj.setRenderer(new SpriteRenderer(context, sprite));
+        obj.setYoutubePlayer(new YoutubePlayer(context, videoId));
         return obj;
     }
     static camera(position){
