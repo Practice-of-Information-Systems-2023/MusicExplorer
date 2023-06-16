@@ -77,18 +77,25 @@ class GameObject{
 
 class AudioController{
     constructor(youtubePlayer){
-        this.preVideoId = null;
+        this.preVideoId = "";
+        this.videoId = "";
         this.init();
         this.youtubePlayer = youtubePlayer;
     }
     init(){
-        this.videoId = null;
+        this.videoId = "";
         this.minDistance = -1;
+        this.secondMinDistance = -1;
     }
     registerAudioSource(dist, videoId){
         if(this.minDistance<0 || dist<this.minDistance){
             this.videoId = videoId;
+            this.secondMinDistance = this.minDistance;
             this.minDistance = dist;
+        }else if(this.minDistance>0 && dist>=this.minDistance){
+            if(this.secondMinDistance<0 || dist<this.secondMinDistance){
+                this.secondMinDistance = dist;
+            }
         }
     }
     playVideo(){
@@ -96,6 +103,20 @@ class AudioController{
             this.preVideoId = this.videoId;
             this.youtubePlayer.playVideoById(this.videoId);
         }
-        this.init();
+    }
+    updateVolume(){
+        if(this.minDistance >= 0 && this.secondMinDistance >= 0){
+            var volume = 1 - this.minDistance / this.secondMinDistance;
+            volume = volume**2;
+            volume = Math.floor(this.volumeAdjust(volume) * 100);
+            this.youtubePlayer.setVolume(volume);
+        }
+    }
+    volumeAdjust(x){
+        if(x<=0.5){
+            return 8*(x**4);
+        }else{
+            return 1-8*((x-1)**4);
+        }
     }
 }

@@ -40,4 +40,7 @@ class YoutubePlayer{
     playVideoById(videoId){
         this.player.loadVideoById(videoId);
     }
+    setVolume(volume){
+        this.player.setVolume(volume);
+    }
 };
