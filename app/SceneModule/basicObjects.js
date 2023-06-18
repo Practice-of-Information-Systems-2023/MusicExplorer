@@ -1,25 +1,29 @@
 class Scene{
     mainCamera;
     constructor(){
-        this.gameObjects = [];
-        this.renderers = [];
+        this.gameObjects = new Set();
+        this.renderers = new Set();
     }
     addGameObject(gameObject){
-        this.gameObjects.push(gameObject);
+        this.gameObjects.add(gameObject);
         gameObject.scene = this;
         if(gameObject.camera != null){
             this.mainCamera = gameObject.camera;
         }
         if(gameObject.renderer != null){
-            this.renderers.push(gameObject.renderer);
+            this.renderers.add(gameObject.renderer);
         }
         return gameObject;
     }
     update(dt){
-        for(let i=0; i<this.gameObjects.length; i+=1){
-            this.gameObjects[i].update(dt);
+        for(let gameObject of this.gameObjects){
+            gameObject.update(dt);
         }
-        this.renderers.sort(function(a,b){
+        var renderers = [];
+        for(let renderer of this.renderers){
+            renderers.push(renderer);
+        }
+        renderers.sort(function(a,b){
             if(a.renderingOrder < b.renderingOrder)return -1;
             else if(a.renderingOrder > b.renderingOrder)return 1;
             else{
@@ -28,9 +32,16 @@ class Scene{
             }
             return 0;
         });
-        for(let i=0; i<this.renderers.length; i+=1){
-            this.renderers[i].update(dt);
+        for(let i=0; i<renderers.length; i+=1){
+            renderers[i].update(dt);
         }
+    }
+    deleteGameObject(gameObject){
+        this.gameObjects.delete(gameObject);
+        if(gameObject.renderer != null){
+            this.renderers.delete(gameObject.renderer);
+        }
+        gameObject.delete();
     }
 };
 
@@ -71,9 +82,16 @@ class GameObject{
         if(this.transform != null) this.transform.update(dt);
         if(this.controller != null) this.controller.update(dt);
         if(this.animator != null) this.animator.update(dt);
-        //if(this.renderer != null) this.renderer.update(dt);
         if(this.camera != null) this.camera.update(dt);
         if(this.musicObject != null) this.musicObject.update(dt);
+    }
+    delete(){
+        this.transform = null;
+        this.controller = null;
+        this.animator = null;
+        this.renderer = null;
+        this.camera = null;
+        this.musicObject = null;
     }
 };
 

@@ -31,10 +31,10 @@ class Prefabs{
         obj.setRenderer(new SpriteRenderer(context, sprite, renderingOrder));
         return obj;
     }
-    static audioPlayer(position, context, videoId, player, audioController){
+    static audioPlayer(position, context, videoId, player, audioController, musicId){
         const obj = new GameObject(new Transform(position, new Vector2(0.2,0.2/*0.3,0.3*/)));
         obj.setRenderer(new SpriteRenderer(context, AUDIO_SPRITE, 10));
-        obj.setMusicObject(new MusicObject(videoId, player, audioController));
+        obj.setMusicObject(new MusicObject(videoId, player, audioController,musicId));
         return obj;
     }
     static camera(position){

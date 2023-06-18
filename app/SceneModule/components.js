@@ -120,8 +120,9 @@ class SpriteRenderer extends Component{
 }
 
 class MusicObject extends Component{
-    constructor(videoId, player, audioController){
+    constructor(videoId, player, audioController, musicId){
         super();
+        this.musicId = musicId;
         this.videoId = videoId;
         this.player = player;
         this.audioController = audioController;

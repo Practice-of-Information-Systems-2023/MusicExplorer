@@ -41,28 +41,18 @@ function init(){
         );
     };
 
-    scene.addGameObject(Prefabs.audioPlayer(
-        new Vector2(-400,-400),
-        context,
-        "gdqGq0rZ5LU",
-        player,
-        audioController
-    ));
-    scene.addGameObject(Prefabs.audioPlayer(
-        new Vector2(400,400),
-        context,
-        "1weNnjzaXbY",
-        player,
-        audioController
-    ));
-
-    scene.addGameObject(Prefabs.audioPlayer(
-        new Vector2(-400,400),
-        context,
-        "DeBG1g1BRMA",
-        player,
-        audioController
-    ));
+    const musicObjectGenerator = new MusicObjectGenerator(
+        scene, context, player, audioController
+    );
+    musicObjectGenerator.generate([
+        [0,"gdqGq0rZ5LU",new Vector2(-400,-400)],
+        [1,"1weNnjzaXbY",new Vector2(400,400)],
+    ]);
+    setTimeout(function(){
+        musicObjectGenerator.generate([
+            [2,"DeBG1g1BRMA",new Vector2(-400,400)]
+        ]);
+    },3000);
 
     var time = 0;
     var t = 0;
