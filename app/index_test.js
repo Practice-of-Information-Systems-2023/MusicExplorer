@@ -12,15 +12,6 @@ new YoutubePlayer("player", function(player){
 function init(){
     const audioController = new AudioController(youtubePlayer);
     const scene = new Scene();
-    const camera = scene.addGameObject(Prefabs.camera(
-        Vector2.zero,
-    ));
-    const background = scene.addGameObject(Prefabs.spriteObject(
-        Vector2.zero,
-        context,
-        BACK_SPRITE,
-        0
-    )); 
     const player = scene.addGameObject(Prefabs.playerCharacter(
         Vector2.zero,
         context,
@@ -31,23 +22,17 @@ function init(){
         context,
         KeyConfig.ASDW
     ));
-    camera.updateProcess = function(){
-        camera.transform.position.set(player.transform.position);
-    };
-    background.updateProcess = function(){
-        background.transform.position.setValue(
-            player.transform.position.x - player.transform.position.x % 32,
-            player.transform.position.y - player.transform.position.y % 32
-        );
-    };
 
-    const musicObjectGenerator = new MusicObjectGenerator(
-        scene, context, player, audioController
-    );
+    const backgroundGenerator = new BackGroundGenerator(scene, context, player);
+    backgroundGenerator.generate(BACK_SPRITE);
+    const cameraGenerator = new CameraGenerator(scene, player);
+    cameraGenerator.generate();
+    const musicObjectGenerator = new MusicObjectGenerator(scene, context, player, audioController);
     musicObjectGenerator.generate([
         [0,"gdqGq0rZ5LU",new Vector2(-400,-400)],
         [1,"1weNnjzaXbY",new Vector2(400,400)],
     ]);
+
     setTimeout(function(){
         musicObjectGenerator.generate([
             [2,"DeBG1g1BRMA",new Vector2(-400,400)]

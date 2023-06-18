@@ -1,3 +1,46 @@
+class CameraGenerator{
+    // カメラオブジェクトを管理するクラス 最初に実行
+    // クラスにする必要はない？
+    constructor(scene, player){
+        this.scene = scene;
+        this.player = player;
+    }
+    generate(){
+        const camera = this.scene.addGameObject(Prefabs.camera(
+            Vector2.zero,
+        ));
+        const playerPosition = this.player.transform.position;
+        camera.updateProcess = function(){
+            camera.transform.position.set(playerPosition);
+        };
+    }
+}
+
+class BackGroundGenerator{
+    // 背景オブジェクトを管理するクラス 最初に実行
+    // クラスにする必要はない？
+    constructor(scene, context, player){
+        this.scene = scene;
+        this.context = context;
+        this.player = player;
+    }
+    generate(sprite){
+        const background = this.scene.addGameObject(Prefabs.spriteObject(
+            Vector2.zero,
+            this.context,
+            sprite,
+            0
+        ));
+        const playerPosition = this.player.transform.position;
+        background.updateProcess = function(){
+            background.transform.position.setValue(
+                playerPosition.x - playerPosition.x % 32,
+                playerPosition.y - playerPosition.y % 32
+            );
+        };
+    }
+}
+
 class MusicObjectGenerator{
     // マップ上の曲オブジェクトを管理するクラス 定期実行
     // プレイヤーから遠いものを削除しつつ新たなものを追加する
