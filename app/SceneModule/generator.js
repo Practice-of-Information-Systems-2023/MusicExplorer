@@ -41,6 +41,23 @@ class BackGroundGenerator{
     }
 }
 
+class PlayerGenerator{
+    // プレイヤーオブジェクトを管理するクラス 最初に実行
+    // クラスにする必要はない？
+    constructor(scene, context){
+        this.scene = scene;
+        this.context = context;
+    }
+    generate(position){
+        const player = this.scene.addGameObject(Prefabs.playerCharacter(
+            position,
+            this.context,
+            KeyConfig.ARROW
+        ));
+        return player;
+    }
+}
+
 class MusicObjectGenerator{
     // マップ上の曲オブジェクトを管理するクラス 定期実行
     // プレイヤーから遠いものを削除しつつ新たなものを追加する

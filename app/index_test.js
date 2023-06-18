@@ -12,16 +12,9 @@ new YoutubePlayer("player", function(player){
 function init(){
     const audioController = new AudioController(youtubePlayer);
     const scene = new Scene();
-    const player = scene.addGameObject(Prefabs.playerCharacter(
-        Vector2.zero,
-        context,
-        KeyConfig.ARROW
-    )); 
-    const anotherPlayer = scene.addGameObject(Prefabs.playerCharacter(
-        new Vector2(100, 0),
-        context,
-        KeyConfig.ASDW
-    ));
+
+    const playerGenerator = new PlayerGenerator(scene, context);
+    const player = playerGenerator.generate(Vector2.zero);
 
     const backgroundGenerator = new BackGroundGenerator(scene, context, player);
     backgroundGenerator.generate(BACK_SPRITE);
@@ -54,11 +47,11 @@ function init(){
         }
         audioController.updateVolume();
     },1000/fps);
-    setInterval(function(){
+    /*setInterval(function(){
         anotherPlayer.controller.setDestination(
             anotherPlayer.transform.position.clone().add(
                 Vector2.right.rotate(Math.floor(Math.random() * 8)*Math.PI/4).times(240)
             )
         );
-    },2000);
+    },2000);*/
 }
