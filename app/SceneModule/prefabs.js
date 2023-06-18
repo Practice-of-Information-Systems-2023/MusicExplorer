@@ -1,18 +1,18 @@
 const CHARA_SPRITE_1 = new Sprite(
-    "chara.png",
+    "Image/chara.png",
     192, 192,
     4, 6,
     new Vector2(0.5,1)
 );
 const BACK_SPRITE = new Sprite(
-    "background.png",
+    "Image/background.png",
     576, 512,
     1, 1,
     new Vector2(0.5,0.5)
 );
 
 const AUDIO_SPRITE = new Sprite(
-    "tree_green.png",
+    "Image/tree_green.png",
     539, 735,//294, 300,
     1, 1,
     new Vector2(0.5,0.93)
