@@ -16,21 +16,25 @@ function init(){
     const playerGenerator = new PlayerGenerator(scene, context);
     const player = playerGenerator.generate(Vector2.zero);
 
+    const characterGenerator = new CharacterGenerator(scene, context);
+    characterGenerator.generate([
+        [0,new Vector2(100,0)],
+        [1,new Vector2(0,100)],
+        [2,new Vector2(0,-100)],
+    ]);
+
     const backgroundGenerator = new BackGroundGenerator(scene, context, player);
     backgroundGenerator.generate(BACK_SPRITE);
+ 
     const cameraGenerator = new CameraGenerator(scene, player);
     cameraGenerator.generate();
+ 
     const musicObjectGenerator = new MusicObjectGenerator(scene, context, player, audioController);
     musicObjectGenerator.generate([
         [0,"gdqGq0rZ5LU",new Vector2(-400,-400)],
         [1,"1weNnjzaXbY",new Vector2(400,400)],
+        [2,"DeBG1g1BRMA",new Vector2(-400,400)]
     ]);
-
-    setTimeout(function(){
-        musicObjectGenerator.generate([
-            [2,"DeBG1g1BRMA",new Vector2(-400,400)]
-        ]);
-    },3000);
 
     var time = 0;
     var t = 0;
@@ -47,11 +51,12 @@ function init(){
         }
         audioController.updateVolume();
     },1000/fps);
-    /*setInterval(function(){
-        anotherPlayer.controller.setDestination(
-            anotherPlayer.transform.position.clone().add(
-                Vector2.right.rotate(Math.floor(Math.random() * 8)*Math.PI/4).times(240)
-            )
-        );
-    },2000);*/
+
+    setInterval(function(){
+        characterGenerator.setDestinations([
+            [0,new Vector2(Math.random()*800-400,Math.random()*800-400)],
+            [1,new Vector2(Math.random()*800-400,Math.random()*800-400)]
+            [2,new Vector2(Math.random()*800-400,Math.random()*800-400)]
+        ]);
+    },2000);
 }

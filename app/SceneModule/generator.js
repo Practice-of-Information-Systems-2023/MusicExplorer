@@ -118,3 +118,69 @@ class MusicObjectGenerator{
         }
     }
 }
+
+class CharacterGenerator{
+    // マップ上の他ユーザーオブジェクトを管理するクラス 定期実行
+    // プレイヤーから遠いものを削除しつつ新たなものを追加する
+    // さらに目的地を設定する
+    constructor(scene, context){
+        this.scene = scene;
+        this.context = context;
+        this.userIDs = new Set();
+        this.userObjects = {};
+        this.USER_ID = 0;
+        this.POSITION = 1;
+    }
+    generate(userObjects){
+        this.change(userObjects, false);
+    }
+    replace(userObjects){
+        this.change(userObjects, true);
+    }
+    change(userObjects, isDelete){
+        var newUserIndexes = [];
+        var stayUserIDs = new Set();
+
+        for(let i=0;i<userObjects.length;i++){
+            if(!this.userIDs.has(userObjects[this.USER_ID])){
+                newUserIndexes.push(i);
+            }else{
+                stayUserIDs.add(userObjects[this.USER_ID]);
+            }
+        }
+        if(isDelete){
+            var deleteUserIDs = new Set();
+            for(let userID of this.userIDs){
+                if(!stayUserIDs.has(userID)){
+                    deleteUserIDs.add(userID);
+                }
+            }
+            for(let userID of this.userIDs){
+                this.scene.deleteGameObject(this.userObjects[userID].gameObject);
+                this.userIDs.delete(userID);
+                delete this.musicObjects[userID];
+            }
+        }
+
+        for(let index of newUserIndexes){
+            const id = userObjects[index][this.USER_ID];
+            const gameObject = this.scene.addGameObject(Prefabs.playerCharacter(
+                userObjects[index][this.POSITION],
+                this.context,
+                null
+            ));
+            this.userIDs.add(id);
+            this.userObjects[id] = gameObject.controller;
+        }
+    }
+    setDestinations(destinations){
+        for(let data of destinations){
+            if(this.userIDs.has(data[this.USER_ID])){
+                this.userObjects[data[this.USER_ID]].setDestination(
+                    data[this.POSITION]
+                );
+            }
+
+        }
+    }
+}
