@@ -55,7 +55,7 @@ function init(){
     setInterval(function(){
         characterGenerator.setDestinations([
             [0,new Vector2(Math.random()*800-400,Math.random()*800-400)],
-            [1,new Vector2(Math.random()*800-400,Math.random()*800-400)]
+            [1,new Vector2(Math.random()*800-400,Math.random()*800-400)],
             [2,new Vector2(Math.random()*800-400,Math.random()*800-400)]
         ]);
     },2000);
