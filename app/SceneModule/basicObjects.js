@@ -101,6 +101,7 @@ class AudioController{
         this.videoId = "";
         this.init();
         this.youtubePlayer = youtubePlayer;
+        this.time = 0;
     }
     init(){
         this.videoId = "";
@@ -138,5 +139,13 @@ class AudioController{
         }else{
             return 1-8*((x-1)**4);
         }
+    }
+    update(dt){
+        this.time += dt;
+        if(this.time > 1){
+            this.playVideo();
+            this.time = 0;
+        }
+        this.updateVolume();
     }
 }
