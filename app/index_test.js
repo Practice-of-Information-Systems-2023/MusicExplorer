@@ -31,10 +31,10 @@ function init(){
         context,
         KeyConfig.ASDW
     ));
-    camera.camera.updateProcess = function(){
+    camera.updateProcess = function(){
         camera.transform.position.set(player.transform.position);
     };
-    background.transform.updateProcess = function(){
+    background.updateProcess = function(){
         background.transform.position.setValue(
             player.transform.position.x - player.transform.position.x % 32,
             player.transform.position.y - player.transform.position.y % 32
@@ -79,4 +79,11 @@ function init(){
         }
         audioController.updateVolume();
     },1000/fps);
+    setInterval(function(){
+        anotherPlayer.controller.setDestination(
+            anotherPlayer.transform.position.clone().add(
+                Vector2.right.rotate(Math.floor(Math.random() * 8)*Math.PI/4).times(240)
+            )
+        );
+    },2000);
 }

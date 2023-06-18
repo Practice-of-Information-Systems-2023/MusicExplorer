@@ -36,6 +36,7 @@ class Scene{
 
 class GameObject{
     scene;
+    updateProcess;
     constructor(transform){
         this.transform = transform;
         this.transform.gameObject = this;
@@ -66,6 +67,7 @@ class GameObject{
         musicObject.gameObject = this;
     }
     update(dt){
+        if(this.updateProcess != null) this.updateProcess();
         if(this.transform != null) this.transform.update(dt);
         if(this.controller != null) this.controller.update(dt);
         if(this.animator != null) this.animator.update(dt);

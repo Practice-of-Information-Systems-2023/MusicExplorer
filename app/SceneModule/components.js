@@ -135,27 +135,31 @@ class MusicObject extends Component{
 };
 
 class CharacterController extends Component{
-    constructor(keyConfig){
+    constructor(keyConfig=null){
         super();
         this.keyConfig = keyConfig;
         this.keyForce = this.getKeyForce();
-
+        this.commands = ['UP', 'DOWN', 'RIGHT', 'LEFT'];
         this.keyFlag = {
             'UP': false,
             'DOWN': false,
             'RIGHT': false,
             'LEFT': false
         };
-        document.addEventListener(
-            'keydown',
-            this.onKeyDown.bind(this)
-        );
-        document.addEventListener(
-            'keyup',
-            this.onKeyUp.bind(this)
-        );
+        if(keyConfig!=null){
+            document.addEventListener(
+                'keydown',
+                this.onKeyDown.bind(this)
+            );
+            document.addEventListener(
+                'keyup',
+                this.onKeyUp.bind(this)
+            );
+        }
         this.velocity = Vector2.zero;
         this.isMoving = false;
+        this.isAutoMove = false;
+        this.destination = Vector2.zero;
     }
     getKeyForce(){
         return {
@@ -175,16 +179,46 @@ class CharacterController extends Component{
             this.keyFlag[this.keyConfig[event.key]] = false;
         }
     }
+    calcVelocityByKey(){
+        var velocity = Vector2.zero;
+        for(let i=0; i<this.commands.length; i++){
+            if(this.keyFlag[this.commands[i]]){
+                velocity.add(this.keyForce[this.commands[i]]);
+            }
+        }
+        return velocity;
+    }
+    calcVelocityByDestination(){
+        const speed = 120;
+        return this.destination.clone()
+                .sub(this.gameObject.transform.position)
+                .normalize()
+                .times(speed);
+    }
+    setDestination(destination){
+        this.destination.set(destination);
+        this.isAutoMove = true;
+    }
+    checkDestination(){
+        const dist = this.destination.clone()
+                        .sub(this.gameObject.transform.position)
+                        .sqMagnitude
+        if(dist < 100){
+            this.isAutoMove = false;
+        }
+    }
     update(dt){
         var preVelocity = this.velocity.clone();
         this.velocity.times(0);
-        const commands = ['UP', 'DOWN', 'RIGHT', 'LEFT'];
-        for(let i=0; i<commands.length; i++){
-            if(this.keyFlag[commands[i]]){
-                this.velocity.add(this.keyForce[commands[i]]);
-            }
+
+        if(this.keyConfig!=null){
+            this.velocity.add(this.calcVelocityByKey());
         }
-        if(this.velocity.x != 0 || this.velocity.y != 0){
+        if(this.isAutoMove){
+            this.velocity.add(this.calcVelocityByDestination());
+        }
+        if(this.velocity.x !=0 || this.velocity.y != 0){
+            this.velocity.normalize().times(120);
             this.isMoving = true;
         }else{
             this.velocity = preVelocity;
@@ -192,5 +226,6 @@ class CharacterController extends Component{
         }
         this.velocity.times(dt);
         this.gameObject.transform.translate(this.velocity);
+        this.checkDestination();
     }
 }
