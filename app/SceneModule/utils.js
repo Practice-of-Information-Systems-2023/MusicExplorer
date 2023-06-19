@@ -139,4 +139,10 @@ class Vector2{
     static get right(){return new Vector2(1,0);}
     static get left(){return new Vector2(-1,0);}
     static direction(r){return new Vector2(Math.cos(r), Math.sin(r));}
-}  
+} 
+
+class MathUtils{
+    static randomRange(begin,end){
+        return Math.random()*(end-begin)+begin;
+    }
+}

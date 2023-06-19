@@ -99,7 +99,7 @@ class MusicObjectGenerator{
                     deleteMusicIDs.add(musicID);
                 }
             }
-            for(let musicID of this.musicIDs){
+            for(let musicID of deleteMusicIDs){
                 this.scene.deleteGameObject(this.musicObjects[musicID].gameObject);
                 this.musicIDs.delete(musicID);
                 delete this.musicObjects[musicID];
@@ -159,7 +159,7 @@ class CharacterGenerator{
                     deleteUserIDs.add(userID);
                 }
             }
-            for(let userID of this.userIDs){
+            for(let userID of deleteUserIDs){
                 this.scene.deleteGameObject(this.userObjects[userID].gameObject);
                 this.userIDs.delete(userID);
                 delete this.musicObjects[userID];
