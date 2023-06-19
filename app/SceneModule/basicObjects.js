@@ -3,6 +3,7 @@ class Scene{
     constructor(){
         this.gameObjects = new Set();
         this.renderers = new Set();
+        this.gameObjectDict = {};
     }
     addGameObject(gameObject){
         this.gameObjects.add(gameObject);
@@ -13,6 +14,7 @@ class Scene{
         if(gameObject.renderer != null){
             this.renderers.add(gameObject.renderer);
         }
+        this.gameObjectDict[gameObject.name] = gameObject;
         return gameObject;
     }
     update(dt){
@@ -36,8 +38,16 @@ class Scene{
             renderers[i].update(dt);
         }
     }
+    find(name){
+        if(this.gameObjectDict[name]){
+            return this.gameObjectDict[name];
+        }else{
+            return null;
+        }
+    }
     deleteGameObject(gameObject){
         this.gameObjects.delete(gameObject);
+        delete this.gameObjectDict[gameObject.name]
         if(gameObject.renderer != null){
             this.renderers.delete(gameObject.renderer);
         }
@@ -48,7 +58,8 @@ class Scene{
 class GameObject{
     scene;
     updateProcess;
-    constructor(transform){
+    constructor(name, transform){
+        this.name = name;
         this.transform = transform;
         this.transform.gameObject = this;
         this.controller = null;

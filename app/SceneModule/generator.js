@@ -1,12 +1,13 @@
 class CameraGenerator{
     // カメラオブジェクトを管理するクラス 最初に実行
     // クラスにする必要はない？
-    constructor(scene, player){
+    constructor(scene){
         this.scene = scene;
-        this.player = player;
+        this.player = scene.find("Player");
     }
     generate(){
         const camera = this.scene.addGameObject(Prefabs.camera(
+            "Camera",
             Vector2.zero,
         ));
         const playerPosition = this.player.transform.position;
@@ -19,13 +20,14 @@ class CameraGenerator{
 class BackGroundGenerator{
     // 背景オブジェクトを管理するクラス 最初に実行
     // クラスにする必要はない？
-    constructor(scene, context, player){
+    constructor(scene, context){
         this.scene = scene;
         this.context = context;
-        this.player = player;
+        this.player = scene.find("Player");;
     }
     generate(sprite){
         const background = this.scene.addGameObject(Prefabs.spriteObject(
+            "Background",
             Vector2.zero,
             this.context,
             sprite,
@@ -50,6 +52,7 @@ class PlayerGenerator{
     }
     generate(position){
         const player = this.scene.addGameObject(Prefabs.playerCharacter(
+            "Player",
             position,
             this.context,
             KeyConfig.ARROW
@@ -61,10 +64,10 @@ class PlayerGenerator{
 class MusicObjectGenerator{
     // マップ上の曲オブジェクトを管理するクラス 定期実行
     // プレイヤーから遠いものを削除しつつ新たなものを追加する
-    constructor(scene, context, player, audioController){
+    constructor(scene, context, audioController){
         this.scene = scene;
         this.context = context;
-        this.player = player;
+        this.player = scene.find("Player");;
         this.audioController = audioController;
         this.musicIDs = new Set();
         this.musicObjects = {};
@@ -106,6 +109,7 @@ class MusicObjectGenerator{
         for(let index of newMusicIndexes){
             const id = musicObjects[index][this.MUSIC_ID];
             const gameObject = this.scene.addGameObject(Prefabs.audioPlayer(
+                "MusicObject_"+id,
                 musicObjects[index][this.POSITION],
                 this.context,
                 musicObjects[index][this.VIDEO_ID],
@@ -165,6 +169,7 @@ class CharacterGenerator{
         for(let index of newUserIndexes){
             const id = userObjects[index][this.USER_ID];
             const gameObject = this.scene.addGameObject(Prefabs.playerCharacter(
+                "Character_"+id,
                 userObjects[index][this.POSITION],
                 this.context,
                 null

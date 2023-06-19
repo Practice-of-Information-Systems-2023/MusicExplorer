@@ -14,7 +14,7 @@ function init(){
     const scene = new Scene();
 
     const playerGenerator = new PlayerGenerator(scene, context);
-    const player = playerGenerator.generate(Vector2.zero);
+    playerGenerator.generate(Vector2.zero);
 
     const characterGenerator = new CharacterGenerator(scene, context);
     characterGenerator.generate([
@@ -23,13 +23,13 @@ function init(){
         [2,new Vector2(0,-100)],
     ]);
 
-    const backgroundGenerator = new BackGroundGenerator(scene, context, player);
+    const backgroundGenerator = new BackGroundGenerator(scene, context);
     backgroundGenerator.generate(BACK_SPRITE);
  
-    const cameraGenerator = new CameraGenerator(scene, player);
+    const cameraGenerator = new CameraGenerator(scene);
     cameraGenerator.generate();
  
-    const musicObjectGenerator = new MusicObjectGenerator(scene, context, player, audioController);
+    const musicObjectGenerator = new MusicObjectGenerator(scene, context, audioController);
     musicObjectGenerator.generate([
         [0,"gdqGq0rZ5LU",new Vector2(-400,-400)],
         [1,"1weNnjzaXbY",new Vector2(400,400)],
