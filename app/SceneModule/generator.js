@@ -86,10 +86,10 @@ class MusicObjectGenerator{
         var stayMusicIDs = new Set();
 
         for(let i=0;i<musicObjects.length;i++){
-            if(!this.musicIDs.has(musicObjects[this.MUSIC_ID])){
+            if(!this.musicIDs.has(musicObjects[i][this.MUSIC_ID])){
                 newMusicIndexes.push(i);
             }else{
-                stayMusicIDs.add(musicObjects[this.MUSIC_ID]);
+                stayMusicIDs.add(musicObjects[i][this.MUSIC_ID]);
             }
         }
         if(isDelete){
@@ -144,12 +144,11 @@ class CharacterGenerator{
     change(userObjects, isDelete){
         var newUserIndexes = [];
         var stayUserIDs = new Set();
-
         for(let i=0;i<userObjects.length;i++){
-            if(!this.userIDs.has(userObjects[this.USER_ID])){
+            if(!this.userIDs.has(userObjects[i][this.USER_ID])){
                 newUserIndexes.push(i);
             }else{
-                stayUserIDs.add(userObjects[this.USER_ID]);
+                stayUserIDs.add(userObjects[i][this.USER_ID]);
             }
         }
         if(isDelete){
@@ -162,7 +161,7 @@ class CharacterGenerator{
             for(let userID of deleteUserIDs){
                 this.scene.deleteGameObject(this.userObjects[userID].gameObject);
                 this.userIDs.delete(userID);
-                delete this.musicObjects[userID];
+                delete this.userObjects[userID];
             }
         }
 
