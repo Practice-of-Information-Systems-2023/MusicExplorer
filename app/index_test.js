@@ -41,6 +41,9 @@ function init(){
         characterGenerator.setDestinations(
             communicater.getCharactersData()
         );
+        communicater.sendPlayerPosition(
+            playerGenerator.getPosition()
+        );
     },200);
 
     setInterval(function(){ // オブジェクトの追加と削除

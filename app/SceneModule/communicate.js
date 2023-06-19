@@ -46,4 +46,11 @@ class Communicater{
             [2,"DeBG1g1BRMA",-400,400]
         ];
     }
+    sendPlayerPosition(position){
+        // idは暫定
+        callPlayerPositionAPI(0,position.x, position.y);
+    }
+    callPlayerPositionAPI(id,x,y){
+        // id,x座標とy座標を送信する
+    }
 }

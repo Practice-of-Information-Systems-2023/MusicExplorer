@@ -51,13 +51,16 @@ class PlayerGenerator{
         this.context = context;
     }
     generate(position){
-        const player = this.scene.addGameObject(Prefabs.playerCharacter(
+        this.player = this.scene.addGameObject(Prefabs.playerCharacter(
             "Player",
             position,
             this.context,
             KeyConfig.ARROW
         ));
-        return player;
+        return this.player;
+    }
+    getPosition(){
+        return this.player.transform.position;
     }
 }
 
