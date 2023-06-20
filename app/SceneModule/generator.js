@@ -162,7 +162,6 @@ class CharacterGenerator{
                 }
             }
             for(let userID of deleteUserIDs){
-                console.log(this.userObjects[userID].gameObject.name + " deleted");
                 this.scene.deleteGameObject(this.userObjects[userID].gameObject);
                 this.userIDs.delete(userID);
                 delete this.userObjects[userID];
@@ -171,15 +170,12 @@ class CharacterGenerator{
 
         for(let index of newUserIndexes){
             const id = userObjects[index][this.USER_ID];
-            console.log("生成:"+userObjects[index][this.POSITION].x+" "+userObjects[index][this.POSITION].y);
             const gameObject = this.scene.addGameObject(Prefabs.playerCharacter(
                 "Character_"+id,
                 userObjects[index][this.POSITION],
                 this.context,
                 null
             ));
-            console.log(gameObject.name + " added");
-            console.log("直後:"+gameObject.transform.position.x+" "+gameObject.transform.position.y);
             this.userIDs.add(id);
             this.userObjects[id] = gameObject.controller;
         }

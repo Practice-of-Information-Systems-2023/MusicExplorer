@@ -89,9 +89,6 @@ class GameObject{
         musicObject.gameObject = this;
     }
     update(dt){
-        if(this.name=="Character_1"){
-            console.log("移動:"+this.transform.position.x+" "+this.transform.position.y);
-        }
         if(this.updateProcess != null) this.updateProcess();
         if(this.transform != null) this.transform.update(dt);
         if(this.controller != null) this.controller.update(dt);

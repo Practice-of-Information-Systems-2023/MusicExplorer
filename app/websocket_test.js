@@ -106,7 +106,6 @@ window.onload = function () {
 
       // 受け取ったデータからusername、x、yを取得
       try {
-        console.log(data);
         const parsedData = JSON.parse(data);
         allUserData.length = 0;
         parsedData.forEach((item) => {
