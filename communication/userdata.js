@@ -4,7 +4,6 @@ function getUserData(id) {
   const currentUser = userData.find((entity) => entity.id === id);
   if (!currentUser) {
     return [];
-    y;
   }
   const { x, y, field } = currentUser;
 
