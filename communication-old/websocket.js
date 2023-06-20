@@ -10,7 +10,7 @@ const clients = new Map();
 
 router.ws("/test", (ws, req) => {
   let identify;
-  console.log("新しいクライアント");
+  console.log("新しいクライアント!");
 
   // ws.send(id);
 

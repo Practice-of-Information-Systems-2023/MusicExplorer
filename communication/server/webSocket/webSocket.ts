@@ -8,8 +8,11 @@ const webSocketRouter = express.Router() as expressWs.Router;
 
 const clients = new Map<string, WebSocket>();
 
+let clientCount = 0;
+
 webSocketRouter.ws("/websocket", (ws: WebSocket, req: Request) => {
-  console.log("新しいクライアント");
+  clientCount++;
+  console.log("new client, client count : " + clientCount);
   let userId: string;
   startSendingUserData(ws, clients, 100);
 
@@ -26,6 +29,8 @@ webSocketRouter.ws("/websocket", (ws: WebSocket, req: Request) => {
   ws.on("close", () => {
     clients.delete(userId);
     deleteUserData(userId);
+    clientCount--;
+    console.log("logout : user " + userId + ", client count : " + clientCount);
   });
 });
 
