@@ -191,10 +191,13 @@ class CharacterController extends Component{
     }
     calcVelocityByDestination(){
         const speed = 120;
-        return this.destination.clone()
-                .sub(this.gameObject.transform.position)
-                .normalize()
-                .times(speed);
+        const velocity = this.destination.clone()
+            .sub(this.gameObject.transform.position);
+        if(velocity.x==0 && velocity.y==0){
+            return Vector2.zero;
+        }else{
+            return velocity.normalize().times(speed);
+        }
     }
     setDestination(destination){
         this.destination.set(destination);
