@@ -1,15 +1,16 @@
 class Communicater {
-  constructor(scene, charactorGenerator) {
+  constructor(scene, charactorGenerator, userID) {
     this.scene = scene;
     this.charactorGenerator = charactorGenerator;
+    this.userID = userID;
     this.player = scene.find("Player");
     this.CHARACTER_RECT = 1000;
     const url = "ws://localhost:3000/websocket/test";
     this.socket = new WebSocket(url);
-    this.socket.addEventListener("message", setDestinations);
+    this.socket.addEventListener("message", this.setDestinations.bind(this));
   }
 
-  setDestinatios(data) {
+  setDestinations(data) {
     const parsedData = JSON.parse(data);
     var positions = [];
     parsedData.forEach((item) => {
@@ -67,7 +68,7 @@ class Communicater {
   }
   sendPlayerPosition(position) {
     // idは暫定
-    callPlayerPositionAPI(0, position.x, position.y);
+    this.callPlayerPositionAPI(this.userID, position.x, position.y);
   }
   callPlayerPositionAPI(id, x, y) {
     // id,x座標とy座標を送信する

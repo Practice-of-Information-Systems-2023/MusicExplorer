@@ -8,8 +8,12 @@ new YoutubePlayer("player", function (player) {
   youtubePlayer = player;
   init();
 });
-
+function getUserID(){
+    const userID = window.prompt("ユーザーIDを整数で入力してください", "");
+    return userID;
+}
 function init() {
+  const userID = getUserID();
   const audioController = new AudioController(youtubePlayer);
   const scene = new Scene();
 
@@ -17,9 +21,8 @@ function init() {
   playerGenerator.generate(Vector2.zero);
 
   const characterGenerator = new CharacterGenerator(scene, context);
-  characterGenerator.generate(communicater.getCharactersData());
 
-  const communicater = new Communicater(scene, characterGenerator);
+  const communicater = new Communicater(scene, characterGenerator, userID);
 
   const backgroundGenerator = new BackGroundGenerator(scene, context);
   backgroundGenerator.generate(BACK_SPRITE);
