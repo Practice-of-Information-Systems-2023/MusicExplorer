@@ -5,16 +5,16 @@ function getUserData(id) {
   if (!currentUser) {
     return [];
   }
-  const { x, y, field } = currentUser;
+  const { x, y } = currentUser;
 
   return userData.filter((entity) => {
     // 範囲内の他のユーザをフィルタリングする
     return (
       entity.id !== id &&
-      entity.x >= x - field &&
-      entity.x <= x + field &&
-      entity.y >= y - field &&
-      entity.y <= y + field
+      entity.x >= x - 250 &&
+      entity.x <= x + 250 &&
+      entity.y >= y - 200 &&
+      entity.y <= y + 200
     );
   });
 }
@@ -28,14 +28,13 @@ function deleteUserData(id) {
   }
 }
 
-function addUserData(id, username, x, y, field) {
+function addUserData(id, x, y) {
   const existingEntity = userData.find((entity) => entity.id === id);
   if (existingEntity) {
     existingEntity.x = x;
     existingEntity.y = y;
-    existingEntity.field = field;
   } else {
-    const newEntity = { id, username, x, y, field };
+    const newEntity = { id, x, y };
     userData.push(newEntity);
   }
 }

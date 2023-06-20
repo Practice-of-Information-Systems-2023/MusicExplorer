@@ -1,7 +1,7 @@
 class Communicater {
-  constructor(scene, charactorGenerator, userID) {
+  constructor(scene, characterGenerator, userID) {
     this.scene = scene;
-    this.charactorGenerator = charactorGenerator;
+    this.characterGenerator = characterGenerator;
     this.userID = userID;
     this.player = scene.find("Player");
     this.CHARACTER_RECT = 1000;
@@ -11,13 +11,15 @@ class Communicater {
   }
 
   setDestinations(data) {
-    const parsedData = JSON.parse(data);
+    const parsedData = JSON.parse(data.data);
     var positions = [];
     parsedData.forEach((item) => {
       const { id, x, y } = item;
-      positions.push((id, new Vector2(x, y)));
+      console.log(id, x, y);
+      positions.push([id, new Vector2(x, y)]);
     });
-    this.charactorGenerator.setDestinations(positions);
+    this.characterGenerator.replace(positions);
+    this.characterGenerator.setDestinations(positions);
   }
 
   getCharactersData() {
@@ -72,5 +74,11 @@ class Communicater {
   }
   callPlayerPositionAPI(id, x, y) {
     // id,x座標とy座標を送信する
+    const message = JSON.stringify({
+      id: id,
+      x: x,
+      y: y,
+    });
+    this.socket.send(message);
   }
 }

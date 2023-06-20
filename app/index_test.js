@@ -8,9 +8,9 @@ new YoutubePlayer("player", function (player) {
   youtubePlayer = player;
   init();
 });
-function getUserID(){
-    const userID = window.prompt("ユーザーIDを整数で入力してください", "");
-    return userID;
+function getUserID() {
+  const userID = window.prompt("ユーザーIDを整数で入力してください", "");
+  return userID;
 }
 function init() {
   const userID = getUserID();
@@ -54,6 +54,5 @@ function init() {
   setInterval(function () {
     // オブジェクトの追加と削除
     musicObjectGenerator.replace(communicater.getMusicObjectsData());
-    characterGenerator.replace(communicater.getCharactersData());
   }, 5000);
 }
