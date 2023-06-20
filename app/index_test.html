@@ -3,8 +3,32 @@
         <title>キャラクターを動かすテスト</title>
     </head>
     <body>
-        <canvas id="main" height=320 width=480 style="border:solid"></canvas>
-        <div id="player" height=320 width=480></div>
+        <center>
+            <table border="2">
+                <tr>        
+                    <td>
+                        <canvas id="main" height=320 width=480 style="border:solid"></canvas>
+                    </td>
+                    <td rowspan="2" valign="top">
+                        <input type="text" id="search" size="36" value="検索したい曲名を入力">
+                        <button onclick="Search()">検索</button><br>
+                        <div style="height:640px; width:360px; overflow-y:scroll;">
+                            <div class="result_area">
+                            </div>
+                        </div>
+
+                    </td>
+                </tr>       
+                <tr>    
+                    <td>
+                        <div id="player" height=320 width=480></div>
+                    </td>
+                </tr>
+            </table> 
+        </center>>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="YoutubeModule/favorite.js"></script>
         <script src="https://www.youtube.com/iframe_api"></script>
         <script src="YoutubeModule/YoutubePlayer.js"></script>
         <script src="SceneModule/utils.js"></script>
