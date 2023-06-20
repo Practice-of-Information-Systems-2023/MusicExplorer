@@ -16,6 +16,18 @@ class KeyConfig{
             'a':    'LEFT',
         };
     }
+    static get DOUBLE(){
+        return {
+            'w':      'UP',
+            's':    'DOWN',
+            'd':   'RIGHT',
+            'a':    'LEFT',
+            'ArrowUp':      'UP',
+            'ArrowDown':    'DOWN',
+            'ArrowRight':   'RIGHT',
+            'ArrowLeft':    'LEFT',
+        };
+    }
 }
 
 class Sprite{
