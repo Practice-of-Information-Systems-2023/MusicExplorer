@@ -43,9 +43,10 @@ def search_music(request):
             music = {'title': title, 'url': url, 'description': description, 'thumbnail_url': thumbnail_url}
             music_list[music_id] = music
 
-        music_json = json.dumps(music_list)
+        music_json = json.dumps(music_list, ensure_ascii=False)
         return render(request, 'backend_app/hoge.html', {'music': music_json})
 
+# テスト用
 if __name__ == '__main__':
     request = {'method': 'POST', 'POST': {'query': 'YOASOBI アイドル'}}
     search_music(request)

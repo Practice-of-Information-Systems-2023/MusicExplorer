@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link
+      href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <title>WebSocket受け渡しテスト</title>
+  </head>
+
+  <body>
+    <div id="canvas-wrap">
+      <canvas id="canvas"></canvas>
+      <div class="py-8 px-12 w-96 mx-auto bg-gray-100">
+        <section class="my-4">
+          <div>
+            <span class="text-sm font-bold">WS Status</span>
+            <div class="bg-indigo-200 p-2 mb-2">
+              <span class="websocket-status">null</span>
+            </div>
+          </div>
+        </section>
+        <section class="my-4">
+          <div class="bg-gray-300 p-2 rounded shadow">
+            <div>
+              <input
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"
+                id="username"
+                type="text"
+                placeholder="ユーザ名を入力"
+              />
+            </div>
+            <div class="text-right">
+              <button
+                id="username-button"
+                class="py-2 px-4 rounded bg-indigo-600 text-white"
+              >
+                websocket通信を開始
+              </button>
+            </div>
+          </div>
+        </section>
+        <section class="my-4">
+          <div class="bg-gray-300 p-2 rounded shadow">
+            <div>
+              <input
+                class="appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline mb-2"
+                id="field-message"
+                type="text"
+                placeholder="視野を入力"
+              />
+            </div>
+            <div class="text-right">
+              <button
+                id="field-button"
+                class="py-2 px-4 rounded bg-indigo-600 text-white"
+              >
+                視野を登録
+              </button>
+            </div>
+          </div>
+        </section>
+        <!-- <section class="my-4">
+          <div class="text-sm font-bold">メッセージ一覧</div>
+          <div id="messages"></div>
+        </section> -->
+      </div>
+    </div>
+
+    <script src="./websocket_test.js"></script>
+  </body>
+</html>
