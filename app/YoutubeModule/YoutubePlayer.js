@@ -2,6 +2,7 @@ class YoutubePlayer{
     constructor(elementName, onPlayerLoad){
         this.makeYouTubeIframe(elementName);
         this.onPlayerLoad = onPlayerLoad;
+        this.seekToFlag = false;
     }
 
     // Playerの生成
@@ -33,11 +34,19 @@ class YoutubePlayer{
         if (event.data == 0){
             // 動画が最後まで到達した場合はループする
             this.player.playVideo();
+        }else if (event.data == 1){
+            // 動画読み込み時に再生位置を同期する
+            if(this.seekToFlag){
+                this.seekToFlag = false;
+                const nowSecond = MathUtils.getSecondFromPivot();
+                this.player.seekTo(nowSecond % Math.floor(this.player.getDuration()));
+            }
         }
     }
 
     // 動画IDを指定するとその動画を再生する
     playVideoById(videoId){
+        this.seekToFlag = true;
         this.player.loadVideoById(videoId);
     }
     setVolume(volume){

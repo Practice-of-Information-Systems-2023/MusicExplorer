@@ -157,4 +157,10 @@ class MathUtils{
     static randomRange(begin,end){
         return Math.random()*(end-begin)+begin;
     }
+    static getSecondFromPivot(){
+        const pivot = new Date('2023/06/01 00:00:00');
+        const now = new Date();
+        const diffTime = Math.floor((now.getTime() - pivot.getTime())/1000);
+        return diffTime;
+    }
 }
