@@ -55,4 +55,5 @@ function init() {
     // オブジェクトの追加と削除
     musicObjectGenerator.replace(communicater.getMusicObjectsData());
   }, 5000);
+  UpdateFavoriteList();
 }
