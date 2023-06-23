@@ -164,3 +164,10 @@ class MathUtils{
         return diffTime;
     }
 }
+
+class Utils{
+    static getVideoIdFromURL(url){
+        const result = url.substr(url.indexOf('=')+1,url.length);
+        return result;
+    }
+}

@@ -4,6 +4,7 @@ var height = canvas.height;
 var width = canvas.width;
 var fps = 30;
 var youtubePlayer = null;
+var sideMenuController = null;
 new YoutubePlayer("player", function (player) {
   youtubePlayer = player;
   init();
@@ -37,6 +38,9 @@ function init() {
   );
   musicObjectGenerator.generate(communicater.getMusicObjectsData());
 
+  sideMenuController = new SideMenuController(scene, audioController);
+  sideMenuController.init();
+
   setInterval(function () {
     // 毎フレームの処理
     context.clearRect(0, 0, width, height);
@@ -55,5 +59,4 @@ function init() {
     // オブジェクトの追加と削除
     musicObjectGenerator.replace(communicater.getMusicObjectsData());
   }, 5000);
-  UpdateFavoriteList();
 }
