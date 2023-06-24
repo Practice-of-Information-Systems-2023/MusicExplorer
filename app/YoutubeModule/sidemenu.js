@@ -46,12 +46,16 @@ class SideMenuController{
     var element = "";
     element += '<div class="search-item">';
     element += '<label class="search-item-music">';
-    element += '<input type="checkbox" class="hide-checkbox">';
+    element += '<input type="radio" name="sidemenu-radio" class="music-radio">';
     element += '<img src="'+music[3]+'">';
     element += '<div>'+music[1]+'</div>';
     element += '<div class="search-item-menu">';
     element += '<input type="button" class="music-button" value="お気に入り登録">';
     element += '<input type="button" class="music-button" value="視聴" onclick="'+func+'">';
+    element += '<label class="search-item-quit">'
+    element += '<input type="radio" name="sidemenu-radio" class="menu-radio">'
+    element += '×'
+    element += '</label>'
     element += '</div>';
     element += '</label>';
     element += '</div>';
@@ -63,12 +67,16 @@ class SideMenuController{
     var element = "";
     element += '<div class="search-item">';
     element += '<label class="search-item-music">';
-    element += '<input type="checkbox" class="hide-checkbox">';
+    element += '<input type="radio" name="sidemenu-radio" class="music-radio">';
     element += '<img src="'+music[3]+'">';
     element += '<div>'+music[1]+'</div>';
     element += '<div class="search-item-menu">';
     element += '<input type="button" class="music-button" value="お気に入り解除">';
     element += '<input type="button" class="music-button" value="移動" onclick="'+func+'">';
+    element += '<label class="search-item-quit">'
+    element += '<input type="radio" name="sidemenu-radio" class="menu-radio">'
+    element += '×'
+    element += '</label>'
     element += '</div>';
     element += '</label>';
     element += '</div>';

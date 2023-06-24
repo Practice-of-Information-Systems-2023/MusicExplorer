@@ -92,7 +92,6 @@
     align-items:center;
     float:left;
     width: 350px;
-    /*max-height: 178px;*/
     min-height: 78px;
     border: thick double #555555;
 }
@@ -106,10 +105,6 @@
     margin-right: 10px;
 }
 
-.search-item:has(.hide-checkbox:not(:checked)) .search-item-menu {
-    display: none;
-}
-
 .search-item-menu{
     position: absolute;
     top: 25%;
@@ -117,11 +112,36 @@
     opacity:1;
 }
 
-.search-item:has(.hide-checkbox:checked) .search-item-music > :not(.search-item-menu) {
-    opacity:0.1;
+.search-item:has(.music-radio:checked) .search-item-music > :not(.search-item-menu) {
+    opacity: 0.1;
+    cursor: auto;
 }
 
-.search-item .hide-checkbox {
+.search-item .search-item-quit{
+    justify-content: center;
+    align-items: center;
+    margin-left:20px;
+    padding: 4px 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #FF0000;
+    color: #fff;
+    font-weight: 600;
+    font-size: 1em;
+    position: absolute;
+    top: -50%;
+    left: -65px;
+}
+.search-item .menu-radio{
+    display: none;
+}
+.search-item .music-radio{
+    display: none;
+}
+.search-item:not(:has(input.music-radio:checked)) input.menu-radio {
+    pointer-events: none;
+}
+.search-item:not(:has(input.music-radio:checked)) .search-item-menu {
     display: none;
 }
 
@@ -129,7 +149,6 @@
 
     justify-content: center;
     align-items: center;
-    /*width: 80px;*/
     margin-left:20px;
     padding: 8px 10px;
     border: none;
@@ -142,4 +161,9 @@
 
 .search-item .music-button:hover {
     background-color: #FFAA67;
+    cursor: pointer;
+}
+.search-item .search-item-quit:hover {
+    background-color: #FF6666;
+    cursor: pointer;
 }
