@@ -9,6 +9,8 @@ from .serializers import AppUserSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
 
 # Create your views here.
@@ -17,7 +19,32 @@ dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(verbose=True, dotenv_path=dotenv_path)
 YOUTUBE_API_KEY = os.getenv('YOUTUBE_API_KEY')
 
-# youtubeからクエリに合致する音楽を検索する
+# youtubeからクエリに合致する音楽を検索するAPI
+@swagger_auto_schema(
+    method='post',
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'query': openapi.Schema(type=openapi.TYPE_STRING),
+        },
+        required=['query']
+    ),
+    responses={
+        status.HTTP_200_OK: openapi.Schema(
+            type=openapi.TYPE_ARRAY,
+            items=openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    'music_id': openapi.Schema(type=openapi.TYPE_STRING),
+                    'title': openapi.Schema(type=openapi.TYPE_STRING),
+                    'description': openapi.Schema(type=openapi.TYPE_STRING),
+                    'thumbnail_url': openapi.Schema(type=openapi.TYPE_STRING),
+                    'url': openapi.Schema(type=openapi.TYPE_STRING),
+                }
+            )
+        ),
+    },
+)
 @api_view(['POST'])
 def search_music(request):
     MAX_RESULTS = 10
@@ -36,23 +63,45 @@ def search_music(request):
             maxResults=MAX_RESULTS
         ).execute()
 
-        music_list = {}
+        music_list = []
         for search_result in search_response.get('items', []):
             music_id = search_result['id']['videoId']
-
             title = search_result['snippet']['title']
             description = search_result['snippet']['description']
             thumbnail_url = search_result['snippet']['thumbnails']['high']['url']
             url = f'https://www.youtube.com/watch?v={music_id}'
+            music = {'music_id': music_id, 'title': title, 'url': url, 'description': description, 'thumbnail_url': thumbnail_url}
+            music_list.append(music)
 
-            music = {'title': title, 'url': url, 'description': description, 'thumbnail_url': thumbnail_url}
-            music_list[music_id] = music
-
-        response = json.dumps(music_list, ensure_ascii=False)
-        return Response(response, status=status.HTTP_200_OK)
+        return Response(music_list, status=status.HTTP_200_OK)
 
 
 # ユーザ登録用API
+@swagger_auto_schema(
+    method='post',
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'name': openapi.Schema(type=openapi.TYPE_STRING),
+            'password': openapi.Schema(type=openapi.TYPE_STRING),
+            'twitter_id': openapi.Schema(type=openapi.TYPE_STRING),
+            'instagram_id': openapi.Schema(type=openapi.TYPE_STRING),
+            'genre_id': openapi.Schema(type=openapi.TYPE_INTEGER),
+            'age': openapi.Schema(type=openapi.TYPE_INTEGER),
+            'gender': openapi.Schema(type=openapi.TYPE_INTEGER),
+        },
+        required=['name', 'password', 'twitter_id', 'instagram_id', 'genre_id', 'age', 'gender']
+    ),
+    responses={
+        status.HTTP_200_OK: openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'user_id': openapi.Schema(type=openapi.TYPE_INTEGER),
+            }
+        ),
+        status.HTTP_400_BAD_REQUEST: "Bad Request"
+    },
+)
 @api_view(['POST'])
 def register_user(request):
     if request.method == 'POST':
@@ -60,8 +109,8 @@ def register_user(request):
         if serializer.is_valid():
             serializer.save()
             user_id = serializer.data['user_id']
-            response = {'user_id': user_id}
-            return Response(json.dumps(response), status=status.HTTP_201_CREATED)
+            response = {"user_id": user_id}
+            return Response(response, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # テスト用
