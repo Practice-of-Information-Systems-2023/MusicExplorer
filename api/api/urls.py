@@ -20,4 +20,5 @@ from backend_app import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/register_user/', views.register_user),
+    path('api/search_music/', views.search_music),
 ]
