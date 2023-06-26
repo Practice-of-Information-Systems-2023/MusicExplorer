@@ -18,12 +18,12 @@ load_dotenv(verbose=True, dotenv_path=dotenv_path)
 YOUTUBE_API_KEY = os.getenv('YOUTUBE_API_KEY')
 
 # youtubeからクエリに合致する音楽を検索する
+@api_view(['POST'])
 def search_music(request):
     MAX_RESULTS = 10
-    # if request.method == 'POST':
-    if request['method'] == 'POST':
-        # query = request.POST.get('query')
-        query = request['POST']['query']
+    if request.method == 'POST':
+        query = request.data.get('query')
+        print(query)
 
         youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEY)
 
@@ -48,8 +48,8 @@ def search_music(request):
             music = {'title': title, 'url': url, 'description': description, 'thumbnail_url': thumbnail_url}
             music_list[music_id] = music
 
-        music_json = json.dumps(music_list, ensure_ascii=False)
-        return render(request, 'backend_app/hoge.html', {'music': music_json})
+        response = json.dumps(music_list, ensure_ascii=False)
+        return Response(response, status=status.HTTP_200_OK)
 
 
 # ユーザ登録用API
@@ -66,22 +66,4 @@ def register_user(request):
 
 # テスト用
 if __name__ == '__main__':
-    # search_music テスト ------------------------------
-    # request = {'method': 'POST', 'POST': {'query': 'YOASOBI アイドル'}}
-    # search_music(request)
-
-    # register_user テスト ------------------------------
-    # request = {
-    #     'method': 'POST',
-    #     'POST': {
-    #         'name': 'hoge',
-    #         'password': 'password',
-    #         'twitter_id': '@hoge',
-    #         'instagram_id': '@hoge',
-    #         'genre_id': 0,
-    #         'age': 20,
-    #         'gender': 0
-    #     }
-    # }
-    # register_user(request)
     print("")
