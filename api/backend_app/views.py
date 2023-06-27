@@ -200,28 +200,18 @@ def get_profile(request):
             user = AppUser.objects.get(user_id=user_id)
         except AppUser.DoesNotExist:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        if 'name' in request.data:
-            user.name = request.data.get('name')
-        if 'password' in request.data:
-            user.password = request.data.get('password')
-        if 'twitter_id' in request.data:
-            user.twitter_id = request.data.get('twitter_id')
-        if 'instagram_id' in request.data:
-            user.instagram_id = request.data.get('instagram_id')
-        if 'genre_id' in request.data:
-            genre_id = Genre.objects.get(genre_id=request.data.get('genre_id'))
-            user.genre_id = genre_id
-        if 'age' in request.data:
-            user.age = request.data.get('age')
-        if 'gender' in request.data:
-            user.gender = request.data.get('gender')
         try:
-            user.save()
-        except Exception as e:
-            print(e)
+            genre_name = Genre.objects.get(genre_id=(user.genre_id).genre_id).name
+        except Genre.DoesNotExist:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        return Response(status=status.HTTP_200_OK)
-
+        response = {
+            'user_id': user.user_id,
+            'name': user.name,
+            'twitter_id': user.twitter_id,
+            'instagram_id': user.instagram_id,
+            'genre_name': genre_name,
+        }
+        return Response(response, status=status.HTTP_200_OK)
 
 
 # テスト用
