@@ -1,4 +1,6 @@
 version: "3"
+volumes:
+  node_modules:
 services:
   communication:
     container_name: ms-communication
@@ -8,6 +10,5 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - type: bind
-        source: .
-        target: /communication
+      - .:/communication
+      - node_modules:/communication/node_modules
