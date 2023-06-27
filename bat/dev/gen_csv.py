@@ -43,7 +43,7 @@ def gen_music_csv(file_name):
     df.to_csv(file_name, index=False)
 
 if __name__ == "__main__":
-    gen_rating_csv("./rating.csv")
-    gen_user_csv("./user.csv")
-    gen_music_csv("./music.csv")
+    gen_rating_csv("../data/rating.csv")
+    gen_user_csv("../data/user.csv")
+    gen_music_csv("../data/music.csv")
      

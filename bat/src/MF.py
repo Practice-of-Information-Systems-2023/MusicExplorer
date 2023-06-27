@@ -4,7 +4,6 @@ from sklearn.decomposition import NMF
 import pandas as pd
 import numpy as np
 from typing import Tuple
-import log as lg
 
 def df2sparse(X: pd.DataFrame, user: pd.DataFrame, music: pd.DataFrame) -> csr_matrix:
     for col in X.columns:
@@ -14,7 +13,6 @@ def df2sparse(X: pd.DataFrame, user: pd.DataFrame, music: pd.DataFrame) -> csr_m
     
 
 def NonNegativeMatrixFactorization(X: pd.DataFrame) -> Tuple[np.ndarray, np.ndarray]:
-    logger = lg.init_logger()
     model = NMF(n_components=2, init="nndsvd", random_state=1, 
                 max_iter=500, solver='mu', alpha_H=0.1, alpha_W=0.1, l1_ratio=0, verbose=1 )
     W = model.fit_transform(X)
@@ -22,9 +20,9 @@ def NonNegativeMatrixFactorization(X: pd.DataFrame) -> Tuple[np.ndarray, np.ndar
     return W, H
 
 if __name__ == "__main__":
-    df_rating = pd.read_csv("./rating.csv", header=0)
-    df_user = pd.read_csv("./user.csv", header=0)
-    df_music = pd.read_csv("./music.csv", header=0)
+    df_rating = pd.read_csv("../data/rating.csv", header=0)
+    df_user = pd.read_csv("../data/user.csv", header=0)
+    df_music = pd.read_csv("../data/music.csv", header=0)
     rating_matrix = df2sparse(df_rating, df_user, df_music)
     print(rating_matrix.shape)
     W, H = NonNegativeMatrixFactorization(rating_matrix)
