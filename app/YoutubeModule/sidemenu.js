@@ -94,4 +94,7 @@ class SideMenuController{
     this.player.transform.position.set(position);
     this.youtubePlayer.playVideoById(videoId);
   }
+  updateProfile(){
+    alert("更新");
+  }
 };
