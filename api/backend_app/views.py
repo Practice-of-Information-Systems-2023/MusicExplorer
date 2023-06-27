@@ -5,6 +5,7 @@ import json
 import os
 from os.path import join, dirname
 from dotenv import load_dotenv
+from .models import AppUser, Genre
 from .serializers import AppUserSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -112,6 +113,60 @@ def register_user(request):
             response = {"user_id": user_id}
             return Response(response, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+# ユーザ情報更新用API
+@swagger_auto_schema(
+    method='post',
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'user_id': openapi.Schema(type=openapi.TYPE_INTEGER),
+            'name': openapi.Schema(type=openapi.TYPE_STRING),
+            'password': openapi.Schema(type=openapi.TYPE_STRING),
+            'twitter_id': openapi.Schema(type=openapi.TYPE_STRING),
+            'instagram_id': openapi.Schema(type=openapi.TYPE_STRING),
+            'genre_id': openapi.Schema(type=openapi.TYPE_INTEGER),
+            'age': openapi.Schema(type=openapi.TYPE_INTEGER),
+            'gender': openapi.Schema(type=openapi.TYPE_INTEGER),
+        },
+        required=['user_id']
+    ),
+    responses={
+        status.HTTP_200_OK: "OK",
+        status.HTTP_400_BAD_REQUEST: "Bad Request"
+    },
+)
+@api_view(['POST'])
+def update_user(request):
+    if request.method == 'POST':
+        user_id = request.data.get('user_id')
+        try:
+            user = AppUser.objects.get(user_id=user_id)
+        except AppUser.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        if 'name' in request.data:
+            user.name = request.data.get('name')
+        if 'password' in request.data:
+            user.password = request.data.get('password')
+        if 'twitter_id' in request.data:
+            user.twitter_id = request.data.get('twitter_id')
+        if 'instagram_id' in request.data:
+            user.instagram_id = request.data.get('instagram_id')
+        if 'genre_id' in request.data:
+            genre_id = Genre.objects.get(genre_id=request.data.get('genre_id'))
+            user.genre_id = genre_id
+        if 'age' in request.data:
+            user.age = request.data.get('age')
+        if 'gender' in request.data:
+            user.gender = request.data.get('gender')
+        try:
+            user.save()
+        except Exception as e:
+            print(e)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_200_OK)
+
 
 # テスト用
 if __name__ == '__main__':

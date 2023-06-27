@@ -1,4 +1,5 @@
 django
 djangorestframework
+drf-yasg
 google-api-python-client
 python-dotenv

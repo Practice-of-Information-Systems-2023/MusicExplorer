@@ -37,6 +37,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/register_user/', views.register_user),
+    path('api/update_user', views.update_user),
     path('api/search_music/', views.search_music),
     path('api/swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('api/doc/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
