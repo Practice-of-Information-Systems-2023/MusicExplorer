@@ -1,49 +1,50 @@
 import { x_range, y_range } from "../config";
 
-interface User {
+interface Pos {
+  x: number;
+  y: number;
+}
+
+interface Users {
+  [id: string]: Pos;
+}
+
+interface UserDataForClient {
   id: string;
   x: number;
   y: number;
 }
 
-const userData: Set<User> = new Set<User>();
+const userData: Users = {};
 
 function addUserData(id: string, x: number, y: number): void {
-  const user: User = {
-    id: id,
-    x: x,
-    y: y,
-  };
-  userData.add(user);
+  userData[id] = { x: x, y: y };
 }
 
 function deleteUserData(id: string): void {
-  userData.forEach((user: User) => {
-    if (user.id === id) {
-      userData.delete(user);
-    }
-  });
+  delete userData[id];
 }
 
-function getUserData(id: string): User | undefined {
-  return Array.from(userData).find((user) => user.id === id);
-}
-
-function getUsers(id: string): User[] {
-  const currentUser = getUserData(id);
+function getUsers(id: string): UserDataForClient[] {
+  const currentUser = userData[id];
   if (!currentUser) {
     return [];
   }
 
   const { x, y } = currentUser;
 
-  return Array.from(userData).filter((user) => {
-    return (
-      user.id !== id &&
-      Math.abs(user.x - x) <= x_range &&
-      Math.abs(user.y - y) <= y_range
-    );
-  });
+  let usersInRange: UserDataForClient[] = [];
+
+  for (const userId in userData) {
+    if (userId !== id) {
+      const user = userData[userId];
+      if (Math.abs(user.x - x) <= x_range && Math.abs(user.y - y) <= y_range) {
+        usersInRange.push({ id: userId, x: user.x, y: user.y });
+      }
+    }
+  }
+
+  return usersInRange;
 }
 
 export { addUserData, deleteUserData, getUsers };
