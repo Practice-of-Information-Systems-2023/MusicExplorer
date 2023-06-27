@@ -1,3 +1,24 @@
+class ProfileGenerator{
+    // プロフィールオブジェクトを管理するクラス 最初に実行
+    constructor(scene){
+        this.scene = scene;
+        document.getElementById("canvas").onclick = this.onClick;
+    }
+    onClick(e){
+        const rect = e.target.getBoundingClientRect();
+            // ブラウザ上での座標を求める
+        const   viewX = e.clientX - rect.left,
+                viewY = e.clientY - rect.top;
+            // 表示サイズとキャンバスの実サイズの比率を求める
+        const   scaleWidth =  cvs.clientWidth / cvs.width,
+                scaleHeight =  cvs.clientHeight / cvs.height;
+            // ブラウザ上でのクリック座標をキャンバス上に変換
+        const   canvasX = Math.floor( viewX / scaleWidth ),
+                canvasY = Math.floor( viewY / scaleHeight );
+        console.log( canvasX,canvasY );
+    }
+}
+
 class CameraGenerator{
     // カメラオブジェクトを管理するクラス 最初に実行
     // クラスにする必要はない？
@@ -137,6 +158,7 @@ class CharacterGenerator{
         this.userObjects = {};
         this.USER_ID = 0;
         this.POSITION = 1;
+        this.NAME = 1;
     }
     generate(userObjects){
         this.change(userObjects, false);
@@ -186,6 +208,14 @@ class CharacterGenerator{
                 this.userObjects[data[this.USER_ID]].setDestination(
                     data[this.POSITION]
                 );
+            }
+
+        }
+    }
+    setNames(names){
+        for(let name of names){
+            if(this.userIDs.has(name[this.USER_ID])){
+                this.userObjects[name[this.USER_ID]].setName(name[this.NAME]);
             }
 
         }

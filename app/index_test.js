@@ -10,11 +10,16 @@ new YoutubePlayer("player", function (player) {
   init();
 });
 function getUserID() {
-  const userID = window.prompt("ユーザーIDを整数で入力してください", "");
+  const userID = window.prompt("ユーザーIDを入力してください", "");
   return userID;
+}
+function getUserName() {
+  const userName = window.prompt("ユーザー名を入力してください", "");
+  return userName;
 }
 function init() {
   const userID = getUserID();
+  const userName = getUserName();
   const audioController = new AudioController(youtubePlayer);
   const scene = new Scene();
 
@@ -23,7 +28,7 @@ function init() {
 
   const characterGenerator = new CharacterGenerator(scene, context);
 
-  const communicater = new Communicater(scene, characterGenerator, userID);
+  const communicater = new Communicater(scene, characterGenerator, userID, userName);
 
   const backgroundGenerator = new BackGroundGenerator(scene, context);
   backgroundGenerator.generate(BACK_SPRITE);
@@ -37,6 +42,8 @@ function init() {
     audioController
   );
   musicObjectGenerator.generate(communicater.getMusicObjectsData());
+
+  //const profileGenerator = new ProfileGenerator(scene);
 
   sideMenuController = new SideMenuController(scene, audioController);
   sideMenuController.init();
