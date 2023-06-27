@@ -193,7 +193,7 @@ def update_user(request):
     },
 )
 @api_view(['POST'])
-def update_user(request):
+def get_profile(request):
     if request.method == 'POST':
         user_id = request.data.get('user_id')
         try:
