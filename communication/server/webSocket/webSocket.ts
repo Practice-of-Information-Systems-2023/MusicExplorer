@@ -18,12 +18,12 @@ webSocketRouter.ws("/websocket", (ws: WebSocket, req: Request) => {
 
   ws.on("message", (msg: string) => {
     const data = JSON.parse(msg);
-    const { id, x, y } = data;
+    const { id, name, x, y, action } = data;
     if (userId == null) {
       userId = id;
       clients.set(userId, ws);
     }
-    addUserData(id, x, y);
+    addUserData(id, name, x, y, action);
   });
 
   ws.on("close", () => {
