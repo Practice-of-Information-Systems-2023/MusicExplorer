@@ -202,6 +202,9 @@ class CharacterController extends Component{
         }
     }
     calcVelocityByKey(){
+        if(this.keyConfig==null){
+            return Vector2.zero;
+        }
         var velocity = Vector2.zero;
         for(let i=0; i<this.commands.length; i++){
             if(this.keyFlag[this.commands[i]]){
@@ -211,6 +214,9 @@ class CharacterController extends Component{
         return velocity;
     }
     calcVelocityByDestination(){
+        if(!this.isAutoMove){
+            return Vector2.zero;
+        }
         const speed = 120;
         const velocity = this.destination.clone()
             .sub(this.gameObject.transform.position);
@@ -228,25 +234,35 @@ class CharacterController extends Component{
         this.name = name;
         this.gameObject.textRenderer.text = name;
     }
-    checkDestination(){
-        const dist = this.destination.clone()
-                        .sub(this.gameObject.transform.position)
-                        .sqMagnitude
-        if(dist < 100){
+    autoMoveAdjust(preVelocity){
+        const transform = this.gameObject.transform;
+        const dist = transform.position.clone()
+                        .sub(this.destination)
+                        .sqMagnitude;
+        const rate = (dist / this.velocity.sqMagnitude)**0.5;
+        if(rate < 1){
+            transform.position.set(this.destination);
+            this.velocity.set(preVelocity);
             this.isAutoMove = false;
+            this.isMoving = false;
+        } else if(rate > 10 && rate < 40){
+            this.velocity.times(1.5);
+            transform.translate(this.velocity);               
+        }else if(rate > 40){
+            transform.position.set(this.destination);
+            this.velocity.set(preVelocity);       
+        }else{
+            transform.translate(this.velocity); 
         }
     }
     update(dt){
-        var preVelocity = this.velocity.clone();
-        this.velocity.times(0);
+        const preVelocity = this.velocity.clone();
 
-        if(this.keyConfig!=null){
-            this.velocity.add(this.calcVelocityByKey());
-        }
-        if(this.isAutoMove){
-            this.velocity.add(this.calcVelocityByDestination());
-        }
-        if(this.velocity.x !=0 || this.velocity.y != 0){
+        this.velocity.times(0);
+        this.velocity.add(this.calcVelocityByKey());
+        this.velocity.add(this.calcVelocityByDestination());
+
+        if(!this.velocity.isZero){
             this.velocity.normalize().times(120);
             this.isMoving = true;
         }else{
@@ -256,16 +272,9 @@ class CharacterController extends Component{
         this.velocity.times(dt);
 
         if(this.isAutoMove){
-            const dist =this.gameObject.transform.position.clone().sub(this.destination).sqMagnitude;
-            if(dist < this.velocity.sqMagnitude){
-                this.gameObject.transform.position.set(this.destination);
-                this.velocity.set(preVelocity);
-            }else{
-                this.gameObject.transform.translate(this.velocity);                
-            }
+            this.autoMoveAdjust(preVelocity);
         }else{
             this.gameObject.transform.translate(this.velocity);
         }
-        this.checkDestination();
     }
 }

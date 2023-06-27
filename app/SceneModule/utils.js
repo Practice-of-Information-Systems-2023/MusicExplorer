@@ -147,6 +147,7 @@ class Vector2{
     get sqMagnitude(){return this.x**2+this.y**2;}
     get magnitude(){return this.sqMagnitude**0.5;}
     get normalized(){return this.clone().normalize;}
+    get isZero(){return this.x==0 && this.y==0;}
     get eulerAngle(){
         var angle = Math.atan2(this.y, this.x)/Math.PI*180;
         if(angle < 0){
