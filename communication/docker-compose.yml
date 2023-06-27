@@ -1,0 +1,13 @@
+version: "3"
+services:
+  communication:
+    container_name: ms-communication
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - type: bind
+        source: .
+        target: /communication
