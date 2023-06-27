@@ -8,13 +8,17 @@ from typing import Tuple
 def df2sparse(X: pd.DataFrame, user: pd.DataFrame, music: pd.DataFrame) -> csr_matrix:
     for col in X.columns:
         X[col] = X[col].astype("int64")
-    print(X.dtypes)
+    # map id to range 0 ~ n
+    user_map = {id:i for i, id in enumerate(user["user_id"])}
+    music_map = {id:i for i, id in enumerate(music["music_id"])}
+    X["user_id"] = X["user_id"].map(user_map)
+    X["music_id"] = X["music_id"].map(music_map)
     return csr_matrix((X["rating"], (X["user_id"], X["music_id"])), shape=(user.shape[0], music.shape[0]))
     
 
 def NonNegativeMatrixFactorization(X: pd.DataFrame) -> Tuple[np.ndarray, np.ndarray]:
-    model = NMF(n_components=2, init="nndsvd", random_state=1, 
-                max_iter=500, solver='mu', alpha_H=0.1, alpha_W=0.1, l1_ratio=0, verbose=1 )
+    model = NMF(n_components=2, init="random", random_state=1, 
+                max_iter=500, solver='mu', alpha_H=0.1, alpha_W=0.1, l1_ratio=0)
     W = model.fit_transform(X)
     H = model.components_
     return W, H

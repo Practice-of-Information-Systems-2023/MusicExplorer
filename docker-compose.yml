@@ -3,8 +3,8 @@ services:
 # API用のサーバport5000がコンテナにつながる,ホストの./apiがコンテナの/apiにマウントされる
   api_service:
     build:
-      context: ./api/Dockerfile
-      dockerfile: api_image
+      dockerfile: ./api/Dockerfile
+      context: ./api
     ports:
       - "5000:5000"
     volumes:
@@ -13,12 +13,12 @@ services:
       main:
         ipv4_address: 192.168.0.1/24
 # 通信用のサーバport5001がコンテナにつながる,ホストの./communicationがコンテナの/communicationにマウントされる
-  communication_service:
+  communication:
     build:
-      context: ./communication/Dockerfile
-      dockerfile: communication_image
+      dockerfile: ./communication/Dockerfile
+      context: ./communication
     ports:
-      - "5001:5001"
+      - "3000:3000"
     volumes:
       - ./communication:/communication
     networks:
