@@ -1,24 +1,34 @@
 import { x_range, y_range } from "../config";
 
-interface Pos {
+interface Detail {
+  name: string;
   x: number;
   y: number;
+  action: number;
 }
 
 interface Users {
-  [id: string]: Pos;
+  [id: string]: Detail;
 }
 
 interface UserDataForClient {
   id: string;
+  name: string;
   x: number;
   y: number;
+  action: number;
 }
 
 const userData: Users = {};
 
-function addUserData(id: string, x: number, y: number): void {
-  userData[id] = { x: x, y: y };
+function addUserData(
+  id: string,
+  name: string,
+  x: number,
+  y: number,
+  action: number
+): void {
+  userData[id] = { name: name, x: x, y: y, action: action };
 }
 
 function deleteUserData(id: string): void {
@@ -39,7 +49,13 @@ function getUsers(id: string): UserDataForClient[] {
     if (userId !== id) {
       const user = userData[userId];
       if (Math.abs(user.x - x) <= x_range && Math.abs(user.y - y) <= y_range) {
-        usersInRange.push({ id: userId, x: user.x, y: user.y });
+        usersInRange.push({
+          id: userId,
+          name: user.name,
+          x: user.x,
+          y: user.y,
+          action: user.action,
+        });
       }
     }
   }
