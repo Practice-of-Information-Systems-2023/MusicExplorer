@@ -49,7 +49,7 @@ def df2dataset(df_rating:pd.DataFrame ,df_user: pd.DataFrame, df_music: pd.DataF
     return interaction, user_features, music_features
 
 if __name__ == "__main__":
-    df_rating = pd.read_csv("./data/rating.csv", header=0)
-    df_user = pd.read_csv("./data/user.csv", header=0)
-    df_music = pd.read_csv("./data/music.csv", header=0)
+    df_rating = pd.read_csv("../data/rating.csv", header=0)
+    df_user = pd.read_csv("../data/user.csv", header=0)
+    df_music = pd.read_csv("../data/music.csv", header=0)
     df2dataset(df_rating, df_user, df_music)
