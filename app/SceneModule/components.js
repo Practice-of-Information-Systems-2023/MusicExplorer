@@ -254,7 +254,18 @@ class CharacterController extends Component{
             this.isMoving = false;
         }
         this.velocity.times(dt);
-        this.gameObject.transform.translate(this.velocity);
+
+        if(this.isAutoMove){
+            const dist =this.gameObject.transform.position.clone().sub(this.destination).sqMagnitude;
+            if(dist < this.velocity.sqMagnitude){
+                this.gameObject.transform.position.set(this.destination);
+                this.velocity.set(preVelocity);
+            }else{
+                this.gameObject.transform.translate(this.velocity);                
+            }
+        }else{
+            this.gameObject.transform.translate(this.velocity);
+        }
         this.checkDestination();
     }
 }
