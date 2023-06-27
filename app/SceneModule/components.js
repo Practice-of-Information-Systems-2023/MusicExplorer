@@ -119,6 +119,26 @@ class SpriteRenderer extends Component{
     }
 }
 
+class TextRenderer extends Component{
+    constructor(context, text="", renderingOrder = 0){
+        super();
+        this.context = context;
+        this.text = text;
+        this.renderingOrder = renderingOrder;
+    }
+    update(dt){
+        const obj = this.gameObject;
+        const positionAndScale 
+            = obj.scene.mainCamera.projection(obj.transform.position, obj.transform.scale);
+        Text.drawText(
+            this.context,
+            positionAndScale[0],
+            new Vector2(0,-50),
+            this.text,
+        );
+    }
+}
+
 class MusicObject extends Component{
     constructor(videoId, player, audioController, musicId){
         super();
@@ -161,6 +181,7 @@ class CharacterController extends Component{
         this.isMoving = false;
         this.isAutoMove = false;
         this.destination = Vector2.zero;
+        this.name = "";
     }
     getKeyForce(){
         return {
@@ -202,6 +223,10 @@ class CharacterController extends Component{
     setDestination(destination){
         this.destination.set(destination);
         this.isAutoMove = true;
+    }
+    setName(name){
+        this.name = name;
+        this.gameObject.textRenderer.text = name;
     }
     checkDestination(){
         const dist = this.destination.clone()

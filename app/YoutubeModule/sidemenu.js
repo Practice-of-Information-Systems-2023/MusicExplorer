@@ -11,6 +11,7 @@ class SideMenuController{
   search(){
     const query = document.getElementById("search").value;
     const result = this.callYoutubeAPI(query);
+    $(".result_area").empty();
     for(let music of result){
       music[2] = Utils.getVideoIdFromURL(music[2]);
       this.addSearchResult(music);
@@ -18,18 +19,30 @@ class SideMenuController{
   }
   updateFavoriteList(){
     const result = this.callGetFavoriteAPI();
+    $(".favorite_area").empty();
     for(let music of result){
       music[2] = Utils.getVideoIdFromURL(music[2]);
       this.addFavoriteResult(music);
     }
   }
   callYoutubeAPI(query){
-    // ダミー
-    return [
-      [3,"After Despair and Hope (Final Boss Theme) - Xenoblade Chronicles 2 OST [089]","https://www.youtube.com/watch?v=LG_AYk4Fa38","https://i.ytimg.com/vi/LG_AYk4Fa38/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDd9K1peZ3TH09XKnkYV0OPQStnFQ"],
-      [4,"Zanza the Divine - Xenoblade Chronicles: Definitive Edition OST [035] [DE]","https://www.youtube.com/watch?v=MnVemwebkiY","https://i.ytimg.com/vi/MnVemwebkiY/hqdefault.jpg?sqp=-oaymwE2CNACELwBSFXyq4qpAygIARUAAIhCGAFwAcABBvABAfgB_gmAAtAFigIMCAAQARh_IC4oMjAP&rs=AOn4CLCjqRi0DjHYug2eoeJsSFkupnbnpQ"],
-      [5,"Alpha, The Divine Beginning & End – Xenoblade Chronicles 3: Future Redeemed OST","https://www.youtube.com/watch?v=jJ93P4NuMtc","https://i.ytimg.com/vi/jJ93P4NuMtc/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCMsRo79kUyyhDwzX0pLIdDm-OMGg"],
-    ];
+
+    const data = $.ajax({
+      url: "http://127.0.0.1:8000/api/search_music/",
+      type:'POST',
+      dataType: 'json',
+      data : {query:query},
+      timeout:3000,
+      async: false
+    }).responseText;
+
+    const parsedData = JSON.parse(data);
+    const musics = [];
+    parsedData.forEach((item) => {
+      const { music_id, title, url, description, thumbnail_url } = item;
+      musics.push([0,title,url,thumbnail_url]);
+    });
+    return musics;
   }
   callGetFavoriteAPI(){
     // ダミー
@@ -93,5 +106,8 @@ class SideMenuController{
     const position = new Vector2(x,y+50);
     this.player.transform.position.set(position);
     this.youtubePlayer.playVideoById(videoId);
+  }
+  updateProfile(){
+    alert("更新");
   }
 };

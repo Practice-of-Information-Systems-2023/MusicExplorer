@@ -14,6 +14,9 @@ class Scene{
         if(gameObject.renderer != null){
             this.renderers.add(gameObject.renderer);
         }
+        if(gameObject.textRenderer != null){
+            this.renderers.add(gameObject.textRenderer);
+        }
         this.gameObjectDict[gameObject.name] = gameObject;
         return gameObject;
     }
@@ -51,6 +54,9 @@ class Scene{
         if(gameObject.renderer != null){
             this.renderers.delete(gameObject.renderer);
         }
+        if(gameObject.textRenderer != null){
+            this.renderers.delete(gameObject.textRenderer);
+        }
         gameObject.delete();
     }
 };
@@ -65,6 +71,7 @@ class GameObject{
         this.controller = null;
         this.animator = null;
         this.renderer = null;
+        this.textRenderer = null;
         this.camera = null;
         this.musicObject = null;
     }
@@ -79,6 +86,10 @@ class GameObject{
     setRenderer(renderer){
         this.renderer = renderer;
         renderer.gameObject = this;
+    }
+    setTextRenderer(textRenderer){
+        this.textRenderer = textRenderer;
+        textRenderer.gameObject = this;
     }
     setCamera(camera){
         this.camera = camera;
@@ -101,6 +112,7 @@ class GameObject{
         this.controller = null;
         this.animator = null;
         this.renderer = null;
+        this.textRenderer = null;
         this.camera = null;
         this.musicObject = null;
     }

@@ -23,6 +23,7 @@ class Prefabs{
         const obj = new GameObject(name, new Transform(position, Vector2.one));
         obj.setAnimator(new CharacterAnimator(Prefabs.CHARACHIP_ANIMATIONS,"down"));
         obj.setRenderer(new SpriteRenderer(context, CHARA_SPRITE_1, 10));
+        obj.setTextRenderer(new TextRenderer(context, "", 15));
         obj.setController(new CharacterController(keyConfig));
         return obj;
     }

@@ -54,6 +54,16 @@ class Sprite{
     }
 }
 
+class Text{
+    static drawText(context, position, pivot, text){
+        context.font = '24px serif';
+        const textWidth = context.measureText(text).width;
+        position.x += pivot.x;
+        position.y += pivot.y;
+        context.fillText(text, position.x - textWidth/2, position.y);
+    }
+}
+
 // 時間経過によるアニメーション制御
 class Animation{
     constructor(stateList, timeList){
