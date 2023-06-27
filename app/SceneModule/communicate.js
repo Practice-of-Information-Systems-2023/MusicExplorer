@@ -19,7 +19,7 @@ class Communicater {
       const { id, name, x, y, action } = item;
       console.log(id, name, x, y, action);
       positions.push([id, new Vector2(x, y)]);
-      names.push(name);
+      names.push([id,name]);
     });
     this.characterGenerator.replace(positions);
     this.characterGenerator.setDestinations(positions);

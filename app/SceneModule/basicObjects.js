@@ -54,6 +54,9 @@ class Scene{
         if(gameObject.renderer != null){
             this.renderers.delete(gameObject.renderer);
         }
+        if(gameObject.textRenderer != null){
+            this.renderers.delete(gameObject.textRenderer);
+        }
         gameObject.delete();
     }
 };
@@ -109,6 +112,7 @@ class GameObject{
         this.controller = null;
         this.animator = null;
         this.renderer = null;
+        this.textRenderer = null;
         this.camera = null;
         this.musicObject = null;
     }

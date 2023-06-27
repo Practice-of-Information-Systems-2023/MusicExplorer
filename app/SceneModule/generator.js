@@ -158,6 +158,7 @@ class CharacterGenerator{
         this.userObjects = {};
         this.USER_ID = 0;
         this.POSITION = 1;
+        this.NAME = 1;
     }
     generate(userObjects){
         this.change(userObjects, false);
@@ -213,8 +214,8 @@ class CharacterGenerator{
     }
     setNames(names){
         for(let name of names){
-            if(this.userIDs.has(data[this.USER_ID])){
-                this.userObjects[data[this.USER_ID]].setName(name);
+            if(this.userIDs.has(name[this.USER_ID])){
+                this.userObjects[name[this.USER_ID]].setName(name[this.NAME]);
             }
 
         }

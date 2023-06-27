@@ -225,7 +225,7 @@ class CharacterController extends Component{
         this.isAutoMove = true;
     }
     setName(name){
-        this.name.set(name);
+        this.name = name;
         this.gameObject.textRenderer.text = name;
     }
     checkDestination(){
