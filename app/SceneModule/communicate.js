@@ -5,7 +5,7 @@ class Communicater {
     this.userID = userID;
     this.player = scene.find("Player");
     this.CHARACTER_RECT = 1000;
-    const url = "ws://localhost:3000/websocket";
+    const url = "ws://15.168.10.223:3000/websocket";
     this.socket = new WebSocket(url);
     this.socket.addEventListener("message", this.setDestinations.bind(this));
   }
