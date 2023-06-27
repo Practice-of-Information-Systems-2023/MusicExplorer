@@ -12,9 +12,78 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from .models import Favorite, AppUser, Music
+from .serializers import AppUserSerializer, MusicSerializer, FavoriteSerializer
+from django.views.decorators.csrf import csrf_protect
 
 
-# Create your views here.
+@csrf_protect
+@api_view(['POST'])
+def create_favorite(request):
+    if request.method == 'POST':
+        get_music_details(request.data.get('music_id'))
+        serializer = FavoriteSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()        
+        return Response(status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+def get_music_details(music_id): 
+    youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEY)
+
+    response = youtube.videos().list(
+        part='snippet, statistics',
+        id=music_id
+    ).execute()
+
+    items = response['items']
+    if len(items) > 0:
+        video = items[0]
+        snippet = video['snippet']
+        statistics = video['statistics']
+        title = snippet['title']
+        url = f'https://www.youtube.com/watch?v={music_id}'
+        views = int(statistics['viewCount'])
+        likes = int(statistics['likeCount'])
+        #dislikes = int(statistics['dislikeCount'])#
+        comment_count = int(statistics['commentCount'])
+
+        if Music.objects.filter(music_id=music_id).exists():
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        music = Music(
+            music_id=music_id,
+            title=title,
+            url=url,
+            views=views,
+            good=likes,
+            #bad=dislikes,
+            position_x=1000000000,
+            position_y=3000000000,
+            comment_count=comment_count
+        )
+        music.save()
+        return Response(status=status.HTTP_200_OK)
+    else:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(['POST'])
+def delete_favorite(request):
+    if request.method == 'POST':
+        serializer = FavoriteSerializer(data=request.data)
+        if serializer.is_valid():
+            try:
+                favorite = Favorite.objects.get(user_id=serializer.validated_data['user_id'], music_id=serializer.validated_data['music_id'])
+                favorite.delete()
+                return Response(status=status.HTTP_200_OK)
+            except Favorite.DoesNotExist:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        else:
+            print(serializer.errors) 
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(verbose=True, dotenv_path=dotenv_path)
