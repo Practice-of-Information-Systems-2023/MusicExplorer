@@ -11,7 +11,13 @@ def gen_rating_csv(file_name):
     num_rating = 5000
     df = pd.DataFrame(columns=rating_col_name)
     for i in range(num_rating):
-        df.loc[i] = [random.randint(0, 99), random.randint(0, 99), 1]
+        df.loc[i] = [random.randint(0, 99), random.randint(0, 149), 1]
+    for i in range(150):
+        for _ in range(5):
+            df.loc[num_rating+i] = [random.randint(0, 99), i, 1]
+    for i in range(100):
+        for _ in range(5):
+            df.loc[num_rating+150+i] = [i, random.randint(0, 149), 1]
     print(df)
     df.to_csv(file_name, index=False)
     
@@ -25,7 +31,7 @@ def gen_user_csv(file_name):
     df.to_csv(file_name, index=False)
     
 def gen_music_csv(file_name):
-    num_music = 100
+    num_music = 150
     df = pd.DataFrame(columns=music_col_name)
     for i in range(num_music//3):
         df.loc[i] = [i, int(random.gauss(10000, 3000)), int(random.gauss(500, 200)), int(random.gauss(500, 200)), int(random.gauss(500, 200))]

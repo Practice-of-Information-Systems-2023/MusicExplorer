@@ -1,28 +1,33 @@
 # simple matrix factorization
-import numpy as np
+from scipy.sparse.csr import csr_matrix
+from sklearn.decomposition import NMF
 import pandas as pd
+import numpy as np
+from typing import Tuple
+import log as lg
 
-def matrix_factorization(ratings, K, steps=5000, alpha=0.0002, beta=0.02):
-    P = np.random.rand(ratings.shape[0], K)
-    Q = np.random.rand(K, ratings.shape[1])
-    Q = Q.T
-    for step in range(steps):
-        for i in range(len(ratings)):
-            for j in range(len(ratings[i])):
-                if ratings[i][j] > 0:
-                    eij = ratings[i][j] - np.dot(P[i,:], Q[:,j])
-                    for k in range(K):
-                        P[i][k] = P[i][k] + alpha * (2 * eij * Q[k][j] - beta * P[i][k])
-                        Q[k][j] = Q[k][j] + alpha * (2 * eij * P[i][k] - beta * Q[k][j])
-        eR = np.dot(P, Q)
-        e = 0
-        for i in range(len(ratings)):
-            for j in range(len(ratings[i])):
-                if ratings[i][j] > 0:
-                    e = e + pow(ratings[i][j] - np.dot(P[i,:], Q[:,j]), 2)
-                    for k in range(K):
-                        e = e + (beta/2) * (pow(P[i][k], 2) + pow(Q[k][j], 2))
-        if e < 0.001:
-            break
-    return P, Q.T
+def df2sparse(X: pd.DataFrame, user: pd.DataFrame, music: pd.DataFrame) -> csr_matrix:
+    for col in X.columns:
+        X[col] = X[col].astype("int64")
+    print(X.dtypes)
+    return csr_matrix((X["rating"], (X["user_id"], X["music_id"])), shape=(user.shape[0], music.shape[0]))
+    
+
+def NonNegativeMatrixFactorization(X: pd.DataFrame) -> Tuple[np.ndarray, np.ndarray]:
+    logger = lg.init_logger()
+    model = NMF(n_components=2, init="nndsvd", random_state=1, 
+                max_iter=500, solver='mu', alpha_H=0.1, alpha_W=0.1, l1_ratio=0, verbose=1 )
+    W = model.fit_transform(X)
+    H = model.components_
+    return W, H
+
+if __name__ == "__main__":
+    df_rating = pd.read_csv("./rating.csv", header=0)
+    df_user = pd.read_csv("./user.csv", header=0)
+    df_music = pd.read_csv("./music.csv", header=0)
+    rating_matrix = df2sparse(df_rating, df_user, df_music)
+    print(rating_matrix.shape)
+    W, H = NonNegativeMatrixFactorization(rating_matrix)
+    print(W.shape, H.shape)
+    
     
