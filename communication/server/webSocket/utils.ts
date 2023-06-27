@@ -18,6 +18,7 @@ export function startSendingUserData(
 const sendUserDataToClients = (clients: Map<string, WebSocket>) => {
   clients.forEach((ws, id) => {
     const response = JSON.stringify(getUsers(id));
+
     if (ws.readyState === ws.OPEN) {
       ws.send(response);
     }
