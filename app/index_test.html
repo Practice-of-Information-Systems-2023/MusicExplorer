@@ -1,12 +1,97 @@
 <!DOCTYPE html>
     <head>
         <title>キャラクターを動かすテスト</title>
+        <link rel="stylesheet" href="index_test.css">
     </head>
     <body>
-        <canvas id="main" height=320 width=480 style="border:solid"></canvas>
-        <div id="player" height=320 width=480></div>
+        <center>
+            <table border="2">
+                <tr>        
+                    <!-- ------------ゲーム画面------------- -->
+                    <td>
+                        <canvas id="main" height=320 width=480 style="border:solid"></canvas>
+                    </td>
+                    <!-- ------------お気に入り・動画検索欄------------- -->
+                    <td rowspan="2" valign="top">
+
+                        <div class="tab">
+                            <!-- ------------動画検索欄------------- -->
+                            <label>
+                                <input type="radio" name="tab-001" class="hide-radiobtn" checked>
+                                動画検索
+                            </label>
+                            <div>
+                                <input type="text" class="search-inputbox" id="search" size="36" placeholder="検索したい曲名を入力"/>
+                                <button class="search-button" onclick="sideMenuController.search()">検索</button><br>
+                                <div style="height:570px; width:360px; overflow-y:scroll;">
+                                    <div class="result_area">
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <label>
+                                <input type="radio" name="tab-001" class="hide-radiobtn">
+                                お気に入り
+                            </label>
+                            <div>
+                                <div style="height:615px; width:360px; overflow-y:scroll;">
+                                    <div class="favorite_area">
+                                    </div>
+                                </div>
+                            </div>
+                        
+                            <label>
+                                <input type="radio" name="tab-001" class="hide-radiobtn">
+                                プロフィール
+                            </label>
+                            <div>
+                                <div style="height:615px; width:360px; overflow-y:scroll;">
+                                    <div class="profile_area" style="margin-left:10px">
+                                        ---公開情報---<br>
+                                        ユーザー名<br>
+                                        <input type="text" class="profile-inputbox" size="36" placeholder="ユーザー名"/><br>
+                                        好きなジャンル<br>
+                                        <select>
+                                            <option value="apple">ジャンル1</option>
+                                            <option value="orange">ジャンル2</option>
+                                            <option value="banana">未回答</option>
+                                        </select><br>
+                                        TwitterID<br>
+                                        <input type="text" class="profile-inputbox" size="36" placeholder="TwitterID"/><br>
+                                        InstagramID<br>
+                                        <input type="text" class="profile-inputbox" size="36" placeholder="InstagramID"/><br>
+                                        <br>
+                                        ---非公開情報---<br>
+                                        年齢<br>
+                                        <input type="text" class="profile-inputbox" size="36" placeholder="年齢"/><br>
+                                        性別<br>
+                                        <select>
+                                            <option value="apple">男</option>
+                                            <option value="orange">女</option>
+                                            <option value="banana">未回答</option>
+                                        </select><br>
+                                        <br>
+                                        <button class="search-button" onclick="alert('更新')">更新</button><br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+
+                </tr>       
+                <tr>
+                    <!-- ------------動画------------- -->
+                    <td>
+                        <div id="player" height=320 width=480></div>
+                    </td>
+                </tr>
+            </table> 
+        </center>>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <script src="YoutubeModule/sidemenu.js"></script>
         <script src="https://www.youtube.com/iframe_api"></script>
-        <script src="YoutubePlayer.js"></script>
+        <script src="YoutubeModule/YoutubePlayer.js"></script>
         <script src="SceneModule/utils.js"></script>
         <script src="SceneModule/basicObjects.js"></script>
         <script src="SceneModule/components.js"></script>

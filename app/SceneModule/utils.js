@@ -16,6 +16,18 @@ class KeyConfig{
             'a':    'LEFT',
         };
     }
+    static get DOUBLE(){
+        return {
+            'w':      'UP',
+            's':    'DOWN',
+            'd':   'RIGHT',
+            'a':    'LEFT',
+            'ArrowUp':      'UP',
+            'ArrowDown':    'DOWN',
+            'ArrowRight':   'RIGHT',
+            'ArrowLeft':    'LEFT',
+        };
+    }
 }
 
 class Sprite{
@@ -144,5 +156,18 @@ class Vector2{
 class MathUtils{
     static randomRange(begin,end){
         return Math.random()*(end-begin)+begin;
+    }
+    static getSecondFromPivot(){
+        const pivot = new Date('2023/06/01 00:00:00');
+        const now = new Date();
+        const diffTime = Math.floor((now.getTime() - pivot.getTime())/1000);
+        return diffTime;
+    }
+}
+
+class Utils{
+    static getVideoIdFromURL(url){
+        const result = url.substr(url.indexOf('=')+1,url.length);
+        return result;
     }
 }

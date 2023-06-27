@@ -55,7 +55,7 @@ class PlayerGenerator{
             "Player",
             position,
             this.context,
-            KeyConfig.ARROW
+            KeyConfig.DOUBLE
         ));
         return this.player;
     }

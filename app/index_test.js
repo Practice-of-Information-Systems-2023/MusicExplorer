@@ -4,6 +4,7 @@ var height = canvas.height;
 var width = canvas.width;
 var fps = 30;
 var youtubePlayer = null;
+var sideMenuController = null;
 new YoutubePlayer("player", function (player) {
   youtubePlayer = player;
   init();
@@ -36,6 +37,9 @@ function init() {
     audioController
   );
   musicObjectGenerator.generate(communicater.getMusicObjectsData());
+
+  sideMenuController = new SideMenuController(scene, audioController);
+  sideMenuController.init();
 
   setInterval(function () {
     // 毎フレームの処理
