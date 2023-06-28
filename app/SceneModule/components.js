@@ -143,6 +143,7 @@ class Renderer extends Component{
         this.context = context;
         this.renderingOrder = renderingOrder;
         this.isHide = false;
+        this.pivot = Vector2.zero;
     }
     update(dt){}
     within(position){return false;}
@@ -161,7 +162,10 @@ class SpriteRenderer extends Renderer{
         }
         const obj = this.gameObject;
         const positionAndScale 
-            = obj.scene.mainCamera.projection(obj.transform.position, obj.transform.scale);
+            = obj.scene.mainCamera.projection(
+                obj.transform.position.clone().add(this.pivot),
+                obj.transform.scale
+            );
         var state = 0;
         if(this.animator != null){
             state = this.animator.state;
@@ -191,7 +195,6 @@ class TextRenderer extends Renderer{
         super(context, renderingOrder);
         this.type = Components.TextRenderer;
         this.text = text;
-        this.pivot = Vector2.zero;
         this.font = '24px serif';
         this.color = '#000000'
 

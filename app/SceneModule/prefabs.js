@@ -25,12 +25,21 @@ const WINDOW_SPRITE = new Sprite(
     new Vector2(0.5,0.5)
 );
 
+const SHADOW = new Sprite(
+    "Image/shadow.png",
+    30, 12,
+    1, 1,
+    new Vector2(0.5,0.6)
+);
+
 class Prefabs{
     static playerCharacter(name, position, context, keyConfig){
         const obj = new GameObject(name, new Transform(position, Vector2.one));
         const animator = new CharacterAnimator(Prefabs.CHARACHIP_ANIMATIONS,"down");
         obj.addComponent(animator);
         obj.addComponent(new SpriteRenderer(context, CHARA_SPRITE_1, 10, animator));
+        const shadow = obj.addComponent(new SpriteRenderer(context, SHADOW, 8));
+        shadow.pivot.y -= 3;
         const textRenderer = obj.addComponent(new TextRenderer(context, "", 15));
         textRenderer.pivot = new Vector2(0,-50);
         obj.addComponent(new CharacterController(keyConfig));
