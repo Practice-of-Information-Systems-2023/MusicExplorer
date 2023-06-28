@@ -1,6 +1,31 @@
+const Components = {
+    Transform:1,
+    CharacterController:2,
+    Animator:3,
+    Camera:4,
+    MusicObject:5,
+    Renderer:6,
+    SpriteRenderer:7,
+    TextRenderer:8,
+    ProfileViewer:9,
+}
+const ComponentOrder = [
+    Components.CharacterController,
+    Components.Animator,
+    Components.Camera,
+    Components.MusicObject
+];
+
+const RendererTags = [
+    Components.Renderer,
+    Components.SpriteRenderer,
+    Components.TextRenderer,
+];
+
 class Component{
     gameObject;
     updateProcess;
+    type;
     constructor(){
         this.updateProcess = null;
     }
@@ -9,11 +34,11 @@ class Component{
             this.updateProcess();
         }
     }
-    static empty(){return new Component();}
 }
 class Transform extends Component{
     constructor(position, scale){
         super();
+        this.type = Components.Transform;
         this.position = position;
         this.scale = scale;
     }
@@ -25,6 +50,7 @@ class Transform extends Component{
 class Camera extends Component{
     constructor(zoomRate, width, height){
         super();
+        this.type = Components.Camera;
         this.zoomRate = zoomRate;
         this.width = width;
         this.height = height;
@@ -49,6 +75,7 @@ class Camera extends Component{
 class Animator extends Component{
     constructor(animations, initState){
         super();
+        this.type = Components.Animator;
         this.animations = animations;
         this.state = 0;
         this.nowAnimation = animations[initState];
@@ -72,10 +99,16 @@ class Animator extends Component{
 }
 
 class CharacterAnimator extends Animator{
+    constructor(animations, initState){
+        super(animations, initState);
+        this.controller = null;
+    }
     getStateName(){
         var stateName;
-        const controller = this.gameObject.controller;
-        const angle = controller.velocity.eulerAngle;
+        if(this.controller==null){
+            this.controller = this.gameObject.getComponent(Components.CharacterController);
+        }
+        const angle = this.controller.velocity.eulerAngle;
         if(angle <= 22.5 || angle > 22.5 + 45*7){
             stateName = "right";
         }else if(angle <= 22.5 + 45){
@@ -94,7 +127,7 @@ class CharacterAnimator extends Animator{
             stateName = "up_right";
         }
 
-        if(controller.isMoving){
+        if(this.controller.isMoving){
             return stateName + "_move";
         }else{
             return stateName;
@@ -102,20 +135,29 @@ class CharacterAnimator extends Animator{
     }
 }
 
-class SpriteRenderer extends Component{
-    constructor(context, sprite, renderingOrder = 0){
+class Renderer extends Component{
+    constructor(context, renderingOrder){
         super();
+        this.type = Components.Renderer;
         this.context = context;
-        this.sprite = sprite;
         this.renderingOrder = renderingOrder;
+    }
+    update(dt){}
+}
+class SpriteRenderer extends Renderer{
+    constructor(context, sprite, renderingOrder = 0, animator = null){
+        super(context,renderingOrder);
+        this.type = Components.SpriteRenderer;
+        this.sprite = sprite;
+        this.animator = animator;
     }
     update(dt){
         const obj = this.gameObject;
         const positionAndScale 
             = obj.scene.mainCamera.projection(obj.transform.position, obj.transform.scale);
         var state = 0;
-        if(obj.animator != null){
-            state = obj.animator.state;
+        if(this.animator != null){
+            state = this.animator.state;
         }
         this.sprite.drawSprite(
             this.context,
@@ -126,12 +168,11 @@ class SpriteRenderer extends Component{
     }
 }
 
-class TextRenderer extends Component{
+class TextRenderer extends Renderer{
     constructor(context, text="", renderingOrder = 0){
-        super();
-        this.context = context;
+        super(context, renderingOrder);
+        this.type = Components.TextRenderer;
         this.text = text;
-        this.renderingOrder = renderingOrder;
     }
     update(dt){
         const obj = this.gameObject;
@@ -149,6 +190,7 @@ class TextRenderer extends Component{
 class MusicObject extends Component{
     constructor(videoId, player, audioController, musicId){
         super();
+        this.type = Components.MusicObject;
         this.musicId = musicId;
         this.videoId = videoId;
         this.player = player;
@@ -165,6 +207,7 @@ class MusicObject extends Component{
 class CharacterController extends Component{
     constructor(keyConfig=null){
         super();
+        this.type = Components.CharacterController;
         this.keyConfig = keyConfig;
         this.keyForce = this.getKeyForce();
         this.commands = ['UP', 'DOWN', 'RIGHT', 'LEFT'];
@@ -189,6 +232,7 @@ class CharacterController extends Component{
         this.isAutoMove = false;
         this.destination = Vector2.zero;
         this.name = "";
+        this.textRenderer = null;
     }
     getKeyForce(){
         return {
@@ -238,8 +282,11 @@ class CharacterController extends Component{
         this.isAutoMove = true;
     }
     setName(name){
+        if(this.textRenderer==null){
+            this.textRenderer = this.gameObject.getComponent(Components.TextRenderer)
+        }
         this.name = name;
-        this.gameObject.textRenderer.text = name;
+        this.textRenderer.text = name;
     }
     autoMoveAdjust(preVelocity){
         const transform = this.gameObject.transform;
@@ -283,5 +330,50 @@ class CharacterController extends Component{
         }else{
             this.gameObject.transform.translate(this.velocity);
         }
+    }
+}
+
+class ProfileViewer extends Component{
+    constructor(canvas, characterGenerator){
+        super();
+        this.type = Components.ProfileViewer;
+        this.canvas = canvas;
+        this.characterGenerator = characterGenerator;
+        canvas.addEventListener("click",this.onClick.bind(this));
+    }
+    onClick(e){
+        const rect = e.target.getBoundingClientRect();
+        const cursorX = e.clientX - rect.left;
+        const cursorY = e.clientY - rect.top;
+        this.viewProfile(new Vector2(cursorX, cursorY));
+    }
+    viewProfile(cursor){
+        const scene = this.gameObject.scene;
+        const worldPosition = scene.mainCamera.reverseProjection(cursor);
+        const renderers = scene.getSortedRenderers(true);
+        var target=null;
+        for(let renderer of renderers){
+            const tag = renderer.gameObject.tag;
+            if(tag != Tag.Character && tag != Tag.Profile){
+                continue;
+            }
+            if(renderer.within(worldPosition)){
+                target=renderer.gameObject;
+                break;
+            }
+        }
+        if(target!=null){
+            if(target.tag == Tag.Character){
+                this.openProfile(target);
+            }else if(target.tag == Tag.Profile){
+                this.closeProfile();
+            }
+        }
+    }
+    openProfile(target){
+
+    }
+    closeProfile(){
+
     }
 }

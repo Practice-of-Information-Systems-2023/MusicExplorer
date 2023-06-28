@@ -21,26 +21,34 @@ const AUDIO_SPRITE = new Sprite(
 class Prefabs{
     static playerCharacter(name, position, context, keyConfig){
         const obj = new GameObject(name, new Transform(position, Vector2.one));
-        obj.setAnimator(new CharacterAnimator(Prefabs.CHARACHIP_ANIMATIONS,"down"));
-        obj.setRenderer(new SpriteRenderer(context, CHARA_SPRITE_1, 10));
-        obj.setTextRenderer(new TextRenderer(context, "", 15));
-        obj.setController(new CharacterController(keyConfig));
+        const animator = new CharacterAnimator(Prefabs.CHARACHIP_ANIMATIONS,"down");
+        obj.addComponent(animator);
+        obj.addComponent(new SpriteRenderer(context, CHARA_SPRITE_1, 10, animator));
+        obj.addComponent(new TextRenderer(context, "", 15));
+        obj.addComponent(new CharacterController(keyConfig));
         return obj;
     }
     static spriteObject(name, position, context, sprite, renderingOrder){
         const obj = new GameObject(name, new Transform(position, Vector2.one));
-        obj.setRenderer(new SpriteRenderer(context, sprite, renderingOrder));
+        obj.addComponent(new SpriteRenderer(context, sprite, renderingOrder));
         return obj;
     }
     static audioPlayer(name, position, context, videoId, player, audioController, musicId){
         const obj = new GameObject(name, new Transform(position, new Vector2(0.2,0.2/*0.3,0.3*/)));
-        obj.setRenderer(new SpriteRenderer(context, AUDIO_SPRITE, 10));
-        obj.setMusicObject(new MusicObject(videoId, player, audioController,musicId));
+        obj.addComponent(new SpriteRenderer(context, AUDIO_SPRITE, 10));
+        obj.addComponent(new MusicObject(videoId, player, audioController,musicId));
         return obj;
     }
     static camera(name, position){
         const obj = new GameObject(name, new Transform(position, Vector2.one));
-        obj.setCamera(new Camera(1,480,320));
+        obj.addComponent(new Camera(1,480,320));
+        return obj;
+    }
+    static profile(name,canvas,context,characterGenerator){
+        const obj = new GameObject(name, new Transform(Vector2.zero, Vector2.one));
+        obj.addComponent(new ProfileViewer(canvas, characterGenerator));
+        obj.addComponent(new SpriteRenderer(context,CHARA_SPRITE_1,20));
+        obj.addComponent(new TextRenderer(context,"プロフィール",20));
         return obj;
     }
     static get CHARACHIP_ANIMATIONS(){

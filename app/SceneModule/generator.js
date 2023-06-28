@@ -1,44 +1,19 @@
 class ProfileGenerator{
     // プロフィールオブジェクトを管理するクラス 最初に実行
-    constructor(scene, canvas, characterGenerator){
+    constructor(scene, canvas, context, characterGenerator){
         this.scene = scene;
         this.canvas = canvas;
+        this.context = context;
         this.characterGenerator = characterGenerator;
-        canvas.addEventListener("click",this.onClick.bind(this));
     }
-    onClick(e){
-        const rect = e.target.getBoundingClientRect();
-        const cursorX = e.clientX - rect.left;
-        const cursorY = e.clientY - rect.top;
-        this.viewProfile(new Vector2(cursorX, cursorY));
-    }
-    viewProfile(cursor){
-        const worldPosition = this.scene.mainCamera.reverseProjection(cursor);
-        const renderers = scene.getSortedRenderers(reverse=true);
-        var target=null;
-        for(let renderer of renderers){
-            if(renderer.gameObject.tag != Tag.Character
-                && render.gameObject.tag != Tag.Profile){
-                continue;
-            }
-            if(renderer.within(worldPosition)){
-                target=renderer.gameObject;
-                break;
-            }
-        }
-        if(target!=null){
-            if(target.tag == Tag.Character){
-                this.openProfile(target);
-            }else if(target.tag == Tag.Profile){
-                this.closeProfile();
-            }
-        }
-    }
-    openProfile(target){
-
-    }
-    closeProfile(){
-
+    generate(){
+        const profile = this.scene.addGameObject(Prefabs.profile(
+            "Profile",
+            this.canvas,
+            this.context,
+            this.characterGenerator
+        ));
+        this.canvas.addEventListener("click",profile.onClick);
     }
 }
 
@@ -54,10 +29,11 @@ class CameraGenerator{
             "Camera",
             Vector2.zero,
         ));
-        const playerPosition = this.player.transform.position;
         camera.updateProcess = function(){
-            camera.transform.position.set(playerPosition);
-        };
+            camera.transform.position.set(
+                this.player.transform.position
+            );
+        }.bind(this);
     }
 }
 
@@ -77,13 +53,13 @@ class BackGroundGenerator{
             sprite,
             0
         ));
-        const playerPosition = this.player.transform.position;
         background.updateProcess = function(){
+            const playerPosition = this.player.transform.position;
             background.transform.position.setValue(
                 playerPosition.x - playerPosition.x % 32,
                 playerPosition.y - playerPosition.y % 32
             );
-        };
+        }.bind(this);
     }
 }
 
@@ -99,7 +75,7 @@ class PlayerGenerator{
             "Player",
             position,
             this.context,
-            KeyConfig.DOUBLE
+            KeyConfig.ARROW
         ));
         this.player.tag = Tag.Player;
         return this.player;
@@ -166,7 +142,7 @@ class MusicObjectGenerator{
                 id
             ));
             this.musicIDs.add(id);
-            this.musicObjects[id] = gameObject.musicObject;
+            this.musicObjects[id] = gameObject.getComponent(Components.MusicObject);
             gameObject.tag = Tag.MusicObj
         }
     }
@@ -224,7 +200,7 @@ class CharacterGenerator{
                 null
             ));
             this.userIDs.add(id);
-            this.userObjects[id] = gameObject.controller;
+            this.userObjects[id] = gameObject.getComponent(Components.CharacterController);
             gameObject.tag = Tag.Character;
         }
     }
