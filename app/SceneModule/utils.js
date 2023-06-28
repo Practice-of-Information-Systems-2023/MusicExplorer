@@ -47,7 +47,9 @@ class Sprite{
         this.size = new Vector2(width/column, height/row);
         this.pivot = this.size.clone().timesVector2(pivot);
     }
-    drawSprite(context, index, position, scale){
+    drawSprite(context, index, position, scale, alpha=1){
+        const alphaPre = context.globalAlpha;
+        context.globalAlpha = alpha;
         context.drawImage(
             this.image,
             this.size.x * (index % this.column),
@@ -59,16 +61,40 @@ class Sprite{
             this.size.x * scale.x,
             this.size.y * scale.y,
         );
+        context.globalAlpha = alphaPre;
+    }
+    within(position, scale, targetPosition){
+        const x1 = position.x - this.pivot.x * scale.x;
+        const x2 = position.x + (this.size.x - this.pivot.x) * scale.x;
+        const y1 = position.y - this.pivot.y * scale.y;
+        const y2 = position.y + (this.size.y - this.pivot.y) * scale.y;
+        return targetPosition.x >= x1 && targetPosition.x <= x2
+            && targetPosition.y >= y1 && targetPosition.y <= y2;
     }
 }
 
 class Text{
-    static drawText(context, position, pivot, text){
-        context.font = '24px serif';
+    static drawText(context, position, pivot, text, font, color){
+        const pos = position.clone().add(pivot);
+        const lines = text.split("\n");
+        const length = lines.length;
+        var plus = 0;
+        context.fillStyle = color;
+        context.font = font;
+        var textWidth = 0;
+        for(let line of lines){
+            const width = context.measureText(line).width;
+            textWidth = Math.max(textWidth,width);
+            context.fillText(line, pos.x - width/2, pos.y);
+            pos.y += 24;
+        }
+    }
+    static getSize(text, font = '24px serif'){
+        context.font = font;
         const textWidth = context.measureText(text).width;
-        position.x += pivot.x;
-        position.y += pivot.y;
-        context.fillText(text, position.x - textWidth/2, position.y);
+        const textHeight = context.measureText(text).height;
+        console.log(textWidth, textHeight);
+        return [textWidth, textHeight];
     }
 }
 

@@ -86,6 +86,7 @@ class GameObject{
             this.transform = component;
         }
         component.gameObject = this;
+        return component;
     }
     getComponent(type){
         if(this.components[type]){

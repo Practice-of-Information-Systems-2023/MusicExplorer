@@ -13,6 +13,7 @@ class ProfileGenerator{
             this.context,
             this.characterGenerator
         ));
+        profile.tag = Tag.Profile;
         this.canvas.addEventListener("click",profile.onClick);
     }
 }

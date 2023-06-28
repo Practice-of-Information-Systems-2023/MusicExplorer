@@ -18,13 +18,21 @@ const AUDIO_SPRITE = new Sprite(
     new Vector2(0.5,0.93)
 );
 
+const WINDOW_SPRITE = new Sprite(
+    "Image/window.png",
+    512, 192,
+    1, 1,
+    new Vector2(0.5,0.5)
+);
+
 class Prefabs{
     static playerCharacter(name, position, context, keyConfig){
         const obj = new GameObject(name, new Transform(position, Vector2.one));
         const animator = new CharacterAnimator(Prefabs.CHARACHIP_ANIMATIONS,"down");
         obj.addComponent(animator);
         obj.addComponent(new SpriteRenderer(context, CHARA_SPRITE_1, 10, animator));
-        obj.addComponent(new TextRenderer(context, "", 15));
+        const textRenderer = obj.addComponent(new TextRenderer(context, "", 15));
+        textRenderer.pivot = new Vector2(0,-50);
         obj.addComponent(new CharacterController(keyConfig));
         return obj;
     }
@@ -45,10 +53,13 @@ class Prefabs{
         return obj;
     }
     static profile(name,canvas,context,characterGenerator){
-        const obj = new GameObject(name, new Transform(Vector2.zero, Vector2.one));
-        obj.addComponent(new ProfileViewer(canvas, characterGenerator));
-        obj.addComponent(new SpriteRenderer(context,CHARA_SPRITE_1,20));
-        obj.addComponent(new TextRenderer(context,"プロフィール",20));
+        const obj = new GameObject(name, new Transform(Vector2.zero, new Vector2(0.7,0.7)));
+        const spriteRenderer = obj.addComponent(new SpriteRenderer(context,WINDOW_SPRITE,20));
+        spriteRenderer.isHide = true;
+        const textRenderer = obj.addComponent(new TextRenderer(context,"プロフィール",21));
+        textRenderer.isHide = true;
+        textRenderer.color = '#FFFFFF';
+        obj.addComponent(new ProfileViewer(canvas, characterGenerator, spriteRenderer, textRenderer));
         return obj;
     }
     static get CHARACHIP_ANIMATIONS(){

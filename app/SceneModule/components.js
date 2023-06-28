@@ -13,7 +13,8 @@ const ComponentOrder = [
     Components.CharacterController,
     Components.Animator,
     Components.Camera,
-    Components.MusicObject
+    Components.MusicObject,
+    Components.ProfileViewer
 ];
 
 const RendererTags = [
@@ -141,8 +142,10 @@ class Renderer extends Component{
         this.type = Components.Renderer;
         this.context = context;
         this.renderingOrder = renderingOrder;
+        this.isHide = false;
     }
     update(dt){}
+    within(position){return false;}
 }
 class SpriteRenderer extends Renderer{
     constructor(context, sprite, renderingOrder = 0, animator = null){
@@ -150,8 +153,12 @@ class SpriteRenderer extends Renderer{
         this.type = Components.SpriteRenderer;
         this.sprite = sprite;
         this.animator = animator;
+        this.alpha = 1;
     }
     update(dt){
+        if(this.isHide){
+            return;
+        }
         const obj = this.gameObject;
         const positionAndScale 
             = obj.scene.mainCamera.projection(obj.transform.position, obj.transform.scale);
@@ -163,7 +170,18 @@ class SpriteRenderer extends Renderer{
             this.context,
             state,
             positionAndScale[0],
-            positionAndScale[1]
+            positionAndScale[1],
+            this.alpha
+        );
+    }
+    within(position){
+        if(this.isHide){
+            return false;
+        }
+        return this.sprite.within(
+            this.gameObject.transform.position,
+            this.gameObject.transform.scale,
+            position
         );
     }
 }
@@ -173,17 +191,42 @@ class TextRenderer extends Renderer{
         super(context, renderingOrder);
         this.type = Components.TextRenderer;
         this.text = text;
+        this.pivot = Vector2.zero;
+        this.font = '24px serif';
+        this.color = '#000000'
+
     }
     update(dt){
+        if(this.isHide){
+            return;
+        }
         const obj = this.gameObject;
         const positionAndScale 
             = obj.scene.mainCamera.projection(obj.transform.position, obj.transform.scale);
         Text.drawText(
             this.context,
             positionAndScale[0],
-            new Vector2(0,-50),
+            this.pivot,
             this.text,
+            this.font,
+            this.color
         );
+    }
+    within(targetPosition){
+        if(this.isHide){
+            return false;
+        }
+        return false;
+        /*console.log(targetPosition);
+        const size = Text.getSize(this.text);
+        const position = this.gameObject.transform.position;
+        const scale = this.gameObject.transform.scale;
+        const x1 = position.x - size[0]/2/scale.x;
+        const x2 = position.x + size[0]/2/scale.x;
+        const y1 = position.y - size[1]/2/scale.y;
+        const y2 = position.y + size[1]/2/scale.y;
+        return targetPosition.x >= x1 && targetPosition.x <= x2
+            && targetPosition.y >= y1 && targetPosition.y <= y2;*/
     }
 }
 
@@ -334,11 +377,13 @@ class CharacterController extends Component{
 }
 
 class ProfileViewer extends Component{
-    constructor(canvas, characterGenerator){
+    constructor(canvas, characterGenerator, spriteRenderer, textRenderer){
         super();
         this.type = Components.ProfileViewer;
         this.canvas = canvas;
         this.characterGenerator = characterGenerator;
+        this.spriteRenderer = spriteRenderer;
+        this.textRenderer = textRenderer;
         canvas.addEventListener("click",this.onClick.bind(this));
     }
     onClick(e){
@@ -371,9 +416,27 @@ class ProfileViewer extends Component{
         }
     }
     openProfile(target){
-
+        this.spriteRenderer.isHide = false;
+        this.textRenderer.isHide = false;
+        this.target = target.transform;
+        this.spriteRenderer.alpha = 0.7;
+        this.textRenderer.pivot.x = 0;
+        this.textRenderer.pivot.y = -30;
+        this.textRenderer.text = 
+            target.getComponent(Components.CharacterController).name + "\n"
+            + "好み: " + "ゲームミュージック"  + "\n"
+            + "Twitter: " + "@aaaaa" + "\n"
+            + "Instagram: " + "@aiueo" + "\n";
     }
     closeProfile(){
-
+        this.spriteRenderer.isHide = true;
+        this.textRenderer.isHide = true;
+        this.target = null;
+    }
+    update(dt){
+        if(this.target!=null){
+            this.gameObject.transform.position.set(this.target.position);
+            this.gameObject.transform.position.y -= 20;
+        }
     }
 }
