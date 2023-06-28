@@ -43,7 +43,7 @@ function init() {
   );
   musicObjectGenerator.generate(communicater.getMusicObjectsData());
 
-  //const profileGenerator = new ProfileGenerator(scene);
+  const profileGenerator = new ProfileGenerator(scene, canvas, characterGenerator);
 
   sideMenuController = new SideMenuController(scene, audioController);
   sideMenuController.init();

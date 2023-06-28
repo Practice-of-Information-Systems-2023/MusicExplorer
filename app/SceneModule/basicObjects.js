@@ -24,22 +24,27 @@ class Scene{
         for(let gameObject of this.gameObjects){
             gameObject.update(dt);
         }
-        var renderers = [];
-        for(let renderer of this.renderers){
-            renderers.push(renderer);
-        }
-        renderers.sort(function(a,b){
-            if(a.renderingOrder < b.renderingOrder)return -1;
-            else if(a.renderingOrder > b.renderingOrder)return 1;
-            else{
-                if(a.gameObject.transform.position.y < b.gameObject.transform.position.y)return -1;
-                else if(a.gameObject.transform.position.y > b.gameObject.transform.position.y)return 1;
-            }
-            return 0;
-        });
+        const renderers = this.getSortedRenderers();
         for(let i=0; i<renderers.length; i+=1){
             renderers[i].update(dt);
         }
+    }
+    getSortedRenderers(reverse=false){
+        const renderers = [];
+        for(let renderer of this.renderers){
+            renderers.push(renderer);
+        }
+        const sign = reverse ? -1 : 1;
+        renderers.sort(function(a,b){
+            if(a.renderingOrder < b.renderingOrder)return -sign;
+            else if(a.renderingOrder > b.renderingOrder)return sign;
+            else{
+                if(a.gameObject.transform.position.y < b.gameObject.transform.position.y)return -sign;
+                else if(a.gameObject.transform.position.y > b.gameObject.transform.position.y)return sign;
+            }
+            return 0;
+        });
+        return renderers;
     }
     find(name){
         if(this.gameObjectDict[name]){
@@ -64,6 +69,7 @@ class Scene{
 class GameObject{
     scene;
     updateProcess;
+    tag;
     constructor(name, transform){
         this.name = name;
         this.transform = transform;

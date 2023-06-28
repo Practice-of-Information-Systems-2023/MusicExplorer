@@ -1,21 +1,44 @@
 class ProfileGenerator{
     // プロフィールオブジェクトを管理するクラス 最初に実行
-    constructor(scene){
+    constructor(scene, canvas, characterGenerator){
         this.scene = scene;
-        document.getElementById("canvas").onclick = this.onClick;
+        this.canvas = canvas;
+        this.characterGenerator = characterGenerator;
+        canvas.addEventListener("click",this.onClick.bind(this));
     }
     onClick(e){
         const rect = e.target.getBoundingClientRect();
-            // ブラウザ上での座標を求める
-        const   viewX = e.clientX - rect.left,
-                viewY = e.clientY - rect.top;
-            // 表示サイズとキャンバスの実サイズの比率を求める
-        const   scaleWidth =  cvs.clientWidth / cvs.width,
-                scaleHeight =  cvs.clientHeight / cvs.height;
-            // ブラウザ上でのクリック座標をキャンバス上に変換
-        const   canvasX = Math.floor( viewX / scaleWidth ),
-                canvasY = Math.floor( viewY / scaleHeight );
-        console.log( canvasX,canvasY );
+        const cursorX = e.clientX - rect.left;
+        const cursorY = e.clientY - rect.top;
+        this.viewProfile(new Vector2(cursorX, cursorY));
+    }
+    viewProfile(cursor){
+        const worldPosition = this.scene.mainCamera.reverseProjection(cursor);
+        const renderers = scene.getSortedRenderers(reverse=true);
+        var target=null;
+        for(let renderer of renderers){
+            if(renderer.gameObject.tag != Tag.Character
+                && render.gameObject.tag != Tag.Profile){
+                continue;
+            }
+            if(renderer.within(worldPosition)){
+                target=renderer.gameObject;
+                break;
+            }
+        }
+        if(target!=null){
+            if(target.tag == Tag.Character){
+                this.openProfile(target);
+            }else if(target.tag == Tag.Profile){
+                this.closeProfile();
+            }
+        }
+    }
+    openProfile(target){
+
+    }
+    closeProfile(){
+
     }
 }
 
@@ -78,6 +101,7 @@ class PlayerGenerator{
             this.context,
             KeyConfig.DOUBLE
         ));
+        this.player.tag = Tag.Player;
         return this.player;
     }
     getPosition(){
@@ -143,6 +167,7 @@ class MusicObjectGenerator{
             ));
             this.musicIDs.add(id);
             this.musicObjects[id] = gameObject.musicObject;
+            gameObject.tag = Tag.MusicObj
         }
     }
 }
@@ -200,6 +225,7 @@ class CharacterGenerator{
             ));
             this.userIDs.add(id);
             this.userObjects[id] = gameObject.controller;
+            gameObject.tag = Tag.Character;
         }
     }
     setDestinations(destinations){

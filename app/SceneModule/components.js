@@ -37,6 +37,13 @@ class Camera extends Component{
         const canvasScale = scale.clone().times(this.zoomRate);
         return [canvasPosition, canvasScale];
     }
+    reverseProjection(position){
+        const worldPosition = position.clone()
+            .sub(new Vector2(this.width/2, this.height/2))
+            .times(1/this.zoomRate)
+            .add(this.gameObject.transform.position)
+        return worldPosition;
+    }
 }
 
 class Animator extends Component{

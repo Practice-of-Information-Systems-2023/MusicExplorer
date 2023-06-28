@@ -1,3 +1,11 @@
+// タグ
+const Tag = {
+    Player : 1,
+    Character : 2,
+    MusicObj : 3,
+    Profile : 4,
+};
+
 // キーコンフィグ
 class KeyConfig{
     static get ARROW(){
