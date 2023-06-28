@@ -13,17 +13,20 @@ class Communicater {
 
   setDestinations(data) {
     const parsedData = JSON.parse(data.data);
-    var positions = [];
-    var names = [];
+    const positions = [];
+    const names = [];
+    const actions = [];
     parsedData.forEach((item) => {
       const { id, name, x, y, action } = item;
       console.log(id, name, x, y, action);
       positions.push([id, new Vector2(x, y)]);
       names.push([id,name]);
+      actions.push([id,action]);
     });
     this.characterGenerator.replace(positions);
     this.characterGenerator.setDestinations(positions);
     this.characterGenerator.setNames(names);
+    this.characterGenerator.setActions(actions);
   }
 
   getCharactersData() {
@@ -72,11 +75,11 @@ class Communicater {
       [2, "DeBG1g1BRMA", -400, 400],
     ];
   }
-  sendPlayerPosition(position) {
+  sendPlayerInfo(position, action) {
     // idは暫定
-    this.callPlayerPositionAPI(this.userID, this.userName, position.x, position.y);
+    this.callPlayerPositionAPI(this.userID, this.userName, position.x, position.y, action);
   }
-  callPlayerPositionAPI(id, name, x, y, action=0) {
+  callPlayerPositionAPI(id, name, x, y, action) {
     // id,x座標とy座標を送信する
     const message = JSON.stringify({
       id: id,

@@ -60,7 +60,7 @@ function init() {
   setInterval(function () {
     // キャラクターの位置同期
     // characterGenerator.setDestinations(communicater.getCharactersData());
-    communicater.sendPlayerPosition(playerGenerator.getPosition());
+    communicater.sendPlayerInfo(playerGenerator.getPosition(), playerGenerator.getAction());
   }, 200);
 
   setInterval(function () {

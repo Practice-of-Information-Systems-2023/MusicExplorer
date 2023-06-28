@@ -14,6 +14,7 @@ class KeyConfig{
             'ArrowDown':    'DOWN',
             'ArrowRight':   'RIGHT',
             'ArrowLeft':    'LEFT',
+            'Shift':    'SHIFT',
         };
     }
     static get ASDW(){
@@ -22,6 +23,7 @@ class KeyConfig{
             's':    'DOWN',
             'd':   'RIGHT',
             'a':    'LEFT',
+            'Shift':    'SHIFT',
         };
     }
     static get DOUBLE(){
@@ -34,6 +36,7 @@ class KeyConfig{
             'ArrowDown':    'DOWN',
             'ArrowRight':   'RIGHT',
             'ArrowLeft':    'LEFT',
+            'Shift':    'SHIFT',
         };
     }
 }
@@ -48,6 +51,9 @@ class Sprite{
         this.pivot = this.size.clone().timesVector2(pivot);
     }
     drawSprite(context, index, position, scale, alpha=1){
+        if(index < 0){
+            return;
+        }
         const alphaPre = context.globalAlpha;
         context.globalAlpha = alpha;
         context.drawImage(
@@ -98,6 +104,15 @@ class Text{
     }
 }
 
+class Effect{
+    constructor(sprite, isLoop, isPingPong, time){
+        this.sprite = sprite;
+        this.isLoop = isLoop;
+        this.isPingPong = isPingPong;
+        this.time = time;
+    }
+}
+
 // 時間経過によるアニメーション制御
 class Animation{
     constructor(stateList, timeList){
@@ -106,21 +121,6 @@ class Animation{
         while(this.timeList.length < this.stateList.length){
             this.timeList.push(this.timeList[this.timeList.length-1])
         }
-        this.index = 0;
-        this.state = 0;
-    }
-    init(){
-        this.index = 0;
-        this.state = this.stateList[this.index];
-    }
-    update(t){
-        var time = t;
-        if(time >= this.timeList[this.index]){
-            time -= this.timeList[this.index];
-            this.index = (this.index + 1) % this.stateList.length;
-            this.state = this.stateList[this.index];
-        }
-        return time;
     }
 }
 

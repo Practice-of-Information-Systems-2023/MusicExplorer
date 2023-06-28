@@ -79,10 +79,14 @@ class PlayerGenerator{
             KeyConfig.ARROW
         ));
         this.player.tag = Tag.Player;
+        this.controller = this.player.getComponent(Components.CharacterController);
         return this.player;
     }
     getPosition(){
         return this.player.transform.position;
+    }
+    getAction(){
+        return this.controller.action;
     }
 }
 
@@ -161,6 +165,7 @@ class CharacterGenerator{
         this.USER_ID = 0;
         this.POSITION = 1;
         this.NAME = 1;
+        this.ACTION = 1;
     }
     generate(userObjects){
         this.change(userObjects, false);
@@ -219,6 +224,14 @@ class CharacterGenerator{
         for(let name of names){
             if(this.userIDs.has(name[this.USER_ID])){
                 this.userObjects[name[this.USER_ID]].setName(name[this.NAME]);
+            }
+
+        }
+    }
+    setActions(actions){
+        for(let action of actions){
+            if(this.userIDs.has(action[this.USER_ID])){
+                this.userObjects[action[this.USER_ID]].setAction(action[this.ACTION]);
             }
 
         }

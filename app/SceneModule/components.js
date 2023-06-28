@@ -78,24 +78,85 @@ class Animator extends Component{
         super();
         this.type = Components.Animator;
         this.animations = animations;
-        this.state = 0;
+        this.index = 0;
         this.nowAnimation = animations[initState];
+        this.state = this.nowAnimation.stateList[this.index];
         this.nowStateName = "";
         this.time = 0;
+        this.isLoop = true;
+        this.isPingPong = false;
+        this.velocity = 1;
     }
     update(dt){
         const stateName = this.getStateName();
         if(this.nowStateName != stateName){
             this.nowAnimation = this.animations[stateName];
-            this.nowAnimation.init();
             this.nowStateName = stateName;
             this.time = 0;
+            this.index = 0;
+            this.state = this.nowAnimation.stateList[this.index];
+        }else{
+            if(this.isLoop==false && this.state==-1){
+                return;
+            }
         }
-        this.time = this.nowAnimation.update(this.time + dt);
-        this.state = this.nowAnimation.state;
+        this.time += dt;
+        if(this.time >= this.nowAnimation.timeList[this.index]){
+            this.time -= this.nowAnimation.timeList[this.index];
+            this.index += this.velocity;
+            const length = this.nowAnimation.stateList.length
+            if(this.index >= length || this.index < 0){
+                if(this.isLoop){
+                    if(length == 1){
+                        this.index = 0;
+                    }else if(this.isPingPong){
+                        this.velocity *= -1;
+                        this.index += this.velocity * 2;
+                    }else{
+                        this.index %= length;
+                    }
+                }else{
+                    this.state = -1;
+                    return;
+                }
+            }
+            this.state = this.nowAnimation.stateList[this.index];
+        }
     }
     getStateName(){
         return "";
+    }
+}
+
+class EffectAnimator extends Animator{
+    constructor(){
+        super(
+            {'none':new Animation([-1],[1])},
+            'none'
+        );
+        this.stateName = 'none';
+        this.spriteRenderer = null;
+    }
+    play(effect){
+        const indexList = [];
+        const spriteCount = effect.sprite.row * effect.sprite.column;
+        for(let i=0;i<spriteCount;i++){
+            indexList.push(i);
+        }
+        this.spriteRenderer.sprite = effect.sprite;
+        this.animations = {
+            'main':new Animation(indexList,[effect.time]),
+            'none':new Animation([-1],[1])
+        };
+        this.stateName = 'main';
+        this.isLoop = effect.isLoop;
+        this.isPingPong = effect.isPingPong;
+    }
+    stop(){
+        this.stateName = 'none';
+    }
+    getStateName(){
+        return this.stateName;
     }
 }
 
@@ -108,6 +169,10 @@ class CharacterAnimator extends Animator{
         var stateName;
         if(this.controller==null){
             this.controller = this.gameObject.getComponent(Components.CharacterController);
+        }
+        if(this.controller.action == 1){
+            stateName = "rotate";
+            return stateName;
         }
         const angle = this.controller.velocity.eulerAngle;
         if(angle <= 22.5 || angle > 22.5 + 45*7){
@@ -155,6 +220,7 @@ class SpriteRenderer extends Renderer{
         this.sprite = sprite;
         this.animator = animator;
         this.alpha = 1;
+        this.scale = Vector2.one;
     }
     update(dt){
         if(this.isHide){
@@ -164,7 +230,7 @@ class SpriteRenderer extends Renderer{
         const positionAndScale 
             = obj.scene.mainCamera.projection(
                 obj.transform.position.clone().add(this.pivot),
-                obj.transform.scale
+                obj.transform.scale.clone().timesVector2(this.scale)
             );
         var state = 0;
         if(this.animator != null){
@@ -183,8 +249,8 @@ class SpriteRenderer extends Renderer{
             return false;
         }
         return this.sprite.within(
-            this.gameObject.transform.position,
-            this.gameObject.transform.scale,
+            this.gameObject.transform.position.clone().add(this.pivot),
+            this.gameObject.transform.scale.clone().timesVector2(this.scale),
             position
         );
     }
@@ -261,7 +327,8 @@ class CharacterController extends Component{
             'UP': false,
             'DOWN': false,
             'RIGHT': false,
-            'LEFT': false
+            'LEFT': false,
+            'SPACE': false
         };
         if(keyConfig!=null){
             document.addEventListener(
@@ -279,6 +346,7 @@ class CharacterController extends Component{
         this.destination = Vector2.zero;
         this.name = "";
         this.textRenderer = null;
+        this.action = 0;
     }
     getKeyForce(){
         return {
@@ -298,14 +366,36 @@ class CharacterController extends Component{
             this.keyFlag[this.keyConfig[event.key]] = false;
         }
     }
+    setAction(action){
+        if(this.action != 1 && action == 1){
+            const animators = this.gameObject.getComponents(Components.Animator);
+            animators[1].play(CHEER_EFFECT1);
+            animators[2].play(CHEER_EFFECT2);
+        }else if(this.action == 1 && action != 1){
+            const animators = this.gameObject.getComponents(Components.Animator);
+            animators[1].stop();
+            animators[2].stop();
+        }
+        this.action = action;
+    }
+    setActionByKey(){
+        if(this.keyConfig==null){
+            return;
+        }
+        var action = 0;
+        if(this.keyFlag['SHIFT']){
+            action = 1;
+        }
+        this.setAction(action);
+    }
     calcVelocityByKey(){
         if(this.keyConfig==null){
             return Vector2.zero;
         }
         var velocity = Vector2.zero;
-        for(let i=0; i<this.commands.length; i++){
-            if(this.keyFlag[this.commands[i]]){
-                velocity.add(this.keyForce[this.commands[i]]);
+        for(let command of this.commands){
+            if(this.keyFlag[command]){
+                velocity.add(this.keyForce[command]);
             }
         }
         return velocity;
@@ -356,6 +446,7 @@ class CharacterController extends Component{
         }
     }
     update(dt){
+        this.setActionByKey();
         const preVelocity = this.velocity.clone();
 
         this.velocity.times(0);
