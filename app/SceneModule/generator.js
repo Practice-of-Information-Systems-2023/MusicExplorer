@@ -1,21 +1,20 @@
 class ProfileGenerator{
     // プロフィールオブジェクトを管理するクラス 最初に実行
-    constructor(scene){
+    constructor(scene, canvas, context, characterGenerator){
         this.scene = scene;
-        document.getElementById("canvas").onclick = this.onClick;
+        this.canvas = canvas;
+        this.context = context;
+        this.characterGenerator = characterGenerator;
     }
-    onClick(e){
-        const rect = e.target.getBoundingClientRect();
-            // ブラウザ上での座標を求める
-        const   viewX = e.clientX - rect.left,
-                viewY = e.clientY - rect.top;
-            // 表示サイズとキャンバスの実サイズの比率を求める
-        const   scaleWidth =  cvs.clientWidth / cvs.width,
-                scaleHeight =  cvs.clientHeight / cvs.height;
-            // ブラウザ上でのクリック座標をキャンバス上に変換
-        const   canvasX = Math.floor( viewX / scaleWidth ),
-                canvasY = Math.floor( viewY / scaleHeight );
-        console.log( canvasX,canvasY );
+    generate(){
+        const profile = this.scene.addGameObject(Prefabs.profile(
+            "Profile",
+            this.canvas,
+            this.context,
+            this.characterGenerator
+        ));
+        profile.tag = Tag.Profile;
+        this.canvas.addEventListener("click",profile.onClick);
     }
 }
 
@@ -31,10 +30,11 @@ class CameraGenerator{
             "Camera",
             Vector2.zero,
         ));
-        const playerPosition = this.player.transform.position;
         camera.updateProcess = function(){
-            camera.transform.position.set(playerPosition);
-        };
+            camera.transform.position.set(
+                this.player.transform.position
+            );
+        }.bind(this);
     }
 }
 
@@ -54,13 +54,13 @@ class BackGroundGenerator{
             sprite,
             0
         ));
-        const playerPosition = this.player.transform.position;
         background.updateProcess = function(){
+            const playerPosition = this.player.transform.position;
             background.transform.position.setValue(
                 playerPosition.x - playerPosition.x % 32,
                 playerPosition.y - playerPosition.y % 32
             );
-        };
+        }.bind(this);
     }
 }
 
@@ -76,12 +76,17 @@ class PlayerGenerator{
             "Player",
             position,
             this.context,
-            KeyConfig.DOUBLE
+            KeyConfig.ARROW
         ));
+        this.player.tag = Tag.Player;
+        this.controller = this.player.getComponent(Components.CharacterController);
         return this.player;
     }
     getPosition(){
         return this.player.transform.position;
+    }
+    getAction(){
+        return this.controller.action;
     }
 }
 
@@ -142,7 +147,8 @@ class MusicObjectGenerator{
                 id
             ));
             this.musicIDs.add(id);
-            this.musicObjects[id] = gameObject.musicObject;
+            this.musicObjects[id] = gameObject.getComponent(Components.MusicObject);
+            gameObject.tag = Tag.MusicObj
         }
     }
 }
@@ -159,6 +165,7 @@ class CharacterGenerator{
         this.USER_ID = 0;
         this.POSITION = 1;
         this.NAME = 1;
+        this.ACTION = 1;
     }
     generate(userObjects){
         this.change(userObjects, false);
@@ -199,7 +206,8 @@ class CharacterGenerator{
                 null
             ));
             this.userIDs.add(id);
-            this.userObjects[id] = gameObject.controller;
+            this.userObjects[id] = gameObject.getComponent(Components.CharacterController);
+            gameObject.tag = Tag.Character;
         }
     }
     setDestinations(destinations){
@@ -216,6 +224,14 @@ class CharacterGenerator{
         for(let name of names){
             if(this.userIDs.has(name[this.USER_ID])){
                 this.userObjects[name[this.USER_ID]].setName(name[this.NAME]);
+            }
+
+        }
+    }
+    setActions(actions){
+        for(let action of actions){
+            if(this.userIDs.has(action[this.USER_ID])){
+                this.userObjects[action[this.USER_ID]].setAction(action[this.ACTION]);
             }
 
         }
