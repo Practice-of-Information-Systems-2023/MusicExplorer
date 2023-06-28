@@ -51,7 +51,7 @@ class YoutubePlayer{
             this.seekToFlag = true;
         }
         this.testListenFlag = false;
-        //this.player.loadVideoById(videoId);
+        this.player.loadVideoById(videoId);
     }
     testListenVideoById(videoId){
         this.testListenFlag = true;
