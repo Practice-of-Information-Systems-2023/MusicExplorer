@@ -50,8 +50,17 @@ class Communicator {
     return result;
   }
   callProfileAPI(id){
-    // ダミーAPI
-    return [id,"テスト君","@twitter","@instagram","ゲーム曲"]
+    const data = $.ajax({
+      url: "http://127.0.0.1:8000/api/get_profile",
+      type:'POST',
+      dataType: 'json',
+      data : {user_id:id},
+      timeout:3000,
+      async: false
+    }).responseText;
+    const parsedData = JSON.parse(data);
+    const { user_id, name, twitter_id, instagram_id, genre_name } = parsedData;
+    return [user_id,name,twitter_id,instagram_id,genre_name]
   }
   callCharactersDataAPI(xMin, xMax, yMin, yMax) {
     // ダミーAPI
