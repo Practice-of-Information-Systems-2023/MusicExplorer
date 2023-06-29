@@ -6,7 +6,6 @@ import os
 from os.path import join, dirname
 from dotenv import load_dotenv
 from .models import AppUser, Genre, Music
-from .serializers import AppUserSerializer
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -15,6 +14,11 @@ from drf_yasg import openapi
 from .models import Favorite, AppUser, Music
 from .serializers import AppUserSerializer, MusicSerializer, FavoriteSerializer
 from django.views.decorators.csrf import csrf_protect
+
+
+dotenv_path = join(dirname(__file__), '.env')
+load_dotenv(verbose=True, dotenv_path=dotenv_path)
+YOUTUBE_API_KEY = os.getenv('YOUTUBE_API_KEY')
 
 
 @csrf_protect
@@ -83,11 +87,6 @@ def delete_favorite(request):
             print(serializer.errors) 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-
-dotenv_path = join(dirname(__file__), '.env')
-load_dotenv(verbose=True, dotenv_path=dotenv_path)
-YOUTUBE_API_KEY = os.getenv('YOUTUBE_API_KEY')
 
 # youtubeからクエリに合致する音楽を検索するAPI
 @swagger_auto_schema(
