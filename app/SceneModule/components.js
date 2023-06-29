@@ -347,6 +347,7 @@ class CharacterController extends Component{
         this.name = "";
         this.textRenderer = null;
         this.action = 0;
+        this.id = "";
     }
     getKeyForce(){
         return {
@@ -424,6 +425,9 @@ class CharacterController extends Component{
         this.name = name;
         this.textRenderer.text = name;
     }
+    setID(id){
+        this.id = id;
+    }
     autoMoveAdjust(preVelocity){
         const transform = this.gameObject.transform;
         const dist = transform.position.clone()
@@ -471,13 +475,14 @@ class CharacterController extends Component{
 }
 
 class ProfileViewer extends Component{
-    constructor(canvas, characterGenerator, spriteRenderer, textRenderer){
+    constructor(canvas, characterGenerator, spriteRenderer, textRenderer,communicator){
         super();
         this.type = Components.ProfileViewer;
         this.canvas = canvas;
         this.characterGenerator = characterGenerator;
         this.spriteRenderer = spriteRenderer;
         this.textRenderer = textRenderer;
+        this.communicator = communicator;
         canvas.addEventListener("click",this.onClick.bind(this));
     }
     onClick(e){
@@ -510,17 +515,19 @@ class ProfileViewer extends Component{
         }
     }
     openProfile(target){
+        const controller = target.getComponent(Components.CharacterController);
         this.spriteRenderer.isHide = false;
         this.textRenderer.isHide = false;
         this.target = target.transform;
         this.spriteRenderer.alpha = 0.7;
         this.textRenderer.pivot.x = 0;
         this.textRenderer.pivot.y = -30;
+        const profile = this.communicator.getUserProfile(controller.id);
         this.textRenderer.text = 
-            target.getComponent(Components.CharacterController).name + "\n"
-            + "好み: " + "ゲームミュージック"  + "\n"
-            + "Twitter: " + "@aaaaa" + "\n"
-            + "Instagram: " + "@aiueo" + "\n";
+            profile[1] + "\n"
+            + "好み: " + profile[4]  + "\n"
+            + "Twitter: " + profile[2] + "\n"
+            + "Instagram: " + profile[3] + "\n";
     }
     closeProfile(){
         this.spriteRenderer.isHide = true;

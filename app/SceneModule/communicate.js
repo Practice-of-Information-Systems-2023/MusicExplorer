@@ -1,4 +1,4 @@
-class Communicater {
+class Communicator {
   constructor(scene, characterGenerator, userID, userName) {
     this.scene = scene;
     this.characterGenerator = characterGenerator;
@@ -8,25 +8,28 @@ class Communicater {
     this.CHARACTER_RECT = 1000;
     const url = "ws://15.168.10.223:3000/websocket";
     this.socket = new WebSocket(url);
-    this.socket.addEventListener("message", this.setDestinations.bind(this));
+    this.socket.addEventListener("message", this.setInfo.bind(this));
   }
 
-  setDestinations(data) {
+  setInfo(data) {
     const parsedData = JSON.parse(data.data);
     const positions = [];
     const names = [];
     const actions = [];
+    const ids = [];
     parsedData.forEach((item) => {
       const { id, name, x, y, action } = item;
       console.log(id, name, x, y, action);
       positions.push([id, new Vector2(x, y)]);
       names.push([id,name]);
       actions.push([id,action]);
+      ids.push(id);
     });
     this.characterGenerator.replace(positions);
     this.characterGenerator.setDestinations(positions);
     this.characterGenerator.setNames(names);
     this.characterGenerator.setActions(actions);
+    this.characterGenerator.setIDs(ids);
   }
 
   getCharactersData() {
@@ -41,6 +44,14 @@ class Communicater {
       positions.push([user[0], new Vector2(user[1], user[2])]);
     }
     return positions;
+  }
+  getUserProfile(id){
+    const result = this.callProfileAPI(id);
+    return result;
+  }
+  callProfileAPI(id){
+    // ダミーAPI
+    return [id,"テスト君","@twitter","@instagram","ゲーム曲"]
   }
   callCharactersDataAPI(xMin, xMax, yMin, yMax) {
     // ダミーAPI

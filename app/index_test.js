@@ -2,7 +2,7 @@ var canvas = document.getElementById("main");
 var context = canvas.getContext("2d");
 var height = canvas.height;
 var width = canvas.width;
-var fps = 30;
+var fps = 60;
 var youtubePlayer = null;
 var sideMenuController = null;
 new YoutubePlayer("player", function (player) {
@@ -28,7 +28,7 @@ function init() {
 
   const characterGenerator = new CharacterGenerator(scene, context);
 
-  const communicater = new Communicater(scene, characterGenerator, userID, userName);
+  const communicator = new Communicator(scene, characterGenerator, userID, userName);
 
   const backgroundGenerator = new BackGroundGenerator(scene, context);
   backgroundGenerator.generate(BACK_SPRITE);
@@ -41,9 +41,9 @@ function init() {
     context,
     audioController
   );
-  musicObjectGenerator.generate(communicater.getMusicObjectsData());
+  musicObjectGenerator.generate(communicator.getMusicObjectsData());
 
-  const profileGenerator = new ProfileGenerator(scene, canvas, context, characterGenerator);
+  const profileGenerator = new ProfileGenerator(scene, canvas, context, characterGenerator, communicator);
   profileGenerator.generate();
 
   sideMenuController = new SideMenuController(scene, audioController);
@@ -60,11 +60,11 @@ function init() {
   setInterval(function () {
     // キャラクターの位置同期
     // characterGenerator.setDestinations(communicater.getCharactersData());
-    communicater.sendPlayerInfo(playerGenerator.getPosition(), playerGenerator.getAction());
+    communicator.sendPlayerInfo(playerGenerator.getPosition(), playerGenerator.getAction());
   }, 200);
 
   setInterval(function () {
     // オブジェクトの追加と削除
-    musicObjectGenerator.replace(communicater.getMusicObjectsData());
+    musicObjectGenerator.replace(communicator.getMusicObjectsData());
   }, 5000);
 }
