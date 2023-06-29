@@ -21,7 +21,24 @@ load_dotenv(verbose=True, dotenv_path=dotenv_path)
 YOUTUBE_API_KEY = os.getenv('YOUTUBE_API_KEY')
 
 
+# お気に入り音楽登録API
 @csrf_protect
+@swagger_auto_schema(
+    method='post',
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'user_id': openapi.Schema(type=openapi.TYPE_INTEGER),
+            'music_id': openapi.Schema(type=openapi.TYPE_STRING),
+        },
+        required=['user_id', 'music_id']
+    ),
+    responses={
+        status.HTTP_201_CREATED: "Created",
+        status.HTTP_400_BAD_REQUEST: "Bad Request",
+        status.HTTP_404_NOT_FOUND: "Not Found",
+    },
+)
 @api_view(['POST'])
 def create_favorite(request):
     if request.method == 'POST':
@@ -72,6 +89,23 @@ def get_music_details(music_id):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 
+# お気に入り楽曲削除API
+@swagger_auto_schema(
+    method='post',
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'user_id': openapi.Schema(type=openapi.TYPE_INTEGER),
+            'music_id': openapi.Schema(type=openapi.TYPE_STRING),
+        },
+        required=['user_id', 'music_id']
+    ),
+    responses={
+        status.HTTP_200_OK: "OK",
+        status.HTTP_400_BAD_REQUEST: "Bad Request",
+        status.HTTP_404_NOT_FOUND: "Not Found",
+    },
+)
 @api_view(['POST'])
 def delete_favorite(request):
     if request.method == 'POST':
