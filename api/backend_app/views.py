@@ -5,7 +5,7 @@ import json
 import os
 from os.path import join, dirname
 from dotenv import load_dotenv
-from .models import AppUser, Genre, Music
+from .models import AppUser, Genre, Music, Favorite
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -279,6 +279,63 @@ def get_profile(request):
             'instagram_id': user.instagram_id,
             'genre_name': genre_name,
         }
+        return Response(response, status=status.HTTP_200_OK)
+
+
+# お気に入り楽曲取得API
+@swagger_auto_schema(
+    method='post',
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'user_id': openapi.Schema(type=openapi.TYPE_INTEGER),
+        },
+        required=['user_id']
+    ),
+    responses={
+        status.HTTP_200_OK: openapi.Schema(
+            type=openapi.TYPE_ARRAY,
+            items=openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    'music_id': openapi.Schema(type=openapi.TYPE_STRING),
+                    'title': openapi.Schema(type=openapi.TYPE_STRING),
+                    'url': openapi.Schema(type=openapi.TYPE_STRING),
+                    'position_x': openapi.Schema(type=openapi.TYPE_NUMBER),
+                    'position_y': openapi.Schema(type=openapi.TYPE_NUMBER),
+                    'views': openapi.Schema(type=openapi.TYPE_INTEGER),
+                    'good': openapi.Schema(type=openapi.TYPE_INTEGER),
+                    'comment_count': openapi.Schema(type=openapi.TYPE_INTEGER),
+                }
+            )
+        ),
+        status.HTTP_400_BAD_REQUEST: "Bad Request"
+    },
+)
+@api_view(['POST'])
+def get_favorite_music(request):
+    if request.method == 'POST':
+        user_id = request.data.get('user_id')
+        try:
+            favorite_music_ids = Favorite.objects.filter(user_id=user_id).all().values_list('music_id', flat=True)
+        except Favorite.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        response = []
+        for favorite_music_id in favorite_music_ids:
+            try:
+                music = Music.objects.get(music_id=favorite_music_id)
+            except Music.DoesNotExist:
+                pass
+            response.append({
+                'music_id': favorite_music_id,
+                'title': music.title,
+                'url': music.url,
+                'position_x': music.position_x,
+                'position_y': music.position_y,
+                'views': music.views,
+                'good': music.good,
+                'comment_count': music.comment_count,
+            })
         return Response(response, status=status.HTTP_200_OK)
 
 
