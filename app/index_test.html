@@ -49,7 +49,7 @@
                                     <div class="profile_area" style="margin-left:10px">
                                         <center>---公開情報---</center>
                                         ユーザー名<br>
-                                        <input type="text" class="profile-inputbox" size="36" placeholder="ユーザー名"/><br>
+                                        <input type="text" id="user_name" class="profile-inputbox" size="36" placeholder="ユーザー名"/><br>
                                         好きなジャンル<br>
                                         <select>
                                             <option value="apple">ジャンル1</option>
@@ -57,18 +57,18 @@
                                             <option value="banana">未回答</option>
                                         </select><br>
                                         TwitterID<br>
-                                        <input type="text" class="profile-inputbox" size="36" placeholder="TwitterID"/><br>
+                                        <input type="text" id="twitter" class="profile-inputbox" size="36" placeholder="TwitterID"/><br>
                                         InstagramID<br>
-                                        <input type="text" class="profile-inputbox" size="36" placeholder="InstagramID"/><br>
+                                        <input type="text" id="instagram" class="profile-inputbox" size="36" placeholder="InstagramID"/><br>
                                         <br>
                                         <center>---非公開情報---</center>
                                         年齢<br>
                                         <input type="text" class="profile-inputbox" size="6" placeholder="年齢"/><br>
                                         性別<br>
                                         <select>
-                                            <option value="apple">男</option>
-                                            <option value="orange">女</option>
-                                            <option value="banana">未回答</option>
+                                            <option value="male">男</option>
+                                            <option value="female">女</option>
+                                            <option value="empty">未回答</option>
                                         </select><br>
                                         <br>
                                         <button class="search-button" onclick="sideMenuController.updateProfile()">更新</button><br>

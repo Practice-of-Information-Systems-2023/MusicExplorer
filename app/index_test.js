@@ -46,7 +46,7 @@ function init() {
   const profileGenerator = new ProfileGenerator(scene, canvas, context, characterGenerator, communicator);
   profileGenerator.generate();
 
-  sideMenuController = new SideMenuController(scene, audioController);
+  sideMenuController = new SideMenuController(scene, audioController,userID, communicator);
   sideMenuController.init();
 
   setInterval(function () {

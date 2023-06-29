@@ -1,12 +1,19 @@
 class SideMenuController{
-  constructor(scene, audioController){
+  constructor(scene, audioController, userID, communicator){
     this.scene = scene;
     this.audioController = audioController;
     this.player = scene.find("Player");
     this.youtubePlayer = audioController.youtubePlayer;
+    this.userID = userID;
+    this.communicator = communicator;
+
+    this.userNameBox = document.getElementById("user_name");
+    this.twitterBox = document.getElementById("twitter");
+    this.instagramBox = document.getElementById("instagram");
   }
   init(){
     this.updateFavoriteList();
+    this.setProfile();
   }
   search(){
     const query = document.getElementById("search").value;
@@ -106,6 +113,12 @@ class SideMenuController{
     const position = new Vector2(x,y+50);
     this.player.transform.position.set(position);
     this.youtubePlayer.playVideoById(videoId);
+  }
+  setProfile(){
+    const profile = this.communicator.getUserProfile(this.userID);
+    this.userNameBox.value = profile[1];
+    this.twitterBox.value = profile[2];
+    this.instagramBox.value = profile[3];
   }
   updateProfile(){
     alert("更新");
