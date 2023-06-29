@@ -433,8 +433,9 @@ class CharacterController extends Component{
         const dist = transform.position.clone()
                         .sub(this.destination)
                         .sqMagnitude;
-        const rate = (dist / this.velocity.sqMagnitude)**0.5;
-        if(rate < 1){
+        var rate = (dist / this.velocity.sqMagnitude)**0.5;//fpsで暫定的な調整
+        rate /= (fps/30);
+        if(rate*(fps/30) < 1){
             transform.position.set(this.destination);
             this.velocity.set(preVelocity);
             this.isAutoMove = false;
