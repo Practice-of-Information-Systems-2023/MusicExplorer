@@ -52,12 +52,32 @@ class SideMenuController{
     return musics;
   }
   callGetFavoriteAPI(){
+    const data = $.ajax({
+      url: "http://127.0.0.1:8000/api/get_favorite_music/",
+      type:'POST',
+      dataType: 'json',
+      data : {user_id:this.userID},
+      timeout:3000,
+      async: false
+    }).responseText;
+    const parsedData = JSON.parse(data);
+    const result = [];
+    parsedData.forEach((item) => {
+      result.push([
+        item.music_id,
+        item.title,
+        item.url,
+        "http://img.youtube.com/vi/"+item.music_id+"/mqdefault.jpg",
+        item.position_x,
+        item.position_y
+      ]);
+    });
     // ダミー
-    var result = [
+    /*var result = [
       [3,"Time to Fight! (Bionis' Shoulder) - Xenoblade Chronicles: Future Connected OST [05]","https://www.youtube.com/watch?v=gdqGq0rZ5LU","https://i.ytimg.com/vi/HIh0BPK_WjE/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDOdE5we7L755edxHQSh0vZ3YEogQ",-400,-400],
       [4,"Battle!! - Torna - Xenoblade Chronicles 2: Torna ~ The Golden Country OST [03]","https://www.youtube.com/watch?v=1weNnjzaXbY","https://i.ytimg.com/vi/3HU8t4pNfnY/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLAJBuN9hRSK6ZGv9PpcUYuJbKVmAA",400,400],
       [5,"New Battle!!! (Full Version) – Xenoblade Chronicles 3: Future Redeemed ~ Original Soundtrack OST","https://www.youtube.com/watch?v=DeBG1g1BRMA","https://i.ytimg.com/vi/C-qoVi70ooM/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDdgffa8LI8hnciwRp_v1pj-xNj3w",-400,400],
-    ];
+    ];*/
     return result;
   }
   addSearchResult(music){
