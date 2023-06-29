@@ -33,10 +33,10 @@ const SHADOW = new Sprite(
 );
 
 const MUSICLIGHT_SPRITE = new Sprite(
-    "Image/music_effect.png",
-    960, 2400,
-    10, 3,
-    new Vector2(0.5,0.75)
+    "Image/music_effect2.png",//"Image/music_effect.png",
+    960, 768,//2400,
+    4, 5,//10, 3,
+    new Vector2(0.5,0.95)//new Vector2(0.5,0.75)
 );
 const MUSICLIGHT_EFFECT = new Effect(
     MUSICLIGHT_SPRITE,
@@ -107,12 +107,14 @@ class Prefabs{
         effectAnimator1.spriteRenderer = effectRenderer1;
         effectRenderer1.scale.times(0.5);
         effectRenderer1.pivot.y += 2;
+        effectRenderer1.alpha = 0.7;
 
         const effectAnimator2 = obj.addComponent(new EffectAnimator());
         const effectRenderer2 = obj.addComponent(new SpriteRenderer(context, CHEER_SPRITE2, 9, effectAnimator2));
         effectAnimator2.spriteRenderer = effectRenderer2;
         effectRenderer2.scale.times(0.5);
         effectRenderer2.pivot.y += 2;
+        effectRenderer2.alpha = 0.7;
 
         //effectAnimator1.play(CHEER_EFFECT1);
         //effectAnimator2.play(CHEER_EFFECT2);
@@ -132,7 +134,7 @@ class Prefabs{
 
     }
     static audioPlayer(name, position, context, videoId, player, audioController, musicId){
-        const obj = new GameObject(name, new Transform(position, new Vector2(/*1,1*/0.3,0.3)));
+        const obj = new GameObject(name, new Transform(position, new Vector2(/*1.5,1.5*/0.3,0.3)));
         //const effectAnimator = obj.addComponent(new EffectAnimator());
         const spriteRenderer = obj.addComponent(new SpriteRenderer(context, AUDIO_SPRITE, 10/*, effectAnimator*/));
         //effectAnimator.spriteRenderer = spriteRenderer;
@@ -145,14 +147,14 @@ class Prefabs{
         obj.addComponent(new Camera(1,480,320));
         return obj;
     }
-    static profile(name,canvas,context,characterGenerator){
+    static profile(name,canvas,context,characterGenerator, communicator){
         const obj = new GameObject(name, new Transform(Vector2.zero, new Vector2(0.7,0.7)));
         const spriteRenderer = obj.addComponent(new SpriteRenderer(context,WINDOW_SPRITE,20));
         spriteRenderer.isHide = true;
         const textRenderer = obj.addComponent(new TextRenderer(context,"プロフィール",21));
         textRenderer.isHide = true;
         textRenderer.color = '#FFFFFF';
-        obj.addComponent(new ProfileViewer(canvas, characterGenerator, spriteRenderer, textRenderer));
+        obj.addComponent(new ProfileViewer(canvas, characterGenerator, spriteRenderer, textRenderer, communicator));
         return obj;
     }
 };

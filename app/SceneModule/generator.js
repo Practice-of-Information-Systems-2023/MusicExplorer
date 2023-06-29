@@ -1,17 +1,19 @@
 class ProfileGenerator{
     // プロフィールオブジェクトを管理するクラス 最初に実行
-    constructor(scene, canvas, context, characterGenerator){
+    constructor(scene, canvas, context, characterGenerator, communicator){
         this.scene = scene;
         this.canvas = canvas;
         this.context = context;
         this.characterGenerator = characterGenerator;
+        this.communicator = communicator;
     }
     generate(){
         const profile = this.scene.addGameObject(Prefabs.profile(
             "Profile",
             this.canvas,
             this.context,
-            this.characterGenerator
+            this.characterGenerator,
+            this.communicator
         ));
         profile.tag = Tag.Profile;
         this.canvas.addEventListener("click",profile.onClick);
@@ -232,6 +234,14 @@ class CharacterGenerator{
         for(let action of actions){
             if(this.userIDs.has(action[this.USER_ID])){
                 this.userObjects[action[this.USER_ID]].setAction(action[this.ACTION]);
+            }
+
+        }
+    }
+    setIDs(ids){
+        for(let id of ids){
+            if(this.userIDs.has(id)){
+                this.userObjects[id].setID(id);
             }
 
         }
