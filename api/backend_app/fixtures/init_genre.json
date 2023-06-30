@@ -1,0 +1,9 @@
+[
+    {"model": "backend_app.genre", "pk": 1, "fields": {"name": "J-POP"}},
+    {"model": "backend_app.genre", "pk": 2, "fields": {"name": "J-ROCK"}},
+    {"model": "backend_app.genre", "pk": 3, "fields": {"name": "洋楽"}},
+    {"model": "backend_app.genre", "pk": 4, "fields": {"name": "クラシック"}},
+    {"model": "backend_app.genre", "pk": 5, "fields": {"name": "アニメ・ゲーム"}},
+    {"model": "backend_app.genre", "pk": 6, "fields": {"name": "キッズ"}},
+    {"model": "backend_app.genre", "pk": 7, "fields": {"name": "サウンドトラック"}}
+]

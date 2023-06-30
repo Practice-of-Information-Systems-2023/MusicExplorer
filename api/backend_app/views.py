@@ -90,6 +90,7 @@ def get_music_details(music_id):
 
 
 # お気に入り楽曲削除API
+@csrf_protect
 @swagger_auto_schema(
     method='post',
     request_body=openapi.Schema(
@@ -123,6 +124,7 @@ def delete_favorite(request):
 
 
 # youtubeからクエリに合致する音楽を検索するAPI
+@csrf_protect
 @swagger_auto_schema(
     method='post',
     request_body=openapi.Schema(
@@ -180,6 +182,7 @@ def search_music(request):
 
 
 # ユーザ登録用API
+@csrf_protect
 @swagger_auto_schema(
     method='post',
     request_body=openapi.Schema(
@@ -218,6 +221,7 @@ def register_user(request):
 
 
 # ユーザ情報更新用API
+@csrf_protect
 @swagger_auto_schema(
     method='post',
     request_body=openapi.Schema(
@@ -271,6 +275,7 @@ def update_user(request):
 
 
 # ユーザ情報取得用API
+@csrf_protect
 @swagger_auto_schema(
     method='post',
     request_body=openapi.Schema(
@@ -317,6 +322,7 @@ def get_profile(request):
 
 
 # お気に入り楽曲取得API
+@csrf_protect
 @swagger_auto_schema(
     method='post',
     request_body=openapi.Schema(
@@ -374,6 +380,7 @@ def get_favorite_music(request):
 
 
 # 周囲の楽曲を取得するAPI
+@csrf_protect
 @swagger_auto_schema(
     method='post',
     request_body=openapi.Schema(
