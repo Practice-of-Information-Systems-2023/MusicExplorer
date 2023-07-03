@@ -12,9 +12,22 @@
                         <canvas id="main" height=320 width=480 style="border:solid"></canvas>
                     </td>
                     <!-- ------------お気に入り・動画検索欄------------- -->
-                    <td rowspan="2" valign="top">
-
-                        <div class="tab">
+                    <td rowspan="2" valign="top" class="sidemenu">
+                        <input type="checkbox" id="is-logined" class="login-checkbox">
+                        <div class="login">
+                            <label>
+                                ログイン
+                            </label>
+                            <div>
+                                ユーザー名<br>
+                                <input type="text" id="user_name_login" class="login-inputbox" size="36" placeholder="ユーザー名"/><br>
+                                パスワード<br>
+                                <input type="text" id="password_login" class="login-inputbox" size="36" placeholder="パスワード"/><br>
+                                <br>
+                                <button class="login-button" onclick="loginController.login()">ログイン</button><br>
+                            </div>
+                        </div>
+                        <div class="tab-main">
                             <!-- ------------動画検索欄------------- -->
                             <label>
                                 <input type="radio" name="tab-001" class="hide-radiobtn" checked>
@@ -42,7 +55,7 @@
                         
                             <label>
                                 <input type="radio" name="tab-001" class="hide-radiobtn">
-                                プロフィール
+                                ユーザー情報
                             </label>
                             <div>
                                 <div style="height:615px; width:360px; overflow-y:scroll;">
@@ -72,6 +85,9 @@
                                         </select><br>
                                         <br>
                                         <button class="search-button" onclick="sideMenuController.updateProfile()">更新</button><br>
+                                        <br>
+                                        <center>---その他---</center>
+                                        <button class="search-button" onclick="loginController.logout()">ログアウト</button><br>
                                     </div>
                                 </div>
                             </div>

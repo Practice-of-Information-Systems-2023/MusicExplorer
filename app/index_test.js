@@ -5,10 +5,15 @@ var width = canvas.width;
 var fps = 60;
 var youtubePlayer = null;
 var sideMenuController = null;
+const loginController = new LoginController(init);
 new YoutubePlayer("player", function (player) {
   youtubePlayer = player;
-  init();
+
+  //const userID = getUserID();
+  //const userName = getUserName();
+  //init(userID, userName);
 });
+
 function getUserID() {
   const userID = window.prompt("ユーザーIDを入力してください", "");
   return userID;
@@ -17,9 +22,7 @@ function getUserName() {
   const userName = window.prompt("ユーザー名を入力してください", "");
   return userName;
 }
-function init() {
-  const userID = getUserID();
-  const userName = getUserName();
+function init(userID, userName) {
   const audioController = new AudioController(youtubePlayer);
   const scene = new Scene();
 

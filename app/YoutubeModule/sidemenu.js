@@ -1,3 +1,36 @@
+class LoginController{
+  constructor(init){
+    this.init = init;
+  }
+  logout(){
+    sessionStorage.removeItem('userID');
+    location.reload()
+  }
+  login(){
+    const userName = document.getElementById("user_name_login").value;
+    const password = document.getElementById("password_login").value;
+    const result = this.callLoginAPI(userName, password);
+    if(result[0]){
+      // ログイン成功
+      const id = result[1];
+      sessionStorage.setItem('userID', id);
+      this.init(id,userName);
+      document.getElementById("is-logined").checked = true;
+    }else{
+      // ログイン失敗
+      document.getElementById("password_login").value = "";
+    }
+  }
+  callLoginAPI(userID, password){
+    // ダミーAPI
+    const id = document.getElementById("user_name_login").value;
+    if(id==""){
+      return [false, -1];
+    }
+    return [true, id];
+  }
+}
+
 class SideMenuController{
   constructor(scene, audioController, userID, communicator){
     this.scene = scene;
