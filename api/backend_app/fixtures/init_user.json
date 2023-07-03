@@ -1,0 +1,44 @@
+[
+    {
+        "model": "backend_app.appuser",
+        "pk": 1,
+        "fields": {
+            "name": "makoto", "password": "makoto", "twitter_id": "@makoto", "instagram_id": "@makoto", "genre_id": 1, "age": 16, "gender": 0
+        }
+    },
+    {
+        "model": "backend_app.appuser",
+        "pk": 2,
+        "fields": {
+            "name": "kyoko", "password": "kyoko", "twitter_id": "@kyoko", "instagram_id": "@kyoko", "genre_id": 1, "age": 16, "gender": 1
+        }
+    },
+    {
+        "model": "backend_app.appuser",
+        "pk": 3,
+        "fields": {
+            "name": "junko", "password": "junko", "twitter_id": "@junko", "instagram_id": "@junko", "genre_id": 2, "age": 16, "gender": 1
+        }
+    },
+    {
+        "model": "backend_app.appuser",
+        "pk": 4,
+        "fields": {
+            "name": "hajime", "password": "hajime", "twitter_id": "@hajime", "instagram_id": "@hajime", "genre_id": 3, "age": 16, "gender": 0
+        }
+    },
+    {
+        "model": "backend_app.appuser",
+        "pk": 5,
+        "fields": {
+            "name": "chiaki", "password": "chiaki", "twitter_id": "@chiaki", "instagram_id": "@chiaki", "genre_id": 4, "age": 16, "gender": 1
+        }
+    },
+    {
+        "model": "backend_app.appuser",
+        "pk": 6,
+        "fields": {
+            "name": "shuichi", "password": "shuichi", "twitter_id": "@shuichi", "instagram_id": "@shuichi", "genre_id": 5, "age": 16, "gender": 0
+        }
+    }
+]
