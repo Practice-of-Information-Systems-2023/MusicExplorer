@@ -7,14 +7,14 @@ const Components = {
     Renderer:6,
     SpriteRenderer:7,
     TextRenderer:8,
-    ProfileViewer:9,
+    InfoViewer:9,
 }
 const ComponentOrder = [
     Components.CharacterController,
     Components.Animator,
     Components.Camera,
     Components.MusicObject,
-    Components.ProfileViewer
+    Components.InfoViewer,
 ];
 
 const RendererTags = [
@@ -300,13 +300,14 @@ class TextRenderer extends Renderer{
 }
 
 class MusicObject extends Component{
-    constructor(videoId, player, audioController, musicId){
+    constructor(videoId, player, audioController, musicId, title){
         super();
         this.type = Components.MusicObject;
         this.musicId = musicId;
         this.videoId = videoId;
         this.player = player;
         this.audioController = audioController;
+        this.title = title;
     }
     update(dt){
         const sqDist = this.player.transform.position.clone()
@@ -475,44 +476,59 @@ class CharacterController extends Component{
     }
 }
 
-class ProfileViewer extends Component{
+class InfoViewer extends Component{
     constructor(canvas, characterGenerator, spriteRenderer, textRenderer,communicator){
         super();
-        this.type = Components.ProfileViewer;
+        this.type = Components.InfoViewer;
         this.canvas = canvas;
         this.characterGenerator = characterGenerator;
         this.spriteRenderer = spriteRenderer;
         this.textRenderer = textRenderer;
         this.communicator = communicator;
+        this.musicId = "";
         canvas.addEventListener("click",this.onClick.bind(this));
     }
     onClick(e){
         const rect = e.target.getBoundingClientRect();
         const cursorX = e.clientX - rect.left;
         const cursorY = e.clientY - rect.top;
-        this.viewProfile(new Vector2(cursorX, cursorY));
+        const target = this.getClickedObject(new Vector2(cursorX, cursorY));
+        this.judgeClickedObject(target);
     }
-    viewProfile(cursor){
+    getClickedObject(cursor){
         const scene = this.gameObject.scene;
         const worldPosition = scene.mainCamera.reverseProjection(cursor);
         const renderers = scene.getSortedRenderers(true);
         var target=null;
         for(let renderer of renderers){
             const tag = renderer.gameObject.tag;
-            if(tag != Tag.Character && tag != Tag.Profile){
+            if(tag != Tag.Character && 
+                tag != Tag.InfoView && 
+                tag != Tag.MusicObj && 
+                tag != Tag.Button){
                 continue;
             }
             if(renderer.within(worldPosition)){
-                target=renderer.gameObject;
+                target=renderer;
                 break;
             }
         }
-        if(target!=null){
-            if(target.tag == Tag.Character){
-                this.openProfile(target);
-            }else if(target.tag == Tag.Profile){
-                this.closeProfile();
-            }
+        return target;
+    }
+    judgeClickedObject(target){
+        if(target==null){
+            return;
+        }
+        switch(target.gameObject.tag){
+            case Tag.InfoView:
+                this.clickViewer(target);
+                break;
+            case Tag.Character:
+                this.openProfile(target.gameObect);
+                break;
+            case Tag.MusicObj:
+                this.openMusicInfo(target.gameObject);
+                break;
         }
     }
     openProfile(target){
@@ -530,10 +546,41 @@ class ProfileViewer extends Component{
             + "Twitter: " + profile[2] + "\n"
             + "Instagram: " + profile[3] + "\n";
     }
-    closeProfile(){
-        this.spriteRenderer.isHide = true;
+    openMusicInfo(target){
+        const musicObj = target.getComponent(Components.MusicObject);
+        const renderers = this.gameObject.getComponents(Components.SpriteRenderer);
+        renderers[0].isHide = false;
+        renderers[1].isHide = false;
+        this.textRenderer.isHide = false;
+        this.target = target.transform;
+        renderers[0].alpha = 0.7;
+        this.textRenderer.pivot.x = 0;
+        this.textRenderer.pivot.y = -30;
+        this.textRenderer.text = 
+            musicObj.title.substring(0,25) + "\n"
+            + musicObj.title.substring(25,50)  + "\n"
+            + musicObj.title.substring(50,75)  + "\n"
+            + musicObj.title.substring(75,100);
+        this.musicId = musicObj.videoId
+    }
+    clickViewer(target){
+        if(target.renderingOrder==20){
+            this.closeViewer(target);
+        }else{
+            this.favoriteRegister(target);
+        }
+    }
+    closeViewer(target){
+        const renderers = this.gameObject.getComponents(Components.SpriteRenderer);
+        for(let renderer of renderers){
+            renderer.isHide = true;
+        }
         this.textRenderer.isHide = true;
         this.target = null;
+    }
+    favoriteRegister(target){
+        sideMenuController.onClickFavoriteRegisterButton(this.musicId);
+        this.closeViewer(target);
     }
     update(dt){
         if(this.target!=null){

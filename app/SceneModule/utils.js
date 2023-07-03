@@ -3,7 +3,7 @@ const Tag = {
     Player : 1,
     Character : 2,
     MusicObj : 3,
-    Profile : 4,
+    InfoView : 4,
 };
 
 // キーコンフィグ

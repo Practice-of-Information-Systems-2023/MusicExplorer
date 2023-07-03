@@ -6,6 +6,7 @@ class Communicator {
     this.userName = userName;
     this.player = scene.find("Player");
     this.CHARACTER_RECT = 1000;
+    this.MUSIC_RECT = 4000;
     const url = "ws://15.168.10.223:3000/websocket";
     this.socket = new WebSocket(url);
     this.socket.addEventListener("message", this.setInfo.bind(this));
@@ -83,17 +84,39 @@ class Communicator {
         musicObject[0],
         musicObject[1],
         new Vector2(musicObject[2], musicObject[3]),
+        musicObject[4],
       ]);
     }
     return positions;
   }
   callMusicObjectsDataAPI(xMin, xMax, yMin, yMax) {
+    const data = $.ajax({
+      url: "http://127.0.0.1:8000/api/get_surrounding_music/",
+      type:'POST',
+      dataType: 'json',
+      data : {
+        x_1:xMin,
+        x_2:xMax,
+        y_1:yMin,
+        y_2:yMax
+      },
+      timeout:3000,
+      async: false
+    }).responseText;
+    console.log(xMin,xMax,yMin,yMax);
+    const parsedData = JSON.parse(data);
+    const result = [];
+    parsedData.forEach((item) => {
+      const { music_id, title, url, position_x, position_y } = item;
+      result.push([music_id, music_id, position_x, position_y, title])
+    });
+    return result;
     // ダミーAPI
-    return [
-      [0, "gdqGq0rZ5LU", -400, -400],
-      [1, "1weNnjzaXbY", 400, 400],
-      [2, "DeBG1g1BRMA", -400, 400],
-    ];
+    /*return [
+      [0, "gdqGq0rZ5LU", -400, -400, "Time to Fight! (Bionis' Shoulder) - Xenoblade Chronicles: Future Connected OST [05]"],
+      [1, "1weNnjzaXbY", 400, 400, "Battle!! - Torna - Xenoblade Chronicles 2: Torna ~ The Golden Country OST [03]"],
+      [2, "DeBG1g1BRMA", -400, 400, "New Battle!!! (Full Version) – Xenoblade Chronicles 3: Future Redeemed ~ Original Soundtrack OST"],
+    ];*/
   }
   sendPlayerInfo(position, action) {
     // idは暫定

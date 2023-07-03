@@ -25,6 +25,13 @@ const WINDOW_SPRITE = new Sprite(
     new Vector2(0.5,0.5)
 );
 
+const FAVORITE_SPRITE = new Sprite(
+    "Image/registerButton.png",
+    211, 65,
+    1, 1,
+    new Vector2(0.5,0.5)
+);
+
 const SHADOW = new Sprite(
     "Image/shadow.png",
     30, 12,
@@ -133,12 +140,12 @@ class Prefabs{
     static effect(name, position, context, effect){
 
     }
-    static audioPlayer(name, position, context, videoId, player, audioController, musicId){
+    static audioPlayer(name, position, context, videoId, player, audioController, musicId, title){
         const obj = new GameObject(name, new Transform(position, new Vector2(/*1.5,1.5*/0.3,0.3)));
         //const effectAnimator = obj.addComponent(new EffectAnimator());
         const spriteRenderer = obj.addComponent(new SpriteRenderer(context, AUDIO_SPRITE, 10/*, effectAnimator*/));
         //effectAnimator.spriteRenderer = spriteRenderer;
-        obj.addComponent(new MusicObject(videoId, player, audioController,musicId));
+        obj.addComponent(new MusicObject(videoId, player, audioController,musicId,title));
         //effectAnimator.play(MUSICLIGHT_EFFECT);
         return obj;
     }
@@ -147,14 +154,17 @@ class Prefabs{
         obj.addComponent(new Camera(1,480,320));
         return obj;
     }
-    static profile(name,canvas,context,characterGenerator, communicator){
+    static infoView(name,canvas,context,characterGenerator, communicator){
         const obj = new GameObject(name, new Transform(Vector2.zero, new Vector2(0.7,0.7)));
         const spriteRenderer = obj.addComponent(new SpriteRenderer(context,WINDOW_SPRITE,20));
         spriteRenderer.isHide = true;
+        const favoriteButton = obj.addComponent(new SpriteRenderer(context,FAVORITE_SPRITE,21));
+        favoriteButton.isHide = true;
+        favoriteButton.pivot.y += 70;
         const textRenderer = obj.addComponent(new TextRenderer(context,"プロフィール",21));
         textRenderer.isHide = true;
         textRenderer.color = '#FFFFFF';
-        obj.addComponent(new ProfileViewer(canvas, characterGenerator, spriteRenderer, textRenderer, communicator));
+        obj.addComponent(new InfoViewer(canvas, characterGenerator, spriteRenderer, textRenderer, communicator));
         return obj;
     }
 };
