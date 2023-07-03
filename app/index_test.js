@@ -8,20 +8,16 @@ var sideMenuController = null;
 const loginController = new LoginController(init);
 new YoutubePlayer("player", function (player) {
   youtubePlayer = player;
-
-  //const userID = getUserID();
-  //const userName = getUserName();
-  //init(userID, userName);
 });
 
-function getUserID() {
+/*function getUserID() {
   const userID = window.prompt("ユーザーIDを入力してください", "");
   return userID;
 }
 function getUserName() {
   const userName = window.prompt("ユーザー名を入力してください", "");
   return userName;
-}
+}*/
 function init(userID, userName) {
   const audioController = new AudioController(youtubePlayer);
   const scene = new Scene();

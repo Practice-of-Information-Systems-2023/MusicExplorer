@@ -12,14 +12,16 @@ class LoginController{
     const result = this.callLoginAPI(userName, password);
     if(result[0]){
       // ログイン成功
-      const id = result[1];
-      sessionStorage.setItem('userID', id);
-      this.init(id,userName);
-      document.getElementById("is-logined").checked = true;
+      this.loginSuccess(result[1],userName);
     }else{
       // ログイン失敗
       document.getElementById("password_login").value = "";
     }
+  }
+  loginSuccess(id, userName){
+    sessionStorage.setItem('userID', id);
+    document.getElementById("is-logined").checked = true;
+    this.init(id,userName);
   }
   callLoginAPI(userID, password){
     // ダミーAPI
@@ -28,6 +30,105 @@ class LoginController{
       return [false, -1];
     }
     return [true, id];
+  }
+  signup(){
+    const userName = document.getElementById("user_name_signup").value;
+    const password = document.getElementById("password_signup").value;
+    const genre = document.getElementById("genre_signup").value;
+    var twitter = document.getElementById("twitter_signup").value;
+    var instagram = document.getElementById("instagram_signup").value;
+    const age = document.getElementById("age_signup").value;
+    const gender = document.getElementById("gender_signup").value;
+    const errorMessages = [];
+    this.addEmptyError("ユーザー名", userName, errorMessages);
+    this.addLengthError("ユーザー名", userName, 15, errorMessages);
+    this.addEmptyError("パスワード", password, errorMessages);
+    this.addLengthError("TwitterID", twitter, 20, errorMessages);
+    this.addLengthError("InstagramID", instagram, 20, errorMessages);
+    this.addMinError("年齢", age, 0, errorMessages);
+    this.addUniqueError("ユーザー名", userName, errorMessages);
+
+    if(twitter==""){
+      twitter="@";
+    }
+    if(instagram==""){
+      instagram="@";
+    }
+    const error = $(".error_message_signup");
+    error.empty();
+    for(let message of errorMessages){
+      error.append(message);
+    }
+
+    if(errorMessages.length == 0){
+      const result = this.callSignUpAPI(
+        userName,
+        password,
+        parseInt(genre),
+        twitter,
+        instagram,
+        parseInt(age),
+        parseInt(gender),
+      );
+      //this.loginSuccess(result, userName);
+      document.getElementById("user_name_login").value = result;
+      document.getElementById("password_login").value = password;
+      this.login();
+    }
+  }
+  addEmptyError(name, string, list){
+    if(string == ""){
+      list.push(name+"が未入力です</br>");
+    }
+  }
+  addLengthError(name, string, length, list){
+    if(string.length > length){
+      list.push(name+"は"+length+"文字以下にしてください</br>");
+    }
+  }
+  addMinError(name, value, min, list){
+    if(value < min){
+      list.push(name+"は"+min+"以上にしてください</br>");
+    }
+  }
+  addUniqueError(name, string, list){
+    if(this.callUserNamesAPI(string)){
+      list.push("この"+name+"は既に使われています</br>");
+    }
+  }
+  callUserNamesAPI(userName){
+    // ダミー
+    return false;
+  }
+  callSignUpAPI(
+    userName,
+    password,
+    genre,
+    twitter,
+    instagram,
+    age,
+    gender
+  ){
+    const data = $.ajax({
+      url: "http://127.0.0.1:8000/api/register_user/",
+      type:'POST',
+      dataType: 'json',
+      data : {
+        name:userName,
+        password:password,
+        twitter_id:twitter,
+        instagram_id:instagram,
+        genre_id:genre,
+        age:age,
+        gender:gender
+      },
+      timeout:3000,
+      async: false
+    }).responseText;
+    const parsedData = JSON.parse(data);
+    const { user_id } = parsedData;
+    alert("内部用ユーザーIDは "+user_id+" です(開発用)");
+    return user_id;
   }
 }
 

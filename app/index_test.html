@@ -20,11 +20,11 @@
                                 ログイン
                             </label>
                             <div>
-                                ユーザー名<br>
+                                ユーザー名 (結合前はIDを入力)<br>
                                 <input type="text" id="user_name_login" class="login-inputbox" size="36" placeholder="ユーザー名"/><br>
                                 パスワード<br>
                                 <input type="text" id="password_login" class="login-inputbox" size="36" placeholder="パスワード"/><br>
-                                <br>
+                                <font color="red" class="error_message_login"></font><br>
                                 <button class="login-button" onclick="loginController.login()">ログイン</button><br>
                             </div>
                             <label>
@@ -37,24 +37,24 @@
                                 パスワード<br>
                                 <input type="text" id="password_signup" class="login-inputbox" size="36" placeholder="パスワード"/><br>
                                 好きなジャンル<br>
-                                <select>
-                                    <option value="apple">ジャンル1</option>
-                                    <option value="orange">ジャンル2</option>
-                                    <option value="banana">未回答</option>
+                                <select id="genre_signup">
+                                    <option value="1">未回答</option>
+                                    <option value="2">ジャンル1</option>
+                                    <option value="3">ジャンル2</option>
                                 </select><br>
                                 TwitterID (任意)<br>
                                 <input type="text" id="twitter_signup" class="profile-inputbox" size="36" placeholder="TwitterID"/><br>
                                 InstagramID (任意)<br>
                                 <input type="text" id="instagram_signup" class="profile-inputbox" size="36" placeholder="InstagramID"/><br>
-                                年齢 (非公開)<br>
-                                <input type="text" id="age_signup" class="profile-inputbox" size="6" placeholder="年齢"/><br>
-                                性別 (非公開)<br>
+                                年齢 (任意, 非公開)<br>
+                                <input type="number" id="age_signup" class="profile-inputbox" size="6" value="0" min="0" max="200"/><br>
+                                性別 (任意, 非公開)<br>
                                 <select id="gender_signup">
-                                    <option value="male">男</option>
-                                    <option value="female">女</option>
-                                    <option value="empty">未回答</option>
+                                    <option value="3">未回答</option>
+                                    <option value="1">男</option>
+                                    <option value="2">女</option>
                                 </select><br>
-                                <font color="red"></font><br>
+                                <font color="red" class="error_message_signup"></font><br>
                                 <button class="login-button" onclick="loginController.signup()">登録</button><br>
                             </div>
                         </div>
@@ -96,9 +96,9 @@
                                         <input type="text" id="user_name" class="profile-inputbox" size="36" placeholder="ユーザー名"/><br>
                                         好きなジャンル<br>
                                         <select>
-                                            <option value="apple">ジャンル1</option>
-                                            <option value="orange">ジャンル2</option>
-                                            <option value="banana">未回答</option>
+                                            <option value="1">未回答</option>
+                                            <option value="2">ジャンル1</option>
+                                            <option value="3">ジャンル2</option>
                                         </select><br>
                                         TwitterID<br>
                                         <input type="text" id="twitter" class="profile-inputbox" size="36" placeholder="TwitterID"/><br>
@@ -107,12 +107,12 @@
                                         <br>
                                         <center>---非公開情報---</center>
                                         年齢<br>
-                                        <input type="text" id="age" class="profile-inputbox" size="6" placeholder="年齢"/><br>
+                                        <input type="number" id="age" class="profile-inputbox" size="6" min="0" max="200"/><br>
                                         性別<br>
                                         <select id="gender">
-                                            <option value="male">男</option>
-                                            <option value="female">女</option>
-                                            <option value="empty">未回答</option>
+                                            <option value="3">未回答</option>
+                                            <option value="1">男</option>
+                                            <option value="2">女</option>
                                         </select><br>
                                         <br>
                                         <button class="search-button" onclick="sideMenuController.updateProfile()">更新</button><br>
