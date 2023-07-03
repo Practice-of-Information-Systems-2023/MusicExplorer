@@ -5,7 +5,8 @@ class Communicator {
     this.userID = userID;
     this.userName = userName;
     this.player = scene.find("Player");
-    this.CHARACTER_RECT = 4000;
+    this.CHARACTER_RECT = 1000;
+    this.MUSIC_RECT = 4000;
     const url = "ws://15.168.10.223:3000/websocket";
     this.socket = new WebSocket(url);
     this.socket.addEventListener("message", this.setInfo.bind(this));
@@ -102,7 +103,7 @@ class Communicator {
       timeout:3000,
       async: false
     }).responseText;
-
+    console.log(xMin,xMax,yMin,yMax);
     const parsedData = JSON.parse(data);
     const result = [];
     parsedData.forEach((item) => {
