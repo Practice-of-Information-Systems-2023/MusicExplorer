@@ -7,14 +7,14 @@ const Components = {
     Renderer:6,
     SpriteRenderer:7,
     TextRenderer:8,
-    ProfileViewer:9,
+    InfoViewer:9,
 }
 const ComponentOrder = [
     Components.CharacterController,
     Components.Animator,
     Components.Camera,
     Components.MusicObject,
-    Components.ProfileViewer
+    Components.InfoViewer,
 ];
 
 const RendererTags = [
@@ -300,13 +300,14 @@ class TextRenderer extends Renderer{
 }
 
 class MusicObject extends Component{
-    constructor(videoId, player, audioController, musicId){
+    constructor(videoId, player, audioController, musicId, title){
         super();
         this.type = Components.MusicObject;
         this.musicId = musicId;
         this.videoId = videoId;
         this.player = player;
         this.audioController = audioController;
+        this.title = title;
     }
     update(dt){
         const sqDist = this.player.transform.position.clone()
@@ -475,10 +476,10 @@ class CharacterController extends Component{
     }
 }
 
-class ProfileViewer extends Component{
+class InfoViewer extends Component{
     constructor(canvas, characterGenerator, spriteRenderer, textRenderer,communicator){
         super();
-        this.type = Components.ProfileViewer;
+        this.type = Components.InfoViewer;
         this.canvas = canvas;
         this.characterGenerator = characterGenerator;
         this.spriteRenderer = spriteRenderer;
@@ -490,16 +491,19 @@ class ProfileViewer extends Component{
         const rect = e.target.getBoundingClientRect();
         const cursorX = e.clientX - rect.left;
         const cursorY = e.clientY - rect.top;
-        this.viewProfile(new Vector2(cursorX, cursorY));
+        const target = this.getClickedObject(new Vector2(cursorX, cursorY));
+        this.judgeClickedObject(target);
     }
-    viewProfile(cursor){
+    getClickedObject(cursor){
         const scene = this.gameObject.scene;
         const worldPosition = scene.mainCamera.reverseProjection(cursor);
         const renderers = scene.getSortedRenderers(true);
         var target=null;
         for(let renderer of renderers){
             const tag = renderer.gameObject.tag;
-            if(tag != Tag.Character && tag != Tag.Profile){
+            if(tag != Tag.Character && 
+                tag != Tag.InfoView && 
+                tag != Tag.MusicObj){
                 continue;
             }
             if(renderer.within(worldPosition)){
@@ -507,12 +511,22 @@ class ProfileViewer extends Component{
                 break;
             }
         }
-        if(target!=null){
-            if(target.tag == Tag.Character){
+        return target;
+    }
+    judgeClickedObject(target){
+        if(target==null){
+            return;
+        }
+        switch(target.tag){
+            case Tag.InfoView:
+                this.closeViewer();
+                break;
+            case Tag.Character:
                 this.openProfile(target);
-            }else if(target.tag == Tag.Profile){
-                this.closeProfile();
-            }
+                break;
+            case Tag.MusicObj:
+                this.openMusicInfo(target);
+                break;
         }
     }
     openProfile(target){
@@ -530,7 +544,21 @@ class ProfileViewer extends Component{
             + "Twitter: " + profile[2] + "\n"
             + "Instagram: " + profile[3] + "\n";
     }
-    closeProfile(){
+    openMusicInfo(target){
+        const musicObj = target.getComponent(Components.MusicObject);
+        this.spriteRenderer.isHide = false;
+        this.textRenderer.isHide = false;
+        this.target = target.transform;
+        this.spriteRenderer.alpha = 0.7;
+        this.textRenderer.pivot.x = 0;
+        this.textRenderer.pivot.y = -30;
+        this.textRenderer.text = 
+            musicObj.title.substring(0,25) + "\n"
+            + musicObj.title.substring(25,50)  + "\n"
+            + musicObj.title.substring(50,75)  + "\n"
+            + musicObj.title.substring(75,100);
+    }
+    closeViewer(){
         this.spriteRenderer.isHide = true;
         this.textRenderer.isHide = true;
         this.target = null;

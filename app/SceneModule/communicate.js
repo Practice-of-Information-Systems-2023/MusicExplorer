@@ -83,6 +83,7 @@ class Communicator {
         musicObject[0],
         musicObject[1],
         new Vector2(musicObject[2], musicObject[3]),
+        musicObject[4],
       ]);
     }
     return positions;
@@ -90,9 +91,9 @@ class Communicator {
   callMusicObjectsDataAPI(xMin, xMax, yMin, yMax) {
     // ダミーAPI
     return [
-      [0, "gdqGq0rZ5LU", -400, -400],
-      [1, "1weNnjzaXbY", 400, 400],
-      [2, "DeBG1g1BRMA", -400, 400],
+      [0, "gdqGq0rZ5LU", -400, -400, "Time to Fight! (Bionis' Shoulder) - Xenoblade Chronicles: Future Connected OST [05]"],
+      [1, "1weNnjzaXbY", 400, 400, "Battle!! - Torna - Xenoblade Chronicles 2: Torna ~ The Golden Country OST [03]"],
+      [2, "DeBG1g1BRMA", -400, 400, "New Battle!!! (Full Version) – Xenoblade Chronicles 3: Future Redeemed ~ Original Soundtrack OST"],
     ];
   }
   sendPlayerInfo(position, action) {

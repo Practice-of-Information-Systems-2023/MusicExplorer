@@ -1,4 +1,4 @@
-class ProfileGenerator{
+class InfoViewerGenerator{
     // プロフィールオブジェクトを管理するクラス 最初に実行
     constructor(scene, canvas, context, characterGenerator, communicator){
         this.scene = scene;
@@ -8,15 +8,15 @@ class ProfileGenerator{
         this.communicator = communicator;
     }
     generate(){
-        const profile = this.scene.addGameObject(Prefabs.profile(
-            "Profile",
+        const infoView = this.scene.addGameObject(Prefabs.infoView(
+            "InfoView",
             this.canvas,
             this.context,
             this.characterGenerator,
             this.communicator
         ));
-        profile.tag = Tag.Profile;
-        this.canvas.addEventListener("click",profile.onClick);
+        infoView.tag = Tag.InfoView;
+        this.canvas.addEventListener("click",infoView.onClick);
     }
 }
 
@@ -105,6 +105,7 @@ class MusicObjectGenerator{
         this.MUSIC_ID = 0;
         this.VIDEO_ID = 1;
         this.POSITION = 2;
+        this.TITLE = 3;
     }
     generate(musicObjects){
         this.change(musicObjects, false);
@@ -146,7 +147,8 @@ class MusicObjectGenerator{
                 musicObjects[index][this.VIDEO_ID],
                 this.player,
                 this.audioController,
-                id
+                id,
+                musicObjects[index][this.TITLE]
             ));
             this.musicIDs.add(id);
             this.musicObjects[id] = gameObject.getComponent(Components.MusicObject);

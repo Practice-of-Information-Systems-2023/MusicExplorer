@@ -42,11 +42,12 @@ function init(userID, userName) {
   );
   musicObjectGenerator.generate(communicator.getMusicObjectsData());
 
-  const profileGenerator = new ProfileGenerator(scene, canvas, context, characterGenerator, communicator);
-  profileGenerator.generate();
+  const infoViewerGenerator = new InfoViewerGenerator(scene, canvas, context, characterGenerator, communicator);
+  infoViewerGenerator.generate();
 
   sideMenuController = new SideMenuController(scene, audioController,userID, communicator);
   sideMenuController.init();
+  communicator.userName = sideMenuController.userNameBox.value;
 
   setInterval(function () {
     // 毎フレームの処理
