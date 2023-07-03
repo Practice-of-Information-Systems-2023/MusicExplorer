@@ -216,7 +216,8 @@ class SideMenuController{
   }
   addSearchResult(music){
     const resultArea = $('.result_area');
-    const func = "sideMenuController.onClickListenButton('"+music[2]+"')";
+    const funcListen = "sideMenuController.onClickListenButton('"+music[2]+"')";
+    const funcRegister = "sideMenuController.onClickFavoriteRegisterButton('"+music[2]+"')";
     var element = "";
     element += '<div class="search-item">';
     element += '<label class="search-item-music">';
@@ -227,8 +228,8 @@ class SideMenuController{
     element += '<label class="search-item-quit">'
     element += '<input type="radio" name="sidemenu-radio" class="menu-radio">'
     element += '</label>'
-    element += '<input type="button" class="music-button" value="お気に入り登録">';
-    element += '<input type="button" class="music-button" value="視聴" onclick="'+func+'">';
+    element += '<input type="button" class="music-button" value="お気に入り登録" onclick="'+funcRegister+'">';
+    element += '<input type="button" class="music-button" value="視聴" onclick="'+funcListen+'">';
     element += '</div>';
     element += '</label>';
     element += '</div>';
@@ -236,7 +237,8 @@ class SideMenuController{
   }
   addFavoriteResult(music){
     const resultArea = $('.favorite_area');
-    const func = "sideMenuController.onClickMoveButton("+music[4]+","+music[5]+",'"+music[2]+"')";
+    const funcMove = "sideMenuController.onClickMoveButton("+music[4]+","+music[5]+",'"+music[2]+"')";
+    const funcDelete = "sideMenuController.onClickFavoriteRemoveButton('"+music[2]+"')";
     var element = "";
     element += '<div class="search-item">';
     element += '<label class="search-item-music">';
@@ -247,18 +249,40 @@ class SideMenuController{
     element += '<label class="search-item-quit">'
     element += '<input type="radio" name="sidemenu-radio" class="menu-radio">'
     element += '</label>'
-    element += '<input type="button" class="music-button" value="お気に入り解除">';
-    element += '<input type="button" class="music-button" value="移動" onclick="'+func+'">';
+    element += '<input type="button" class="music-button" value="お気に入り解除" onclick="'+funcDelete+'">';
+    element += '<input type="button" class="music-button" value="移動" onclick="'+funcMove+'">';
     element += '</div>';
     element += '</label>';
     element += '</div>';
     resultArea.append(element);
   }
   onClickFavoriteRegisterButton(id){
-
+    const data = $.ajax({
+      url: "http://127.0.0.1:8000/api/create_favorite/",
+      type:'POST',
+      dataType: 'json',
+      data : {
+        user_id:this.userID,
+        music_id:id
+      },
+      timeout:3000,
+      async: false
+    });
+    this.updateFavoriteList();
   }
   onClickFavoriteRemoveButton(id){
-
+    const data = $.ajax({
+      url: "http://127.0.0.1:8000/api/delete_favorite/",
+      type:'POST',
+      dataType: 'json',
+      data : {
+        user_id:this.userID,
+        music_id:id
+      },
+      timeout:3000,
+      async: false
+    });
+    this.updateFavoriteList();
   }
   onClickListenButton(videoId){
     this.youtubePlayer.testListenVideoById(videoId);
