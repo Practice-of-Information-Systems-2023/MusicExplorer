@@ -25,6 +25,13 @@ const WINDOW_SPRITE = new Sprite(
     new Vector2(0.5,0.5)
 );
 
+const FAVORITE_SPRITE = new Sprite(
+    "Image/registerButton.png",
+    211, 65,
+    1, 1,
+    new Vector2(0.5,0.5)
+);
+
 const SHADOW = new Sprite(
     "Image/shadow.png",
     30, 12,
@@ -151,6 +158,9 @@ class Prefabs{
         const obj = new GameObject(name, new Transform(Vector2.zero, new Vector2(0.7,0.7)));
         const spriteRenderer = obj.addComponent(new SpriteRenderer(context,WINDOW_SPRITE,20));
         spriteRenderer.isHide = true;
+        const favoriteButton = obj.addComponent(new SpriteRenderer(context,FAVORITE_SPRITE,21));
+        favoriteButton.isHide = true;
+        favoriteButton.pivot.y += 70;
         const textRenderer = obj.addComponent(new TextRenderer(context,"プロフィール",21));
         textRenderer.isHide = true;
         textRenderer.color = '#FFFFFF';

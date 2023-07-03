@@ -485,6 +485,7 @@ class InfoViewer extends Component{
         this.spriteRenderer = spriteRenderer;
         this.textRenderer = textRenderer;
         this.communicator = communicator;
+        this.musicId = "";
         canvas.addEventListener("click",this.onClick.bind(this));
     }
     onClick(e){
@@ -503,11 +504,12 @@ class InfoViewer extends Component{
             const tag = renderer.gameObject.tag;
             if(tag != Tag.Character && 
                 tag != Tag.InfoView && 
-                tag != Tag.MusicObj){
+                tag != Tag.MusicObj && 
+                tag != Tag.Button){
                 continue;
             }
             if(renderer.within(worldPosition)){
-                target=renderer.gameObject;
+                target=renderer;
                 break;
             }
         }
@@ -517,15 +519,15 @@ class InfoViewer extends Component{
         if(target==null){
             return;
         }
-        switch(target.tag){
+        switch(target.gameObject.tag){
             case Tag.InfoView:
-                this.closeViewer();
+                this.clickViewer(target);
                 break;
             case Tag.Character:
-                this.openProfile(target);
+                this.openProfile(target.gameObect);
                 break;
             case Tag.MusicObj:
-                this.openMusicInfo(target);
+                this.openMusicInfo(target.gameObject);
                 break;
         }
     }
@@ -546,10 +548,12 @@ class InfoViewer extends Component{
     }
     openMusicInfo(target){
         const musicObj = target.getComponent(Components.MusicObject);
-        this.spriteRenderer.isHide = false;
+        const renderers = this.gameObject.getComponents(Components.SpriteRenderer);
+        renderers[0].isHide = false;
+        renderers[1].isHide = false;
         this.textRenderer.isHide = false;
         this.target = target.transform;
-        this.spriteRenderer.alpha = 0.7;
+        renderers[0].alpha = 0.7;
         this.textRenderer.pivot.x = 0;
         this.textRenderer.pivot.y = -30;
         this.textRenderer.text = 
@@ -557,11 +561,26 @@ class InfoViewer extends Component{
             + musicObj.title.substring(25,50)  + "\n"
             + musicObj.title.substring(50,75)  + "\n"
             + musicObj.title.substring(75,100);
+        this.musicId = musicObj.videoId
     }
-    closeViewer(){
-        this.spriteRenderer.isHide = true;
+    clickViewer(target){
+        if(target.renderingOrder==20){
+            this.closeViewer(target);
+        }else{
+            this.favoriteRegister(target);
+        }
+    }
+    closeViewer(target){
+        const renderers = this.gameObject.getComponents(Components.SpriteRenderer);
+        for(let renderer of renderers){
+            renderer.isHide = true;
+        }
         this.textRenderer.isHide = true;
         this.target = null;
+    }
+    favoriteRegister(target){
+        sideMenuController.onClickFavoriteRegisterButton(this.musicId);
+        this.closeViewer(target);
     }
     update(dt){
         if(this.target!=null){
