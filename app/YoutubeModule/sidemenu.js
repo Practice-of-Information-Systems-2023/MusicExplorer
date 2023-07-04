@@ -32,9 +32,6 @@ class LoginController{
   callLoginAPI(userName, password){
     // ダミーAPI
     const name = document.getElementById("user_name_login").value;
-    if(id==""){
-      return [false, -1];
-    }
     const data = $.ajax({
       url: "http://127.0.0.1:8000/api/login/",
       type:'POST',
@@ -46,10 +43,11 @@ class LoginController{
       timeout:3000,
       async: false
     });
-    const dataText = data.responseText;
-    const id = parseInt(dataText);
     const status = data.status;
     if(status==200){
+      const parsedData = JSON.parse(data.responseText);
+      const { user_id } = parsedData;
+      const id = user_id;
       return [status, id];
     }else{
       return [status, -1];
@@ -166,7 +164,6 @@ class LoginController{
     }else{
       const parsedData = JSON.parse(dataText);
       const { user_id } = parsedData;
-      alert("内部用ユーザーIDは "+user_id+" です(開発用)");
       return [status, user_id]
     }
   }
