@@ -1,6 +1,8 @@
 class LoginController {
   constructor(init) {
     this.init = init;
+    this.password = "";
+    this.userID = null;
   }
   logout() {
     sessionStorage.removeItem("userID");
@@ -37,7 +39,7 @@ class LoginController {
     const genre = document.getElementById("genre_signup").value;
     var twitter = document.getElementById("twitter_signup").value;
     var instagram = document.getElementById("instagram_signup").value;
-    const age = document.getElementById("age_signup").value;
+    var age = document.getElementById("age_signup").value;
     const gender = document.getElementById("gender_signup").value;
     const errorMessages = [];
     this.addEmptyError("ユーザー名", userName, errorMessages);
@@ -53,6 +55,9 @@ class LoginController {
     }
     if (instagram == "") {
       instagram = "@";
+    }
+    if (age == "") {
+      age = "0";
     }
     const error = $(".error_message_signup");
     error.empty();
@@ -121,6 +126,89 @@ class LoginController {
     const { user_id } = parsedData;
     alert("内部用ユーザーIDは " + user_id + " です(開発用)");
     return user_id;
+  }
+  updateProfile(communicator) {
+    const userID = this.userID;
+    const userName = document.getElementById("user_name").value;
+    const password = this.password;
+    const genre = document.getElementById("genre").value;
+    var twitter = document.getElementById("twitter").value;
+    var instagram = document.getElementById("instagram").value;
+    var age = document.getElementById("age").value;
+    const gender = document.getElementById("gender").value;
+
+    const errorMessages = [];
+    this.addEmptyError("ユーザー名", userName, errorMessages);
+    this.addLengthError("ユーザー名", userName, 15, errorMessages);
+    this.addLengthError("TwitterID", twitter, 20, errorMessages);
+    this.addLengthError("InstagramID", instagram, 20, errorMessages);
+    this.addMinError("年齢", age, 0, errorMessages);
+    this.addUniqueError("ユーザー名", userName, errorMessages);
+
+    if (twitter == "") {
+      twitter = "@";
+    }
+    if (instagram == "") {
+      instagram = "@";
+    }
+    if (age == "") {
+      age = "0";
+    }
+    const error = $(".error_message_update");
+    error.empty();
+    $(".success_message_update").empty();
+
+    for (let message of errorMessages) {
+      error.append(message);
+    }
+
+    if (errorMessages.length == 0) {
+      const result = this.callProfileUpdateAPI(
+        userID,
+        userName,
+        password,
+        parseInt(genre),
+        twitter,
+        instagram,
+        parseInt(age),
+        parseInt(gender)
+      );
+      if (result) {
+        communicator.userName = userName;
+      }
+    }
+  }
+  callProfileUpdateAPI(
+    userID,
+    userName,
+    password,
+    genre,
+    twitter,
+    instagram,
+    age,
+    gender
+  ) {
+    const data = $.ajax({
+      url: "http://127.0.0.1:8000/api/update_user",
+      type: "POST",
+      dataType: "json",
+      data: {
+        user_id: userID,
+        name: userName,
+        password: password,
+        twitter_id: twitter,
+        instagram_id: instagram,
+        genre_id: genre,
+        age: age,
+        gender: gender,
+      },
+      timeout: 3000,
+      async: false,
+    }).responseText;
+
+    $(".error_message_update").empty();
+    $(".success_message_update").append("プロフィールを更新しました");
+    return true;
   }
 }
 

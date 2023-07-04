@@ -8,19 +8,21 @@ const Components = {
     SpriteRenderer:7,
     TextRenderer:8,
     InfoViewer:9,
+    MiniMapRenderer:10
 }
 const ComponentOrder = [
     Components.CharacterController,
     Components.Animator,
     Components.Camera,
     Components.MusicObject,
-    Components.InfoViewer,
+    Components.InfoViewer
 ];
 
 const RendererTags = [
     Components.Renderer,
     Components.SpriteRenderer,
     Components.TextRenderer,
+    Components.MiniMapRenderer,
 ];
 
 class Component{
@@ -213,6 +215,63 @@ class Renderer extends Component{
     update(dt){}
     within(position){return false;}
 }
+class MiniMapRenderer extends Renderer{
+    constructor(context, player, musicObjectGenerator,renderingOrder = 100){
+        super(context,renderingOrder);
+        this.type = Components.MiniMapRenderer;
+        this.alpha = 1;
+        this.scale = new Vector2(120,80);
+        this.range = new Vector2(4000,3000);
+        this.musicObjects = musicObjectGenerator.musicObjects;
+        this.player = player;
+
+        this.backSprite = new Sprite(
+            "Image/miniMapBack.png",
+            200, 200,
+            1, 1,
+            new Vector2(1,1)
+        );
+        this.musicSprite = new Sprite(
+            "Image/miniMapMusic.png",
+            5, 5,
+            1, 1,
+            new Vector2(0.5,0.5)
+        );
+        this.playerSprite = new Sprite(
+            "Image/miniMapPlayer.png",
+            5, 5,
+            1, 1,
+            new Vector2(0.5,0.5)
+        );
+    }
+    update(dt){
+        if(this.isHide){
+            return;
+        }
+        const playerPosition = this.player.transform.position;
+        const xMin = playerPosition.x - this.range.x / 2;
+        const xMax = playerPosition.x + this.range.x / 2;
+        const yMin = playerPosition.y - this.range.y / 2;
+        const yMax = playerPosition.y + this.range.y / 2;
+        const positions = [];
+        for(let key in this.musicObjects){
+            const musicObject = this.musicObjects[key];
+            const musicPosition = musicObject.gameObject.transform.position.clone();
+            if(xMin <= musicPosition.x && musicPosition.x <= xMax &&
+                yMin <= musicPosition.y && musicPosition.y <= yMax){
+                musicPosition.sub(new Vector2(xMin,yMin));
+                musicPosition.timesVector2(new Vector2(1/(xMax-xMin),1/(yMax-yMin)));
+                positions.push(musicPosition);
+            }
+        }
+        this.backSprite.drawSprite(this.context, 0, this.scale.clone().add(new Vector2(3,3)), Vector2.one, 0.3);
+        for(let position of positions){
+            const transformed = position.clone().timesVector2(this.scale);
+            this.musicSprite.drawSprite(this.context, 0, transformed, Vector2.one, 1);
+        }
+        this.playerSprite.drawSprite(this.context, 0, this.scale.clone().times(0.5), Vector2.one, 1);
+    }
+}
 class SpriteRenderer extends Renderer{
     constructor(context, sprite, renderingOrder = 0, animator = null){
         super(context,renderingOrder);
@@ -253,6 +312,22 @@ class SpriteRenderer extends Renderer{
             this.gameObject.transform.scale.clone().timesVector2(this.scale),
             position
         );
+    }
+    within(targetPosition){
+        if(this.isHide){
+            return false;
+        }
+        return false;
+        /*console.log(targetPosition);
+        const size = Text.getSize(this.text);
+        const position = this.gameObject.transform.position;
+        const scale = this.gameObject.transform.scale;
+        const x1 = position.x - size[0]/2/scale.x;
+        const x2 = position.x + size[0]/2/scale.x;
+        const y1 = position.y - size[1]/2/scale.y;
+        const y2 = position.y + size[1]/2/scale.y;
+        return targetPosition.x >= x1 && targetPosition.x <= x2
+            && targetPosition.y >= y1 && targetPosition.y <= y2;*/
     }
 }
 
@@ -524,7 +599,7 @@ class InfoViewer extends Component{
                 this.clickViewer(target);
                 break;
             case Tag.Character:
-                this.openProfile(target.gameObect);
+                this.openProfile(target.gameObject);
                 break;
             case Tag.MusicObj:
                 this.openMusicInfo(target.gameObject);
