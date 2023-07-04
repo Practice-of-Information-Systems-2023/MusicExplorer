@@ -524,7 +524,7 @@ class InfoViewer extends Component{
                 this.clickViewer(target);
                 break;
             case Tag.Character:
-                this.openProfile(target.gameObect);
+                this.openProfile(target.gameObject);
                 break;
             case Tag.MusicObj:
                 this.openMusicInfo(target.gameObject);
