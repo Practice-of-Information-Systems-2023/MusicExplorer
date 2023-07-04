@@ -1,59 +1,59 @@
-class LoginController{
-  constructor(init){
+class LoginController {
+  constructor(init) {
     this.init = init;
     this.password = "";
     this.userID = null;
   }
-  logout(){
-    sessionStorage.removeItem('userID');
-    location.reload()
+  logout() {
+    sessionStorage.removeItem("userID");
+    location.reload();
   }
-  login(){
+  login() {
     const userName = document.getElementById("user_name_login").value;
     const password = document.getElementById("password_login").value;
     const result = this.callLoginAPI(userName, password);
-    if(result[0]==200){
+    if (result[0] == 200) {
       // ログイン成功
       this.password = password;
       this.userID = result[1];
       this.loginSuccess(this.userID, userName);
-    }else{
+    } else {
       // ログイン失敗
       const error = $(".error_message_login");
       error.append("ユーザー名またはパスワードが不正です");
       document.getElementById("password_login").value = "";
     }
   }
-  loginSuccess(id, userName){
-    sessionStorage.setItem('userID', id);
+  loginSuccess(id, userName) {
+    sessionStorage.setItem("userID", id);
     document.getElementById("is-logined").checked = true;
-    this.init(id,userName);
+    this.init(id, userName);
   }
-  callLoginAPI(userName, password){
+  callLoginAPI(userName, password) {
     // ダミーAPI
     const name = document.getElementById("user_name_login").value;
     const data = $.ajax({
       url: "http://127.0.0.1:8000/api/login/",
-      type:'POST',
-      dataType: 'json',
-      data : {
-        name:userName,
-        password:password,
+      type: "POST",
+      dataType: "json",
+      data: {
+        name: userName,
+        password: password,
       },
-      timeout:3000,
-      async: false
+      timeout: 3000,
+      async: false,
     });
     const status = data.status;
-    if(status==200){
+    if (status == 200) {
       const parsedData = JSON.parse(data.responseText);
       const { user_id } = parsedData;
       const id = user_id;
       return [status, id];
-    }else{
+    } else {
       return [status, -1];
     }
   }
-  signup(){
+  signup() {
     const userName = document.getElementById("user_name_signup").value;
     const password = document.getElementById("password_signup").value;
     const genre = document.getElementById("genre_signup").value;
@@ -70,22 +70,22 @@ class LoginController{
     this.addMinError("年齢", age, 0, errorMessages);
     this.addUniqueError("ユーザー名", userName, errorMessages);
 
-    if(twitter==""){
-      twitter="@";
+    if (twitter == "") {
+      twitter = "@";
     }
-    if(instagram==""){
-      instagram="@";
+    if (instagram == "") {
+      instagram = "@";
     }
-    if(age==""){
-      age="0";
+    if (age == "") {
+      age = "0";
     }
     const error = $(".error_message_signup");
     error.empty();
-    for(let message of errorMessages){
+    for (let message of errorMessages) {
       error.append(message);
     }
 
-    if(errorMessages.length == 0){
+    if (errorMessages.length == 0) {
       const result = this.callSignUpAPI(
         userName,
         password,
@@ -93,81 +93,73 @@ class LoginController{
         twitter,
         instagram,
         parseInt(age),
-        parseInt(gender),
+        parseInt(gender)
       );
-      if(result[0]==400){
+      if (result[0] == 400) {
         error.append("何らかのエラーで登録できませんでした");
-      }else if(result[0]==418){
+      } else if (result[0] == 418) {
         error.append("このユーザー名は既に使われています");
-      }else{
-        document.getElementById("user_name_login").value = result[1];
+      } else {
+        document.getElementById("user_name_login").value = userName;
         document.getElementById("password_login").value = password;
         this.login();
       }
     }
   }
-  addEmptyError(name, string, list){
-    if(string == ""){
-      list.push(name+"が未入力です</br>");
+  addEmptyError(name, string, list) {
+    if (string == "") {
+      list.push(name + "が未入力です</br>");
     }
   }
-  addLengthError(name, string, length, list){
-    if(string.length > length){
-      list.push(name+"は"+length+"文字以下にしてください</br>");
+  addLengthError(name, string, length, list) {
+    if (string.length > length) {
+      list.push(name + "は" + length + "文字以下にしてください</br>");
     }
   }
-  addMinError(name, value, min, list){
-    if(value < min){
-      list.push(name+"は"+min+"以上にしてください</br>");
+  addMinError(name, value, min, list) {
+    if (value < min) {
+      list.push(name + "は" + min + "以上にしてください</br>");
     }
   }
-  addUniqueError(name, string, list){
-    if(this.callUserNamesAPI(string)){
-      list.push("この"+name+"は既に使われています</br>");
+  addUniqueError(name, string, list) {
+    if (this.callUserNamesAPI(string)) {
+      list.push("この" + name + "は既に使われています</br>");
     }
   }
-  callUserNamesAPI(userName){
+  callUserNamesAPI(userName) {
     // ダミー
     return false;
   }
-  callSignUpAPI(
-    userName,
-    password,
-    genre,
-    twitter,
-    instagram,
-    age,
-    gender
-  ){
+  callSignUpAPI(userName, password, genre, twitter, instagram, age, gender) {
     const data = $.ajax({
       url: "http://127.0.0.1:8000/api/register_user/",
-      type:'POST',
-      dataType: 'json',
-      data : {
-        name:userName,
-        password:password,
-        twitter_id:twitter,
-        instagram_id:instagram,
-        genre_id:genre,
-        age:age,
-        gender:gender
+      type: "POST",
+      dataType: "json",
+      data: {
+        name: userName,
+        password: password,
+        twitter_id: twitter,
+        instagram_id: instagram,
+        genre_id: genre,
+        age: age,
+        gender: gender,
       },
-      timeout:3000,
-      async: false
+      timeout: 3000,
+      async: false,
     });
     const dataText = data.responseText;
     const status = data.status;
-    if(status==418){
+    if (status == 418) {
       return [status, -1];
-    }else if(status==400){
+    } else if (status == 400) {
       return [status, -1];
-    }else{
+    } else {
       const parsedData = JSON.parse(dataText);
       const { user_id } = parsedData;
-      return [status, user_id]
+      return [status, user_id];
     }
   }
-  updateProfile(communicator){
+  updateProfile(communicator) {
     const userID = this.userID;
     const userName = document.getElementById("user_name").value;
     const password = this.password;
@@ -185,24 +177,24 @@ class LoginController{
     this.addMinError("年齢", age, 0, errorMessages);
     this.addUniqueError("ユーザー名", userName, errorMessages);
 
-    if(twitter==""){
-      twitter="@";
+    if (twitter == "") {
+      twitter = "@";
     }
-    if(instagram==""){
-      instagram="@";
+    if (instagram == "") {
+      instagram = "@";
     }
-    if(age==""){
-      age="0";
+    if (age == "") {
+      age = "0";
     }
     const error = $(".error_message_update");
     error.empty();
     $(".success_message_update").empty();
 
-    for(let message of errorMessages){
+    for (let message of errorMessages) {
       error.append(message);
     }
 
-    if(errorMessages.length == 0){
+    if (errorMessages.length == 0) {
       const result = this.callProfileUpdateAPI(
         userID,
         userName,
@@ -213,70 +205,80 @@ class LoginController{
         parseInt(age),
         parseInt(gender)
       );
-      if(result == 200){
+      if (result == 200) {
         communicator.userName = userName;
       }
     }
   }
-  callProfileUpdateAPI(userID, userName, password, genre, twitter, instagram, age, gender){
+  callProfileUpdateAPI(
+    userID,
+    userName,
+    password,
+    genre,
+    twitter,
+    instagram,
+    age,
+    gender
+  ) {
     const data = $.ajax({
       url: "http://127.0.0.1:8000/api/update_user",
-      type:'POST',
-      dataType: 'json',
-      data : {
-        user_id:userID,
-        name:userName,
-        password:password,
-        twitter_id:twitter,
-        instagram_id:instagram,
-        genre_id:genre,
-        age:age,
-        gender:gender
+      type: "POST",
+      dataType: "json",
+      data: {
+        user_id: userID,
+        name: userName,
+        password: password,
+        twitter_id: twitter,
+        instagram_id: instagram,
+        genre_id: genre,
+        age: age,
+        gender: gender,
       },
-      timeout:3000,
-      async: false
+      timeout: 3000,
+      async: false,
     });
     const status = data.status;
     const error = $(".error_message_update");
     const success = $(".success_message_update");
     error.empty();
     success.empty();
-    if(status==400){
+    if (status == 400) {
       error.append("何らかのエラーで更新できませんでした");
-    }else if(status==418){
+    } else if (status == 418) {
       error.append("このユーザー名は既に使われています");
-    }else{
+    } else {
       success.append("プロフィール更新しました");
     }
     return status;
   }
 }
 
-class InitController{
-  init(){
-    this.genreID={};
+class InitController {
+  init() {
+    this.genreID = {};
     this.setGenre();
   }
-  setGenre(){
+  setGenre() {
     const result = this.callGenreAPI();
     const signup = $(".genre_signup");
     const profile = $(".genre");
     signup.empty();
     profile.empty();
-    for(let genre of result){
-      const addData = '<option value="'+genre[0]+'">'+genre[1]+'</option>"';
+    for (let genre of result) {
+      const addData =
+        '<option value="' + genre[0] + '">' + genre[1] + '</option>"';
       signup.append(addData);
       profile.append(addData);
-      this.genreID[genre[1]]=genre[0];
+      this.genreID[genre[1]] = genre[0];
     }
   }
-  callGenreAPI(){
+  callGenreAPI() {
     const data = $.ajax({
       url: "http://127.0.0.1:8000/api/get_genre_list/",
-      type:'GET',
-      dataType: 'json',
-      timeout:3000,
-      async: false
+      type: "GET",
+      dataType: "json",
+      timeout: 3000,
+      async: false,
     }).responseText;
 
     const parsedData = JSON.parse(data);
@@ -288,8 +290,8 @@ class InitController{
   }
 }
 
-class SideMenuController{
-  constructor(scene, audioController, userID, communicator){
+class SideMenuController {
+  constructor(scene, audioController, userID, communicator) {
     this.scene = scene;
     this.audioController = audioController;
     this.player = scene.find("Player");
@@ -304,54 +306,53 @@ class SideMenuController{
     this.ageBox = document.getElementById("age");
     this.genderBox = document.getElementById("gender");
   }
-  init(){
+  init() {
     this.updateFavoriteList();
     this.setProfile();
   }
-  search(){
+  search() {
     const query = document.getElementById("search").value;
     const result = this.callYoutubeAPI(query);
     $(".result_area").empty();
-    for(let music of result){
+    for (let music of result) {
       music[2] = Utils.getVideoIdFromURL(music[2]);
       this.addSearchResult(music);
     }
   }
-  updateFavoriteList(){
+  updateFavoriteList() {
     const result = this.callGetFavoriteAPI();
     $(".favorite_area").empty();
-    for(let music of result){
+    for (let music of result) {
       music[2] = Utils.getVideoIdFromURL(music[2]);
       this.addFavoriteResult(music);
     }
   }
-  callYoutubeAPI(query){
-
+  callYoutubeAPI(query) {
     const data = $.ajax({
       url: "http://127.0.0.1:8000/api/search_music/",
-      type:'POST',
-      dataType: 'json',
-      data : {query:query},
-      timeout:3000,
-      async: false
+      type: "POST",
+      dataType: "json",
+      data: { query: query },
+      timeout: 3000,
+      async: false,
     }).responseText;
 
     const parsedData = JSON.parse(data);
     const musics = [];
     parsedData.forEach((item) => {
       const { music_id, title, url, description, thumbnail_url } = item;
-      musics.push([0,title,url,thumbnail_url]);
+      musics.push([0, title, url, thumbnail_url]);
     });
     return musics;
   }
-  callGetFavoriteAPI(){
+  callGetFavoriteAPI() {
     const data = $.ajax({
       url: "http://127.0.0.1:8000/api/get_favorite_music/",
-      type:'POST',
-      dataType: 'json',
-      data : {user_id:this.userID},
-      timeout:3000,
-      async: false
+      type: "POST",
+      dataType: "json",
+      data: { user_id: this.userID },
+      timeout: 3000,
+      async: false,
     }).responseText;
     const parsedData = JSON.parse(data);
     const result = [];
@@ -360,9 +361,9 @@ class SideMenuController{
         item.music_id,
         item.title,
         item.url,
-        "http://img.youtube.com/vi/"+item.music_id+"/mqdefault.jpg",
+        "http://img.youtube.com/vi/" + item.music_id + "/mqdefault.jpg",
         item.position_x,
-        item.position_y
+        item.position_y,
       ]);
     });
     // ダミー
@@ -373,85 +374,107 @@ class SideMenuController{
     ];*/
     return result;
   }
-  addSearchResult(music){
-    const resultArea = $('.result_area');
-    const funcListen = "sideMenuController.onClickListenButton('"+music[2]+"')";
-    const funcRegister = "sideMenuController.onClickFavoriteRegisterButton('"+music[2]+"')";
+  addSearchResult(music) {
+    const resultArea = $(".result_area");
+    const funcListen =
+      "sideMenuController.onClickListenButton('" + music[2] + "')";
+    const funcRegister =
+      "sideMenuController.onClickFavoriteRegisterButton('" + music[2] + "')";
     var element = "";
     element += '<div class="search-item">';
     element += '<label class="search-item-music">';
     element += '<input type="radio" name="sidemenu-radio" class="music-radio">';
-    element += '<img src="'+music[3]+'">';
-    element += '<div>'+music[1]+'</div>';
+    element += '<img src="' + music[3] + '">';
+    element += "<div>" + music[1] + "</div>";
     element += '<div class="search-item-menu">';
-    element += '<label class="search-item-quit">'
-    element += '<input type="radio" name="sidemenu-radio" class="menu-radio">'
-    element += '</label>'
-    element += '<input type="button" class="music-button" value="お気に入り登録" onclick="'+funcRegister+'">';
-    element += '<input type="button" class="music-button" value="視聴" onclick="'+funcListen+'">';
-    element += '</div>';
-    element += '</label>';
-    element += '</div>';
+    element += '<label class="search-item-quit">';
+    element += '<input type="radio" name="sidemenu-radio" class="menu-radio">';
+    element += "</label>";
+    element +=
+      '<input type="button" class="music-button" value="お気に入り登録" onclick="' +
+      funcRegister +
+      '">';
+    element +=
+      '<input type="button" class="music-button" value="視聴" onclick="' +
+      funcListen +
+      '">';
+    element += "</div>";
+    element += "</label>";
+    element += "</div>";
     resultArea.append(element);
   }
-  addFavoriteResult(music){
-    const resultArea = $('.favorite_area');
-    const funcMove = "sideMenuController.onClickMoveButton("+music[4]+","+music[5]+",'"+music[2]+"')";
-    const funcDelete = "sideMenuController.onClickFavoriteRemoveButton('"+music[2]+"')";
+  addFavoriteResult(music) {
+    const resultArea = $(".favorite_area");
+    const funcMove =
+      "sideMenuController.onClickMoveButton(" +
+      music[4] +
+      "," +
+      music[5] +
+      ",'" +
+      music[2] +
+      "')";
+    const funcDelete =
+      "sideMenuController.onClickFavoriteRemoveButton('" + music[2] + "')";
     var element = "";
     element += '<div class="search-item">';
     element += '<label class="search-item-music">';
     element += '<input type="radio" name="sidemenu-radio" class="music-radio">';
-    element += '<img src="'+music[3]+'">';
-    element += '<div>'+music[1]+'</div>';
+    element += '<img src="' + music[3] + '">';
+    element += "<div>" + music[1] + "</div>";
     element += '<div class="search-item-menu">';
-    element += '<label class="search-item-quit">'
-    element += '<input type="radio" name="sidemenu-radio" class="menu-radio">'
-    element += '</label>'
-    element += '<input type="button" class="music-button" value="お気に入り解除" onclick="'+funcDelete+'">';
-    element += '<input type="button" class="music-button" value="移動" onclick="'+funcMove+'">';
-    element += '</div>';
-    element += '</label>';
-    element += '</div>';
+    element += '<label class="search-item-quit">';
+    element += '<input type="radio" name="sidemenu-radio" class="menu-radio">';
+    element += "</label>";
+    element +=
+      '<input type="button" class="music-button" value="お気に入り解除" onclick="' +
+      funcDelete +
+      '">';
+    element +=
+      '<input type="button" class="music-button" value="移動" onclick="' +
+      funcMove +
+      '">';
+    element += "</div>";
+    element += "</label>";
+    element += "</div>";
     resultArea.append(element);
   }
-  onClickFavoriteRegisterButton(id){
+  onClickFavoriteRegisterButton(id) {
     const data = $.ajax({
       url: "http://127.0.0.1:8000/api/create_favorite/",
-      type:'POST',
-      dataType: 'json',
-      data : {
-        user_id:this.userID,
-        music_id:id
+      type: "POST",
+      dataType: "json",
+      data: {
+        user_id: this.userID,
+        music_id: id,
       },
-      timeout:3000,
-      async: false
+      timeout: 3000,
+      async: false,
     });
     this.updateFavoriteList();
   }
-  onClickFavoriteRemoveButton(id){
+  onClickFavoriteRemoveButton(id) {
     const data = $.ajax({
       url: "http://127.0.0.1:8000/api/delete_favorite/",
-      type:'POST',
-      dataType: 'json',
-      data : {
-        user_id:this.userID,
-        music_id:id
+      type: "POST",
+      dataType: "json",
+      data: {
+        user_id: this.userID,
+        music_id: id,
       },
-      timeout:3000,
-      async: false
+      timeout: 3000,
+      async: false,
     });
     this.updateFavoriteList();
   }
-  onClickListenButton(videoId){
+  onClickListenButton(videoId) {
     this.youtubePlayer.testListenVideoById(videoId);
   }
-  onClickMoveButton(x,y,videoId){
-    const position = new Vector2(x,y+50);
+  onClickMoveButton(x, y, videoId) {
+    const position = new Vector2(x, y + 50);
     this.player.transform.position.set(position);
     this.youtubePlayer.playVideoById(videoId);
   }
-  setProfile(){
+  setProfile() {
     const profile = this.communicator.getUserProfile(this.userID);
     this.userNameBox.value = profile[1];
     this.twitterBox.value = profile[2];
@@ -461,7 +484,7 @@ class SideMenuController{
     console.log(profile[6]);
     this.genderBox.value = profile[6];
   }
-  updateProfile(){
+  updateProfile() {
     loginController.updateProfile(this.communicator);
   }
-};
+}
