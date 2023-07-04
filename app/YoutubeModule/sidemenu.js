@@ -225,6 +225,9 @@ class SideMenuController{
     this.userNameBox = document.getElementById("user_name");
     this.twitterBox = document.getElementById("twitter");
     this.instagramBox = document.getElementById("instagram");
+    this.genreBox = document.getElementById("genre");
+    this.ageBox = document.getElementById("age");
+    this.genderBox = document.getElementById("gender");
   }
   init(){
     this.updateFavoriteList();
@@ -378,6 +381,10 @@ class SideMenuController{
     this.userNameBox.value = profile[1];
     this.twitterBox.value = profile[2];
     this.instagramBox.value = profile[3];
+    this.genreBox.value = 1;
+    this.ageBox.value = profile[5];
+    console.log(profile[6]);
+    this.genderBox.value = profile[6];
   }
   updateProfile(){
     loginController.updateProfile(this.communicator);
