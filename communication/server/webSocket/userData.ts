@@ -46,7 +46,7 @@ function getUsers(id: string): UserDataForClient[] {
   let usersInRange: UserDataForClient[] = [];
 
   for (const userId in userData) {
-    if (userId !== id) {
+    if (userId != id) {
       const user = userData[userId];
       if (Math.abs(user.x - x) <= x_range && Math.abs(user.y - y) <= y_range) {
         usersInRange.push({
