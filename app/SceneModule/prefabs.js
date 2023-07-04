@@ -184,7 +184,6 @@ class Prefabs{
         spriteRenderer.isHide = true;
         const favoriteButton = obj.addComponent(new SpriteRenderer(context,FAVORITE_SPRITE,21));
         favoriteButton.isHide = true;
-        favoriteButton.pivot.y += 70;
         const textRenderer = obj.addComponent(new TextRenderer(context,"プロフィール",21));
         textRenderer.isHide = true;
         textRenderer.color = '#FFFFFF';

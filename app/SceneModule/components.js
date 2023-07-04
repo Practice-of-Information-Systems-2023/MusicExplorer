@@ -615,11 +615,7 @@ class InfoViewer extends Component{
         renderers[0].alpha = 0.7;
         this.textRenderer.pivot.x = 0;
         this.textRenderer.pivot.y = -30;
-        this.textRenderer.text = 
-            musicObj.title.substring(0,25) + "\n"
-            + musicObj.title.substring(25,50)  + "\n"
-            + musicObj.title.substring(50,75)  + "\n"
-            + musicObj.title.substring(75,100);
+        this.textRenderer.text = "";
         this.musicId = musicObj.videoId
     }
     clickViewer(target){
