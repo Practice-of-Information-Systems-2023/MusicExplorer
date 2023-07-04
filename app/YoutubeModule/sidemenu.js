@@ -12,6 +12,8 @@ class LoginController {
     const userName = document.getElementById("user_name_login").value;
     const password = document.getElementById("password_login").value;
     const result = this.callLoginAPI(userName, password);
+    const error = $(".error_message_login");
+    error.empty();
     if (result[0] == 200) {
       // ログイン成功
       this.password = password;
@@ -19,7 +21,6 @@ class LoginController {
       this.loginSuccess(this.userID, userName);
     } else {
       // ログイン失敗
-      const error = $(".error_message_login");
       error.append("ユーザー名またはパスワードが不正です");
       document.getElementById("password_login").value = "";
     }
