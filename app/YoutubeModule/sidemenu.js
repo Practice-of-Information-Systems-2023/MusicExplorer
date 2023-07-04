@@ -213,6 +213,40 @@ class LoginController{
   }
 }
 
+class InitController{
+  init(){
+    this.setGenre();
+  }
+  setGenre(){
+    const result = this.callGenreAPI();
+    const signup = $(".genre_signup");
+    const profile = $(".genre");
+    signup.empty();
+    profile.empty();
+    for(let genre of result){
+      const addData = '<option value="'+genre[0]+'">'+genre[1]+'</option>"';
+      signup.append(addData);
+      profile.append(addData);
+    }
+  }
+  callGenreAPI(){
+    const data = $.ajax({
+      url: "http://127.0.0.1:8000/api/get_genre_list/",
+      type:'GET',
+      dataType: 'json',
+      timeout:3000,
+      async: false
+    }).responseText;
+
+    const parsedData = JSON.parse(data);
+    const genreList = [];
+    parsedData.forEach((item) => {
+      genreList.push(item);
+    });
+    return genreList;
+  }
+}
+
 class SideMenuController{
   constructor(scene, audioController, userID, communicator){
     this.scene = scene;
