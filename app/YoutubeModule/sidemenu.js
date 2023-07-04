@@ -215,6 +215,7 @@ class LoginController{
 
 class InitController{
   init(){
+    this.genreID={};
     this.setGenre();
   }
   setGenre(){
@@ -227,6 +228,7 @@ class InitController{
       const addData = '<option value="'+genre[0]+'">'+genre[1]+'</option>"';
       signup.append(addData);
       profile.append(addData);
+      this.genreID[genre[1]]=genre[0];
     }
   }
   callGenreAPI(){
@@ -415,7 +417,7 @@ class SideMenuController{
     this.userNameBox.value = profile[1];
     this.twitterBox.value = profile[2];
     this.instagramBox.value = profile[3];
-    this.genreBox.value = 1;
+    this.genreBox.value = initController.genreID[profile[4]];
     this.ageBox.value = profile[5];
     console.log(profile[6]);
     this.genderBox.value = profile[6];
