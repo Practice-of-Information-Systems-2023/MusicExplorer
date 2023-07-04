@@ -503,11 +503,28 @@ def get_surrounding_music(request):
         return Response(response, status=status.HTTP_200_OK)
 
 #ジャンル一覧取得するAPI
+@swagger_auto_schema(
+    method='get',
+    responses={
+        status.HTTP_200_OK: openapi.Schema(
+            type=openapi.TYPE_ARRAY,
+            items=openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    'genre_id': openapi.Schema(type=openapi.TYPE_INTEGER),
+                    'name': openapi.Schema(type=openapi.TYPE_STRING),
+                }
+            )
+        ),
+        status.HTTP_400_BAD_REQUEST: "Bad Request"
+    }
+)
+
 @api_view(['GET'])
 def get_genre_list(request):
     if request.method == 'GET':
         genres = Genre.objects.all()
-        genre_list = [(genre.genre_id, genre.name) for genre in genres]
+        genre_list = [{'genre_id': genre.genre_id, 'name': genre.name} for genre in genres]
         return Response(genre_list, status=status.HTTP_200_OK)
     return Response(status=status.HTTP_400_BAD_REQUEST)
 
