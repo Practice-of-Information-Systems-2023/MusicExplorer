@@ -12,10 +12,10 @@ const BACK_SPRITE = new Sprite(
 );
 
 const AUDIO_SPRITE = new Sprite(
-    "Image/tree_green.png",
-    539, 735,//294, 300,
+    "Image/tv.png",
+    58, 60,
     1, 1,
-    new Vector2(0.5,0.93)
+    new Vector2(0.5,1)
 );
 
 const WINDOW_SPRITE = new Sprite(
@@ -141,17 +141,41 @@ class Prefabs{
 
     }
     static audioPlayer(name, position, context, videoId, player, audioController, musicId, title){
-        const obj = new GameObject(name, new Transform(position, new Vector2(/*1.5,1.5*/0.3,0.3)));
-        //const effectAnimator = obj.addComponent(new EffectAnimator());
-        const spriteRenderer = obj.addComponent(new SpriteRenderer(context, AUDIO_SPRITE, 10/*, effectAnimator*/));
-        //effectAnimator.spriteRenderer = spriteRenderer;
+        const obj = new GameObject(name, new Transform(position, new Vector2(3,3)));
         obj.addComponent(new MusicObject(videoId, player, audioController,musicId,title));
-        //effectAnimator.play(MUSICLIGHT_EFFECT);
+        const thumbnail = new Sprite(
+            "http://img.youtube.com/vi/"+videoId+"/default.jpg",
+            120, 90,
+            1, 1,
+            new Vector2(0.5,1.2)
+        );
+        const thumbnailRenderer = obj.addComponent(new SpriteRenderer(context, thumbnail, 10));
+        thumbnailRenderer.scale = new Vector2(0.44,0.4);
+        thumbnailRenderer.pivot.y += -38;
+        const spriteRenderer = obj.addComponent(new SpriteRenderer(context, AUDIO_SPRITE, 10));
+
+        // タイトル表示
+        var titleBlock = "";
+        var count = 0;
+        for(let char of title){
+            count += 1;
+            titleBlock += char;
+            if(count % 20 == 0){
+                titleBlock += "\n";
+            }
+        }
+        const textRenderer = obj.addComponent(new TextRenderer(context, titleBlock, 10));
+        textRenderer.pivot.y += 40;
         return obj;
     }
     static camera(name, position){
         const obj = new GameObject(name, new Transform(position, Vector2.one));
         obj.addComponent(new Camera(1,480,320));
+        return obj;
+    }
+    static miniMap(name, context, player, musicObjectGenerator){
+        const obj = new GameObject(name, new Transform(Vector2.zero, Vector2.one));
+        obj.addComponent(new MiniMapRenderer(context, player, musicObjectGenerator,100));
         return obj;
     }
     static infoView(name,canvas,context,characterGenerator, communicator){

@@ -1,3 +1,21 @@
+class MiniMapGenerator{
+    // プロフィールオブジェクトを管理するクラス 最初に実行
+    constructor(scene, context, musicObjectGenerator){
+        this.scene = scene;
+        this.context = context;
+        this.musicObjectGenerator = musicObjectGenerator;
+        this.player = scene.find("Player");
+    }
+    generate(){
+        this.scene.addGameObject(Prefabs.miniMap(
+            "MiniMap",
+            this.context,
+            this.player,
+            this.musicObjectGenerator
+        ));
+    }
+}
+
 class InfoViewerGenerator{
     // プロフィールオブジェクトを管理するクラス 最初に実行
     constructor(scene, canvas, context, characterGenerator, communicator){
