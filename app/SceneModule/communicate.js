@@ -7,7 +7,7 @@ class Communicator {
     this.player = scene.find("Player");
     this.CHARACTER_RECT = 1000;
     this.MUSIC_RECT = 4000;
-    const url = "ws://15.168.10.223:3000/websocket";
+    const url = "ws://localhost:3000/websocket";
     this.socket = new WebSocket(url);
     this.socket.addEventListener("message", this.setInfo.bind(this));
   }
@@ -22,8 +22,8 @@ class Communicator {
       const { id, name, x, y, action } = item;
       console.log(id, name, x, y, action);
       positions.push([id, new Vector2(x, y)]);
-      names.push([id,name]);
-      actions.push([id,action]);
+      names.push([id, name]);
+      actions.push([id, action]);
       ids.push(id);
     });
     this.characterGenerator.replace(positions);
@@ -46,22 +46,23 @@ class Communicator {
     }
     return positions;
   }
-  getUserProfile(id){
+  getUserProfile(id) {
     const result = this.callProfileAPI(id);
     return result;
   }
-  callProfileAPI(id){
+  callProfileAPI(id) {
     const data = $.ajax({
       url: "http://127.0.0.1:8000/api/get_profile",
-      type:'POST',
-      dataType: 'json',
-      data : {user_id:id},
-      timeout:3000,
-      async: false
+      type: "POST",
+      dataType: "json",
+      data: { user_id: id },
+      timeout: 3000,
+      async: false,
     }).responseText;
     const parsedData = JSON.parse(data);
-    const { user_id, name, twitter_id, instagram_id, genre_name, age, gender } = parsedData;
-    return [user_id,name,twitter_id,instagram_id,genre_name, age, gender]
+    const { user_id, name, twitter_id, instagram_id, genre_name, age, gender } =
+      parsedData;
+    return [user_id, name, twitter_id, instagram_id, genre_name, age, gender];
   }
   callCharactersDataAPI(xMin, xMax, yMin, yMax) {
     // ダミーAPI
@@ -92,23 +93,23 @@ class Communicator {
   callMusicObjectsDataAPI(xMin, xMax, yMin, yMax) {
     const data = $.ajax({
       url: "http://127.0.0.1:8000/api/get_surrounding_music/",
-      type:'POST',
-      dataType: 'json',
-      data : {
-        x_1:xMin,
-        x_2:xMax,
-        y_1:yMin,
-        y_2:yMax
+      type: "POST",
+      dataType: "json",
+      data: {
+        x_1: xMin,
+        x_2: xMax,
+        y_1: yMin,
+        y_2: yMax,
       },
-      timeout:3000,
-      async: false
+      timeout: 3000,
+      async: false,
     }).responseText;
-    console.log(xMin,xMax,yMin,yMax);
+    console.log(xMin, xMax, yMin, yMax);
     const parsedData = JSON.parse(data);
     const result = [];
     parsedData.forEach((item) => {
       const { music_id, title, url, position_x, position_y } = item;
-      result.push([music_id, music_id, position_x, position_y, title])
+      result.push([music_id, music_id, position_x, position_y, title]);
     });
     return result;
     // ダミーAPI
@@ -120,7 +121,13 @@ class Communicator {
   }
   sendPlayerInfo(position, action) {
     // idは暫定
-    this.callPlayerPositionAPI(this.userID, this.userName, position.x, position.y, action);
+    this.callPlayerPositionAPI(
+      this.userID,
+      this.userName,
+      position.x,
+      position.y,
+      action
+    );
   }
   callPlayerPositionAPI(id, name, x, y, action) {
     // id,x座標とy座標を送信する
@@ -129,7 +136,7 @@ class Communicator {
       name: name,
       x: x,
       y: y,
-      action: action
+      action: action,
     });
     this.socket.send(message);
   }

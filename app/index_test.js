@@ -21,7 +21,12 @@ function init(userID, userName) {
 
   const characterGenerator = new CharacterGenerator(scene, context);
 
-  const communicator = new Communicator(scene, characterGenerator, userID, userName);
+  const communicator = new Communicator(
+    scene,
+    characterGenerator,
+    userID,
+    userName
+  );
 
   const backgroundGenerator = new BackGroundGenerator(scene, context);
   backgroundGenerator.generate(BACK_SPRITE);
@@ -36,13 +41,28 @@ function init(userID, userName) {
   );
   musicObjectGenerator.generate(communicator.getMusicObjectsData());
 
-  const infoViewerGenerator = new InfoViewerGenerator(scene, canvas, context, characterGenerator, communicator);
+  const infoViewerGenerator = new InfoViewerGenerator(
+    scene,
+    canvas,
+    context,
+    characterGenerator,
+    communicator
+  );
   infoViewerGenerator.generate();
 
-  const miniMapGenerator = new MiniMapGenerator(scene, context, musicObjectGenerator);
+  const miniMapGenerator = new MiniMapGenerator(
+    scene,
+    context,
+    musicObjectGenerator
+  );
   miniMapGenerator.generate();
 
-  sideMenuController = new SideMenuController(scene, audioController,userID, communicator);
+  sideMenuController = new SideMenuController(
+    scene,
+    audioController,
+    userID,
+    communicator
+  );
   sideMenuController.init();
   communicator.userName = sideMenuController.userNameBox.value;
 
@@ -57,7 +77,10 @@ function init(userID, userName) {
   setInterval(function () {
     // キャラクターの位置同期
     // characterGenerator.setDestinations(communicater.getCharactersData());
-    communicator.sendPlayerInfo(playerGenerator.getPosition(), playerGenerator.getAction());
+    communicator.sendPlayerInfo(
+      playerGenerator.getPosition(),
+      playerGenerator.getAction()
+    );
   }, 200);
 
   setInterval(function () {
