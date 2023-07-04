@@ -4,3 +4,7 @@ drf-yasg
 django-cors-headers
 google-api-python-client
 python-dotenv
+scikit-learn
+scipy
+pandas
+numpy
