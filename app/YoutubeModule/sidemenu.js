@@ -266,11 +266,12 @@ class InitController {
     signup.empty();
     profile.empty();
     for (let genre of result) {
+      const { genre_id, name } = genre;
       const addData =
-        '<option value="' + genre[0] + '">' + genre[1] + '</option>"';
+        '<option value="' + genre_id + '">' + name + '</option>"';
       signup.append(addData);
       profile.append(addData);
-      this.genreID[genre[1]] = genre[0];
+      this.genreID[name] = genre_id;
     }
   }
   callGenreAPI() {
