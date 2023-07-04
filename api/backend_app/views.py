@@ -348,6 +348,39 @@ def get_profile(request):
         return Response(response, status=status.HTTP_200_OK)
 
 
+# ログインAPI
+@csrf_protect
+@swagger_auto_schema(
+    method='post',
+    request_body=openapi.Schema(
+        type=openapi.TYPE_OBJECT,
+        properties={
+            'name': openapi.Schema(type=openapi.TYPE_STRING),
+            'password': openapi.Schema(type=openapi.TYPE_STRING),
+        },
+        required=['name', 'password']
+    ),
+    responses={
+        status.HTTP_200_OK: "OK",
+        status.HTTP_400_BAD_REQUEST: "Bad Request",
+        status.HTTP_401_UNAUTHORIZED: "Unauthorized"
+    },
+)
+@api_view(['POST'])
+def login(request):
+    if request.method == 'POST':
+        name = request.data.get('name')
+        password = request.data.get('password')
+        try:
+            user = AppUser.objects.get(name=name)
+        except AppUser.DoesNotExist:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        if user.password == password:
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+
 # お気に入り楽曲取得API
 @csrf_protect
 @swagger_auto_schema(
