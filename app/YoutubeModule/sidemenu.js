@@ -77,10 +77,15 @@ class LoginController{
         parseInt(age),
         parseInt(gender),
       );
-      //this.loginSuccess(result, userName);
-      document.getElementById("user_name_login").value = result;
-      document.getElementById("password_login").value = password;
-      this.login();
+      if(result[0]==400){
+        error.append("何らかのエラーで登録できませんでした");
+      }else if(result[1]==418){
+        error.append("このユーザー名は既に使われています");
+      }else{
+        document.getElementById("user_name_login").value = result[1];
+        document.getElementById("password_login").value = password;
+        this.login();
+      }
     }
   }
   addEmptyError(name, string, list){
@@ -131,11 +136,19 @@ class LoginController{
       },
       timeout:3000,
       async: false
-    }).responseText;
-    const parsedData = JSON.parse(data);
-    const { user_id } = parsedData;
-    alert("内部用ユーザーIDは "+user_id+" です(開発用)");
-    return user_id;
+    });
+    const dataText = data.responseText;
+    const status = data.status;
+    if(status==418){
+      return [status, -1];
+    }else if(status==400){
+      return [status, -1];
+    }else{
+      const parsedData = JSON.parse(dataText);
+      const { user_id } = parsedData;
+      alert("内部用ユーザーIDは "+user_id+" です(開発用)");
+      return [status, user_id]
+    }
   }
   updateProfile(communicator){
     const userID = this.userID;
@@ -183,7 +196,7 @@ class LoginController{
         parseInt(age),
         parseInt(gender)
       );
-      if(result){
+      if(result == 200){
         communicator.userName = userName;
       }
     }
@@ -205,11 +218,20 @@ class LoginController{
       },
       timeout:3000,
       async: false
-    }).responseText;
-
-    $(".error_message_update").empty();
-    $(".success_message_update").append("プロフィールを更新しました");
-    return true;
+    });
+    const status = data.status;
+    const error = $(".error_message_update");
+    const success = $(".success_message_update");
+    error.empty();
+    success.empty();
+    if(status==400){
+      error.append("何らかのエラーで更新できませんでした");
+    }else if(status==418){
+      error.append("このユーザー名は既に使われています");
+    }else{
+      success.append("プロフィール更新しました");
+    }
+    return status;
   }
 }
 
