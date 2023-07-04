@@ -313,6 +313,22 @@ class SpriteRenderer extends Renderer{
             position
         );
     }
+    within(targetPosition){
+        if(this.isHide){
+            return false;
+        }
+        return false;
+        /*console.log(targetPosition);
+        const size = Text.getSize(this.text);
+        const position = this.gameObject.transform.position;
+        const scale = this.gameObject.transform.scale;
+        const x1 = position.x - size[0]/2/scale.x;
+        const x2 = position.x + size[0]/2/scale.x;
+        const y1 = position.y - size[1]/2/scale.y;
+        const y2 = position.y + size[1]/2/scale.y;
+        return targetPosition.x >= x1 && targetPosition.x <= x2
+            && targetPosition.y >= y1 && targetPosition.y <= y2;*/
+    }
 }
 
 class TextRenderer extends Renderer{

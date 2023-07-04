@@ -39,6 +39,7 @@ urlpatterns = [
     path('api/register_user/', views.register_user),
     path('api/update_user', views.update_user),
     path('api/get_profile', views.get_profile),
+    path('api/login/', views.login),
     path('api/create_favorite/', views.create_favorite),
     path('api/delete_favorite/', views.delete_favorite),
     path('api/search_music/', views.search_music),
