@@ -154,6 +154,11 @@ class Prefabs{
         obj.addComponent(new Camera(1,480,320));
         return obj;
     }
+    static miniMap(name, context, player, musicObjectGenerator){
+        const obj = new GameObject(name, new Transform(Vector2.zero, Vector2.one));
+        obj.addComponent(new MiniMapRenderer(context, player, musicObjectGenerator,100));
+        return obj;
+    }
     static infoView(name,canvas,context,characterGenerator, communicator){
         const obj = new GameObject(name, new Transform(Vector2.zero, new Vector2(0.7,0.7)));
         const spriteRenderer = obj.addComponent(new SpriteRenderer(context,WINDOW_SPRITE,20));

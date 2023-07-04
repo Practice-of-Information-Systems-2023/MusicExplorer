@@ -10,14 +10,6 @@ new YoutubePlayer("player", function (player) {
   youtubePlayer = player;
 });
 
-/*function getUserID() {
-  const userID = window.prompt("ユーザーIDを入力してください", "");
-  return userID;
-}
-function getUserName() {
-  const userName = window.prompt("ユーザー名を入力してください", "");
-  return userName;
-}*/
 function init(userID, userName) {
   const audioController = new AudioController(youtubePlayer);
   const scene = new Scene();
@@ -44,6 +36,9 @@ function init(userID, userName) {
 
   const infoViewerGenerator = new InfoViewerGenerator(scene, canvas, context, characterGenerator, communicator);
   infoViewerGenerator.generate();
+
+  const miniMapGenerator = new MiniMapGenerator(scene, context, musicObjectGenerator);
+  miniMapGenerator.generate();
 
   sideMenuController = new SideMenuController(scene, audioController,userID, communicator);
   sideMenuController.init();
