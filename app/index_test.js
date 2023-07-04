@@ -2,19 +2,23 @@ var canvas = document.getElementById("main");
 var context = canvas.getContext("2d");
 var height = canvas.height;
 var width = canvas.width;
-var fps = 30;
+var fps = 60;
 var youtubePlayer = null;
 var sideMenuController = null;
+const loginController = new LoginController(init);
 new YoutubePlayer("player", function (player) {
   youtubePlayer = player;
-  init();
 });
-function getUserID() {
-  const userID = window.prompt("ユーザーIDを整数で入力してください", "");
+
+/*function getUserID() {
+  const userID = window.prompt("ユーザーIDを入力してください", "");
   return userID;
 }
-function init() {
-  const userID = getUserID();
+function getUserName() {
+  const userName = window.prompt("ユーザー名を入力してください", "");
+  return userName;
+}*/
+function init(userID, userName) {
   const audioController = new AudioController(youtubePlayer);
   const scene = new Scene();
 
@@ -23,7 +27,7 @@ function init() {
 
   const characterGenerator = new CharacterGenerator(scene, context);
 
-  const communicater = new Communicater(scene, characterGenerator, userID);
+  const communicator = new Communicator(scene, characterGenerator, userID, userName);
 
   const backgroundGenerator = new BackGroundGenerator(scene, context);
   backgroundGenerator.generate(BACK_SPRITE);
@@ -36,10 +40,14 @@ function init() {
     context,
     audioController
   );
-  musicObjectGenerator.generate(communicater.getMusicObjectsData());
+  musicObjectGenerator.generate(communicator.getMusicObjectsData());
 
-  sideMenuController = new SideMenuController(scene, audioController);
+  const infoViewerGenerator = new InfoViewerGenerator(scene, canvas, context, characterGenerator, communicator);
+  infoViewerGenerator.generate();
+
+  sideMenuController = new SideMenuController(scene, audioController,userID, communicator);
   sideMenuController.init();
+  communicator.userName = sideMenuController.userNameBox.value;
 
   setInterval(function () {
     // 毎フレームの処理
@@ -52,11 +60,11 @@ function init() {
   setInterval(function () {
     // キャラクターの位置同期
     // characterGenerator.setDestinations(communicater.getCharactersData());
-    communicater.sendPlayerPosition(playerGenerator.getPosition());
+    communicator.sendPlayerInfo(playerGenerator.getPosition(), playerGenerator.getAction());
   }, 200);
 
   setInterval(function () {
     // オブジェクトの追加と削除
-    musicObjectGenerator.replace(communicater.getMusicObjectsData());
+    musicObjectGenerator.replace(communicator.getMusicObjectsData());
   }, 5000);
 }

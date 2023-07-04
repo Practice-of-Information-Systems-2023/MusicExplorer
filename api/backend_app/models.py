@@ -19,15 +19,20 @@ class Favorite(models.Model):
     music_id = models.ForeignKey('Music',on_delete=models.CASCADE)
 
     class Meta:
-        unique_together = (("user_id", "music_id"),)
-
+        constraints=[
+            models.UniqueConstraint(
+                fields=["user_id","music_id"],
+                name="unique"
+            )
+        ]
+        
 class Music(models.Model):
-    music_id = models.IntegerField(primary_key=True)
+    music_id = models.CharField(primary_key=True,max_length=255)
     title = models.CharField(max_length=255)
     url = models.URLField()
     position_x = models.FloatField()
     position_y = models.FloatField()
     views = models.IntegerField()
     good = models.IntegerField()
-    bad = models.IntegerField()
+    bad = models.IntegerField(null=True)
     comment_count = models.IntegerField()

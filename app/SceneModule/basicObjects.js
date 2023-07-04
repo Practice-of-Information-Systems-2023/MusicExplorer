@@ -8,11 +8,14 @@ class Scene{
     addGameObject(gameObject){
         this.gameObjects.add(gameObject);
         gameObject.scene = this;
-        if(gameObject.camera != null){
-            this.mainCamera = gameObject.camera;
+        const camera = gameObject.getComponent(Components.Camera);
+        if(camera != null){
+            this.mainCamera = camera;
         }
-        if(gameObject.renderer != null){
-            this.renderers.add(gameObject.renderer);
+        for(let componentTag of RendererTags){
+            for(let renderer of gameObject.getComponents(componentTag)){
+                this.renderers.add(renderer);
+            }
         }
         this.gameObjectDict[gameObject.name] = gameObject;
         return gameObject;
@@ -21,22 +24,27 @@ class Scene{
         for(let gameObject of this.gameObjects){
             gameObject.update(dt);
         }
-        var renderers = [];
+        const renderers = this.getSortedRenderers();
+        for(let renderer of renderers){
+            renderer.update(dt);
+        }
+    }
+    getSortedRenderers(reverse){
+        const renderers = [];
         for(let renderer of this.renderers){
             renderers.push(renderer);
         }
+        const sign = reverse ? -1 : 1;
         renderers.sort(function(a,b){
-            if(a.renderingOrder < b.renderingOrder)return -1;
-            else if(a.renderingOrder > b.renderingOrder)return 1;
+            if(a.renderingOrder < b.renderingOrder)return -sign;
+            else if(a.renderingOrder > b.renderingOrder)return sign;
             else{
-                if(a.gameObject.transform.position.y < b.gameObject.transform.position.y)return -1;
-                else if(a.gameObject.transform.position.y > b.gameObject.transform.position.y)return 1;
+                if(a.gameObject.transform.position.y < b.gameObject.transform.position.y)return -sign;
+                else if(a.gameObject.transform.position.y > b.gameObject.transform.position.y)return sign;
             }
             return 0;
         });
-        for(let i=0; i<renderers.length; i+=1){
-            renderers[i].update(dt);
-        }
+        return renderers;
     }
     find(name){
         if(this.gameObjectDict[name]){
@@ -48,8 +56,10 @@ class Scene{
     deleteGameObject(gameObject){
         this.gameObjects.delete(gameObject);
         delete this.gameObjectDict[gameObject.name]
-        if(gameObject.renderer != null){
-            this.renderers.delete(gameObject.renderer);
+        for(let componentTag of RendererTags){
+            for(let renderer of gameObject.getComponents(componentTag)){
+                this.renderers.delete(renderer);
+            }
         }
         gameObject.delete();
     }
@@ -58,51 +68,56 @@ class Scene{
 class GameObject{
     scene;
     updateProcess;
+    tag;
     constructor(name, transform){
         this.name = name;
-        this.transform = transform;
-        this.transform.gameObject = this;
-        this.controller = null;
-        this.animator = null;
-        this.renderer = null;
-        this.camera = null;
-        this.musicObject = null;
+        this.components = {};
+        this.updateProcess = null;
+        this.addComponent(transform);
     }
-    setAnimator(animator){
-        this.animator = animator;
-        animator.gameObject = this;
+    addComponent(component){
+        const type = component.type;
+        if(this.components[type]){
+            this.components[type].push(component);
+        }else{
+            this.components[type] = [component];
+        }
+        if(type == Components.Transform){
+            this.transform = component;
+        }
+        component.gameObject = this;
+        return component;
     }
-    setController(controller){
-        this.controller = controller;
-        controller.gameObject = this;
+    getComponent(type){
+        if(this.components[type]){
+            return this.components[type][0];
+        }else{
+            return null;
+        }
     }
-    setRenderer(renderer){
-        this.renderer = renderer;
-        renderer.gameObject = this;
-    }
-    setCamera(camera){
-        this.camera = camera;
-        camera.gameObject = this;
-    }
-    setMusicObject(musicObject){
-        this.musicObject = musicObject;
-        musicObject.gameObject = this;
+    getComponents(type){
+        if(this.components[type]){
+            return this.components[type];
+        }else{
+            return [];
+        }
     }
     update(dt){
-        if(this.updateProcess != null) this.updateProcess();
-        if(this.transform != null) this.transform.update(dt);
-        if(this.controller != null) this.controller.update(dt);
-        if(this.animator != null) this.animator.update(dt);
-        if(this.camera != null) this.camera.update(dt);
-        if(this.musicObject != null) this.musicObject.update(dt);
+        if(this.updateProcess != null){
+            this.updateProcess();
+        }
+        for(let componentTag of ComponentOrder){
+            if(!this.components[componentTag]){
+                continue;
+            }
+            const components = this.components[componentTag];
+            for(let component of components){
+                component.update(dt);
+            }
+        }
     }
     delete(){
-        this.transform = null;
-        this.controller = null;
-        this.animator = null;
-        this.renderer = null;
-        this.camera = null;
-        this.musicObject = null;
+        this.components = null;
     }
 };
 

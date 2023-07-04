@@ -1,3 +1,25 @@
+class InfoViewerGenerator{
+    // プロフィールオブジェクトを管理するクラス 最初に実行
+    constructor(scene, canvas, context, characterGenerator, communicator){
+        this.scene = scene;
+        this.canvas = canvas;
+        this.context = context;
+        this.characterGenerator = characterGenerator;
+        this.communicator = communicator;
+    }
+    generate(){
+        const infoView = this.scene.addGameObject(Prefabs.infoView(
+            "InfoView",
+            this.canvas,
+            this.context,
+            this.characterGenerator,
+            this.communicator
+        ));
+        infoView.tag = Tag.InfoView;
+        this.canvas.addEventListener("click",infoView.onClick);
+    }
+}
+
 class CameraGenerator{
     // カメラオブジェクトを管理するクラス 最初に実行
     // クラスにする必要はない？
@@ -10,10 +32,11 @@ class CameraGenerator{
             "Camera",
             Vector2.zero,
         ));
-        const playerPosition = this.player.transform.position;
         camera.updateProcess = function(){
-            camera.transform.position.set(playerPosition);
-        };
+            camera.transform.position.set(
+                this.player.transform.position
+            );
+        }.bind(this);
     }
 }
 
@@ -33,13 +56,13 @@ class BackGroundGenerator{
             sprite,
             0
         ));
-        const playerPosition = this.player.transform.position;
         background.updateProcess = function(){
+            const playerPosition = this.player.transform.position;
             background.transform.position.setValue(
                 playerPosition.x - playerPosition.x % 32,
                 playerPosition.y - playerPosition.y % 32
             );
-        };
+        }.bind(this);
     }
 }
 
@@ -55,12 +78,17 @@ class PlayerGenerator{
             "Player",
             position,
             this.context,
-            KeyConfig.DOUBLE
+            KeyConfig.ARROW
         ));
+        this.player.tag = Tag.Player;
+        this.controller = this.player.getComponent(Components.CharacterController);
         return this.player;
     }
     getPosition(){
         return this.player.transform.position;
+    }
+    getAction(){
+        return this.controller.action;
     }
 }
 
@@ -77,6 +105,7 @@ class MusicObjectGenerator{
         this.MUSIC_ID = 0;
         this.VIDEO_ID = 1;
         this.POSITION = 2;
+        this.TITLE = 3;
     }
     generate(musicObjects){
         this.change(musicObjects, false);
@@ -118,10 +147,12 @@ class MusicObjectGenerator{
                 musicObjects[index][this.VIDEO_ID],
                 this.player,
                 this.audioController,
-                id
+                id,
+                musicObjects[index][this.TITLE]
             ));
             this.musicIDs.add(id);
-            this.musicObjects[id] = gameObject.musicObject;
+            this.musicObjects[id] = gameObject.getComponent(Components.MusicObject);
+            gameObject.tag = Tag.MusicObj
         }
     }
 }
@@ -137,6 +168,8 @@ class CharacterGenerator{
         this.userObjects = {};
         this.USER_ID = 0;
         this.POSITION = 1;
+        this.NAME = 1;
+        this.ACTION = 1;
     }
     generate(userObjects){
         this.change(userObjects, false);
@@ -177,7 +210,8 @@ class CharacterGenerator{
                 null
             ));
             this.userIDs.add(id);
-            this.userObjects[id] = gameObject.controller;
+            this.userObjects[id] = gameObject.getComponent(Components.CharacterController);
+            gameObject.tag = Tag.Character;
         }
     }
     setDestinations(destinations){
@@ -186,6 +220,30 @@ class CharacterGenerator{
                 this.userObjects[data[this.USER_ID]].setDestination(
                     data[this.POSITION]
                 );
+            }
+
+        }
+    }
+    setNames(names){
+        for(let name of names){
+            if(this.userIDs.has(name[this.USER_ID])){
+                this.userObjects[name[this.USER_ID]].setName(name[this.NAME]);
+            }
+
+        }
+    }
+    setActions(actions){
+        for(let action of actions){
+            if(this.userIDs.has(action[this.USER_ID])){
+                this.userObjects[action[this.USER_ID]].setAction(action[this.ACTION]);
+            }
+
+        }
+    }
+    setIDs(ids){
+        for(let id of ids){
+            if(this.userIDs.has(id)){
+                this.userObjects[id].setID(id);
             }
 
         }

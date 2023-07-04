@@ -1,3 +1,11 @@
+// タグ
+const Tag = {
+    Player : 1,
+    Character : 2,
+    MusicObj : 3,
+    InfoView : 4,
+};
+
 // キーコンフィグ
 class KeyConfig{
     static get ARROW(){
@@ -6,6 +14,7 @@ class KeyConfig{
             'ArrowDown':    'DOWN',
             'ArrowRight':   'RIGHT',
             'ArrowLeft':    'LEFT',
+            'Shift':    'SHIFT',
         };
     }
     static get ASDW(){
@@ -14,6 +23,7 @@ class KeyConfig{
             's':    'DOWN',
             'd':   'RIGHT',
             'a':    'LEFT',
+            'Shift':    'SHIFT',
         };
     }
     static get DOUBLE(){
@@ -26,6 +36,7 @@ class KeyConfig{
             'ArrowDown':    'DOWN',
             'ArrowRight':   'RIGHT',
             'ArrowLeft':    'LEFT',
+            'Shift':    'SHIFT',
         };
     }
 }
@@ -39,7 +50,12 @@ class Sprite{
         this.size = new Vector2(width/column, height/row);
         this.pivot = this.size.clone().timesVector2(pivot);
     }
-    drawSprite(context, index, position, scale){
+    drawSprite(context, index, position, scale, alpha=1){
+        if(index < 0){
+            return;
+        }
+        const alphaPre = context.globalAlpha;
+        context.globalAlpha = alpha;
         context.drawImage(
             this.image,
             this.size.x * (index % this.column),
@@ -51,6 +67,49 @@ class Sprite{
             this.size.x * scale.x,
             this.size.y * scale.y,
         );
+        context.globalAlpha = alphaPre;
+    }
+    within(position, scale, targetPosition){
+        const x1 = position.x - this.pivot.x * scale.x;
+        const x2 = position.x + (this.size.x - this.pivot.x) * scale.x;
+        const y1 = position.y - this.pivot.y * scale.y;
+        const y2 = position.y + (this.size.y - this.pivot.y) * scale.y;
+        return targetPosition.x >= x1 && targetPosition.x <= x2
+            && targetPosition.y >= y1 && targetPosition.y <= y2;
+    }
+}
+
+class Text{
+    static drawText(context, position, pivot, text, font, color){
+        const pos = position.clone().add(pivot);
+        const lines = text.split("\n");
+        const length = lines.length;
+        var plus = 0;
+        context.fillStyle = color;
+        context.font = font;
+        var textWidth = 0;
+        for(let line of lines){
+            const width = context.measureText(line).width;
+            textWidth = Math.max(textWidth,width);
+            context.fillText(line, pos.x - width/2, pos.y);
+            pos.y += 24;
+        }
+    }
+    static getSize(text, font = '24px serif'){
+        context.font = font;
+        const textWidth = context.measureText(text).width;
+        const textHeight = context.measureText(text).height;
+        console.log(textWidth, textHeight);
+        return [textWidth, textHeight];
+    }
+}
+
+class Effect{
+    constructor(sprite, isLoop, isPingPong, time){
+        this.sprite = sprite;
+        this.isLoop = isLoop;
+        this.isPingPong = isPingPong;
+        this.time = time;
     }
 }
 
@@ -62,21 +121,6 @@ class Animation{
         while(this.timeList.length < this.stateList.length){
             this.timeList.push(this.timeList[this.timeList.length-1])
         }
-        this.index = 0;
-        this.state = 0;
-    }
-    init(){
-        this.index = 0;
-        this.state = this.stateList[this.index];
-    }
-    update(t){
-        var time = t;
-        if(time >= this.timeList[this.index]){
-            time -= this.timeList[this.index];
-            this.index = (this.index + 1) % this.stateList.length;
-            this.state = this.stateList[this.index];
-        }
-        return time;
     }
 }
 
@@ -137,6 +181,7 @@ class Vector2{
     get sqMagnitude(){return this.x**2+this.y**2;}
     get magnitude(){return this.sqMagnitude**0.5;}
     get normalized(){return this.clone().normalize;}
+    get isZero(){return this.x==0 && this.y==0;}
     get eulerAngle(){
         var angle = Math.atan2(this.y, this.x)/Math.PI*180;
         if(angle < 0){

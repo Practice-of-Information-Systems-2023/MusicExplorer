@@ -1,11 +1,86 @@
-/*タブの切り替えに関するスタイル*/
-.tab {
+/*ログイン制御*/
+.sidemenu input.login-checkbox{
+    display: none;
+}
+.sidemenu:has(input.login-checkbox:checked) > div.tab-main{
     display: flex;
+}
+.sidemenu:not(:has(input.login-checkbox:checked)) > div.login{
+    display: flex;
+}
+
+/*ログイン画面*/
+.login {
+    display: none;
+    flex-wrap: wrap;
+    max-width: 360px;
+}
+.login > label {
+    flex: 1 1;
+    order: -1;
+    min-width: 10px;
+    padding: .7em 1em .5em;
+    border-bottom: 1px solid #f0f0f0;
+    border-radius: 0;
+    background-color: #e9f0f6;
+    color: #535353;
+    font-size: .9em;
+    text-align: center;
+}
+.login .hide-radiobtn{
+    display: none;
+}
+.login > div {
+    display: none;
+    width: 100%;
+    padding: 0em 0em;
+    margin-left: 10px;
+    background-color: #fff;
+}
+.login .login-button {
+
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    margin:0 auto;
+    padding: 8px 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #7077aa;
+    color: #fff;
+    font-weight: 600;
+    font-size: 1em;
+}
+.login .login-button:hover {
+    background-color: #60679a;
+}
+
+.login > label:hover {
+    opacity: .8;
+}
+
+.login label:has(:checked) {
+    background-color: #fff;
+    border-color: #2589d0 #f0f0f0 #fff;
+    border-style: solid;
+    border-width: 4px 1px 1px;
+    border-radius: 5px;
+    color: #333333;
+}
+
+.login label:has(:checked) + div {
+    display: block;
+}
+
+/*メインのタブの切り替えに関するスタイル*/
+
+.tab-main {
+    display: none;
     flex-wrap: wrap;
     max-width: 360px;
 }
 
-.tab > label {
+.tab-main > label {
     flex: 1 1;
     order: -1;
     min-width: 10px;
@@ -19,22 +94,22 @@
     cursor: pointer;
 }
 
-.tab > label:hover {
+.tab-main > label:hover {
     opacity: .8;
 }
 
-.tab .hide-radiobtn{
+.tab-main .hide-radiobtn{
     display: none;
 }
 
-.tab > div {
+.tab-main > div {
     display: none;
     width: 100%;
     padding: 0em 0em;
     background-color: #fff;
 }
 
-.tab label:has(:checked) {
+.tab-main label:has(:checked) {
     background-color: #fff;
     border-color: #2589d0 #f0f0f0 #fff;
     border-style: solid;
@@ -43,11 +118,11 @@
     color: #333333;
 }
 
-.tab label:has(:checked) + div {
+.tab-main label:has(:checked) + div {
     display: block;
 }
 
-.tab .search-inputbox {
+.tab-main .search-inputbox {
     width: 70%;
     padding: 8px 10px;
     border: 1px solid #d2d2d2;
@@ -58,11 +133,11 @@
     line-height: 1.5;
 }
 
-.tab .search-inputbox::placeholder {
+.tab-main .search-inputbox::placeholder {
     color: #999;
 }
 
-.tab .search-button {
+.tab-main .search-button {
 
     justify-content: center;
     align-items: center;
@@ -77,7 +152,7 @@
     font-size: 1em;
 }
 
-.tab .search-button:hover {
+.tab-main .search-button:hover {
     background-color: #60679a;
 }
 

@@ -39,8 +39,14 @@ urlpatterns = [
     path('api/register_user/', views.register_user),
     path('api/update_user', views.update_user),
     path('api/get_profile', views.get_profile),
+    path('api/create_favorite/', views.create_favorite),
+    path('api/delete_favorite/', views.delete_favorite),
     path('api/search_music/', views.search_music),
+    path('api/get_surrounding_music/', views.get_surrounding_music),
+    path('api/get_favorite_music/', views.get_favorite_music),
     path('api/swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('api/doc/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('api/redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
+
+

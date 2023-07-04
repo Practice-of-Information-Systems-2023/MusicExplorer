@@ -1,5 +1,12 @@
 # もとになるOSを作成
-FROM ubuntu:latest
+FROM python:3
+
+UESR root
+
+COPY requirements.txt /root/
+
+RUN pip install -r /root/requirements.txt
+
 
 # 必要なパッケージのインストール
 RUN pip install numpy

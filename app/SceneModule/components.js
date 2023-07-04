@@ -1,6 +1,32 @@
+const Components = {
+    Transform:1,
+    CharacterController:2,
+    Animator:3,
+    Camera:4,
+    MusicObject:5,
+    Renderer:6,
+    SpriteRenderer:7,
+    TextRenderer:8,
+    InfoViewer:9,
+}
+const ComponentOrder = [
+    Components.CharacterController,
+    Components.Animator,
+    Components.Camera,
+    Components.MusicObject,
+    Components.InfoViewer,
+];
+
+const RendererTags = [
+    Components.Renderer,
+    Components.SpriteRenderer,
+    Components.TextRenderer,
+];
+
 class Component{
     gameObject;
     updateProcess;
+    type;
     constructor(){
         this.updateProcess = null;
     }
@@ -9,11 +35,11 @@ class Component{
             this.updateProcess();
         }
     }
-    static empty(){return new Component();}
 }
 class Transform extends Component{
     constructor(position, scale){
         super();
+        this.type = Components.Transform;
         this.position = position;
         this.scale = scale;
     }
@@ -25,6 +51,7 @@ class Transform extends Component{
 class Camera extends Component{
     constructor(zoomRate, width, height){
         super();
+        this.type = Components.Camera;
         this.zoomRate = zoomRate;
         this.width = width;
         this.height = height;
@@ -37,38 +64,117 @@ class Camera extends Component{
         const canvasScale = scale.clone().times(this.zoomRate);
         return [canvasPosition, canvasScale];
     }
+    reverseProjection(position){
+        const worldPosition = position.clone()
+            .sub(new Vector2(this.width/2, this.height/2))
+            .times(1/this.zoomRate)
+            .add(this.gameObject.transform.position)
+        return worldPosition;
+    }
 }
 
 class Animator extends Component{
     constructor(animations, initState){
         super();
+        this.type = Components.Animator;
         this.animations = animations;
-        this.state = 0;
+        this.index = 0;
         this.nowAnimation = animations[initState];
+        this.state = this.nowAnimation.stateList[this.index];
         this.nowStateName = "";
         this.time = 0;
+        this.isLoop = true;
+        this.isPingPong = false;
+        this.velocity = 1;
     }
     update(dt){
         const stateName = this.getStateName();
         if(this.nowStateName != stateName){
             this.nowAnimation = this.animations[stateName];
-            this.nowAnimation.init();
             this.nowStateName = stateName;
             this.time = 0;
+            this.index = 0;
+            this.state = this.nowAnimation.stateList[this.index];
+        }else{
+            if(this.isLoop==false && this.state==-1){
+                return;
+            }
         }
-        this.time = this.nowAnimation.update(this.time + dt);
-        this.state = this.nowAnimation.state;
+        this.time += dt;
+        if(this.time >= this.nowAnimation.timeList[this.index]){
+            this.time -= this.nowAnimation.timeList[this.index];
+            this.index += this.velocity;
+            const length = this.nowAnimation.stateList.length
+            if(this.index >= length || this.index < 0){
+                if(this.isLoop){
+                    if(length == 1){
+                        this.index = 0;
+                    }else if(this.isPingPong){
+                        this.velocity *= -1;
+                        this.index += this.velocity * 2;
+                    }else{
+                        this.index %= length;
+                    }
+                }else{
+                    this.state = -1;
+                    return;
+                }
+            }
+            this.state = this.nowAnimation.stateList[this.index];
+        }
     }
     getStateName(){
         return "";
     }
 }
 
+class EffectAnimator extends Animator{
+    constructor(){
+        super(
+            {'none':new Animation([-1],[1])},
+            'none'
+        );
+        this.stateName = 'none';
+        this.spriteRenderer = null;
+    }
+    play(effect){
+        const indexList = [];
+        const spriteCount = effect.sprite.row * effect.sprite.column;
+        for(let i=0;i<spriteCount;i++){
+            indexList.push(i);
+        }
+        this.spriteRenderer.sprite = effect.sprite;
+        this.animations = {
+            'main':new Animation(indexList,[effect.time]),
+            'none':new Animation([-1],[1])
+        };
+        this.stateName = 'main';
+        this.isLoop = effect.isLoop;
+        this.isPingPong = effect.isPingPong;
+    }
+    stop(){
+        this.stateName = 'none';
+    }
+    getStateName(){
+        return this.stateName;
+    }
+}
+
 class CharacterAnimator extends Animator{
+    constructor(animations, initState){
+        super(animations, initState);
+        this.controller = null;
+    }
     getStateName(){
         var stateName;
-        const controller = this.gameObject.controller;
-        const angle = controller.velocity.eulerAngle;
+        if(this.controller==null){
+            this.controller = this.gameObject.getComponent(Components.CharacterController);
+        }
+        if(this.controller.action == 1){
+            stateName = "rotate";
+            return stateName;
+        }
+        const angle = this.controller.velocity.eulerAngle;
         if(angle <= 22.5 || angle > 22.5 + 45*7){
             stateName = "right";
         }else if(angle <= 22.5 + 45){
@@ -87,7 +193,7 @@ class CharacterAnimator extends Animator{
             stateName = "up_right";
         }
 
-        if(controller.isMoving){
+        if(this.controller.isMoving){
             return stateName + "_move";
         }else{
             return stateName;
@@ -95,37 +201,113 @@ class CharacterAnimator extends Animator{
     }
 }
 
-class SpriteRenderer extends Component{
-    constructor(context, sprite, renderingOrder = 0){
+class Renderer extends Component{
+    constructor(context, renderingOrder){
         super();
+        this.type = Components.Renderer;
         this.context = context;
-        this.sprite = sprite;
         this.renderingOrder = renderingOrder;
+        this.isHide = false;
+        this.pivot = Vector2.zero;
+    }
+    update(dt){}
+    within(position){return false;}
+}
+class SpriteRenderer extends Renderer{
+    constructor(context, sprite, renderingOrder = 0, animator = null){
+        super(context,renderingOrder);
+        this.type = Components.SpriteRenderer;
+        this.sprite = sprite;
+        this.animator = animator;
+        this.alpha = 1;
+        this.scale = Vector2.one;
     }
     update(dt){
+        if(this.isHide){
+            return;
+        }
         const obj = this.gameObject;
         const positionAndScale 
-            = obj.scene.mainCamera.projection(obj.transform.position, obj.transform.scale);
+            = obj.scene.mainCamera.projection(
+                obj.transform.position.clone().add(this.pivot),
+                obj.transform.scale.clone().timesVector2(this.scale)
+            );
         var state = 0;
-        if(obj.animator != null){
-            state = obj.animator.state;
+        if(this.animator != null){
+            state = this.animator.state;
         }
         this.sprite.drawSprite(
             this.context,
             state,
             positionAndScale[0],
-            positionAndScale[1]
+            positionAndScale[1],
+            this.alpha
+        );
+    }
+    within(position){
+        if(this.isHide){
+            return false;
+        }
+        return this.sprite.within(
+            this.gameObject.transform.position.clone().add(this.pivot),
+            this.gameObject.transform.scale.clone().timesVector2(this.scale),
+            position
         );
     }
 }
 
+class TextRenderer extends Renderer{
+    constructor(context, text="", renderingOrder = 0){
+        super(context, renderingOrder);
+        this.type = Components.TextRenderer;
+        this.text = text;
+        this.font = '24px serif';
+        this.color = '#000000'
+
+    }
+    update(dt){
+        if(this.isHide){
+            return;
+        }
+        const obj = this.gameObject;
+        const positionAndScale 
+            = obj.scene.mainCamera.projection(obj.transform.position, obj.transform.scale);
+        Text.drawText(
+            this.context,
+            positionAndScale[0],
+            this.pivot,
+            this.text,
+            this.font,
+            this.color
+        );
+    }
+    within(targetPosition){
+        if(this.isHide){
+            return false;
+        }
+        return false;
+        /*console.log(targetPosition);
+        const size = Text.getSize(this.text);
+        const position = this.gameObject.transform.position;
+        const scale = this.gameObject.transform.scale;
+        const x1 = position.x - size[0]/2/scale.x;
+        const x2 = position.x + size[0]/2/scale.x;
+        const y1 = position.y - size[1]/2/scale.y;
+        const y2 = position.y + size[1]/2/scale.y;
+        return targetPosition.x >= x1 && targetPosition.x <= x2
+            && targetPosition.y >= y1 && targetPosition.y <= y2;*/
+    }
+}
+
 class MusicObject extends Component{
-    constructor(videoId, player, audioController, musicId){
+    constructor(videoId, player, audioController, musicId, title){
         super();
+        this.type = Components.MusicObject;
         this.musicId = musicId;
         this.videoId = videoId;
         this.player = player;
         this.audioController = audioController;
+        this.title = title;
     }
     update(dt){
         const sqDist = this.player.transform.position.clone()
@@ -138,6 +320,7 @@ class MusicObject extends Component{
 class CharacterController extends Component{
     constructor(keyConfig=null){
         super();
+        this.type = Components.CharacterController;
         this.keyConfig = keyConfig;
         this.keyForce = this.getKeyForce();
         this.commands = ['UP', 'DOWN', 'RIGHT', 'LEFT'];
@@ -145,7 +328,8 @@ class CharacterController extends Component{
             'UP': false,
             'DOWN': false,
             'RIGHT': false,
-            'LEFT': false
+            'LEFT': false,
+            'SPACE': false
         };
         if(keyConfig!=null){
             document.addEventListener(
@@ -161,6 +345,10 @@ class CharacterController extends Component{
         this.isMoving = false;
         this.isAutoMove = false;
         this.destination = Vector2.zero;
+        this.name = "";
+        this.textRenderer = null;
+        this.action = 0;
+        this.id = "";
     }
     getKeyForce(){
         return {
@@ -180,16 +368,44 @@ class CharacterController extends Component{
             this.keyFlag[this.keyConfig[event.key]] = false;
         }
     }
+    setAction(action){
+        if(this.action != 1 && action == 1){
+            const animators = this.gameObject.getComponents(Components.Animator);
+            animators[1].play(CHEER_EFFECT1);
+            animators[2].play(CHEER_EFFECT2);
+        }else if(this.action == 1 && action != 1){
+            const animators = this.gameObject.getComponents(Components.Animator);
+            animators[1].stop();
+            animators[2].stop();
+        }
+        this.action = action;
+    }
+    setActionByKey(){
+        if(this.keyConfig==null){
+            return;
+        }
+        var action = 0;
+        if(this.keyFlag['SHIFT']){
+            action = 1;
+        }
+        this.setAction(action);
+    }
     calcVelocityByKey(){
+        if(this.keyConfig==null){
+            return Vector2.zero;
+        }
         var velocity = Vector2.zero;
-        for(let i=0; i<this.commands.length; i++){
-            if(this.keyFlag[this.commands[i]]){
-                velocity.add(this.keyForce[this.commands[i]]);
+        for(let command of this.commands){
+            if(this.keyFlag[command]){
+                velocity.add(this.keyForce[command]);
             }
         }
         return velocity;
     }
     calcVelocityByDestination(){
+        if(!this.isAutoMove){
+            return Vector2.zero;
+        }
         const speed = 120;
         const velocity = this.destination.clone()
             .sub(this.gameObject.transform.position);
@@ -203,25 +419,47 @@ class CharacterController extends Component{
         this.destination.set(destination);
         this.isAutoMove = true;
     }
-    checkDestination(){
-        const dist = this.destination.clone()
-                        .sub(this.gameObject.transform.position)
-                        .sqMagnitude
-        if(dist < 100){
+    setName(name){
+        if(this.textRenderer==null){
+            this.textRenderer = this.gameObject.getComponent(Components.TextRenderer)
+        }
+        this.name = name;
+        this.textRenderer.text = name;
+    }
+    setID(id){
+        this.id = id;
+    }
+    autoMoveAdjust(preVelocity){
+        const transform = this.gameObject.transform;
+        const dist = transform.position.clone()
+                        .sub(this.destination)
+                        .sqMagnitude;
+        var rate = (dist / this.velocity.sqMagnitude)**0.5;//fpsで暫定的な調整
+        rate /= (fps/30);
+        if(rate*(fps/30) < 1){
+            transform.position.set(this.destination);
+            this.velocity.set(preVelocity);
             this.isAutoMove = false;
+            this.isMoving = false;
+        } else if(rate > 10 && rate < 40){
+            this.velocity.times(1.5);
+            transform.translate(this.velocity);               
+        }else if(rate > 40){
+            transform.position.set(this.destination);
+            this.velocity.set(preVelocity);       
+        }else{
+            transform.translate(this.velocity); 
         }
     }
     update(dt){
-        var preVelocity = this.velocity.clone();
-        this.velocity.times(0);
+        this.setActionByKey();
+        const preVelocity = this.velocity.clone();
 
-        if(this.keyConfig!=null){
-            this.velocity.add(this.calcVelocityByKey());
-        }
-        if(this.isAutoMove){
-            this.velocity.add(this.calcVelocityByDestination());
-        }
-        if(this.velocity.x !=0 || this.velocity.y != 0){
+        this.velocity.times(0);
+        this.velocity.add(this.calcVelocityByKey());
+        this.velocity.add(this.calcVelocityByDestination());
+
+        if(!this.velocity.isZero){
             this.velocity.normalize().times(120);
             this.isMoving = true;
         }else{
@@ -229,7 +467,125 @@ class CharacterController extends Component{
             this.isMoving = false;
         }
         this.velocity.times(dt);
-        this.gameObject.transform.translate(this.velocity);
-        this.checkDestination();
+
+        if(this.isAutoMove){
+            this.autoMoveAdjust(preVelocity);
+        }else{
+            this.gameObject.transform.translate(this.velocity);
+        }
+    }
+}
+
+class InfoViewer extends Component{
+    constructor(canvas, characterGenerator, spriteRenderer, textRenderer,communicator){
+        super();
+        this.type = Components.InfoViewer;
+        this.canvas = canvas;
+        this.characterGenerator = characterGenerator;
+        this.spriteRenderer = spriteRenderer;
+        this.textRenderer = textRenderer;
+        this.communicator = communicator;
+        this.musicId = "";
+        canvas.addEventListener("click",this.onClick.bind(this));
+    }
+    onClick(e){
+        const rect = e.target.getBoundingClientRect();
+        const cursorX = e.clientX - rect.left;
+        const cursorY = e.clientY - rect.top;
+        const target = this.getClickedObject(new Vector2(cursorX, cursorY));
+        this.judgeClickedObject(target);
+    }
+    getClickedObject(cursor){
+        const scene = this.gameObject.scene;
+        const worldPosition = scene.mainCamera.reverseProjection(cursor);
+        const renderers = scene.getSortedRenderers(true);
+        var target=null;
+        for(let renderer of renderers){
+            const tag = renderer.gameObject.tag;
+            if(tag != Tag.Character && 
+                tag != Tag.InfoView && 
+                tag != Tag.MusicObj && 
+                tag != Tag.Button){
+                continue;
+            }
+            if(renderer.within(worldPosition)){
+                target=renderer;
+                break;
+            }
+        }
+        return target;
+    }
+    judgeClickedObject(target){
+        if(target==null){
+            return;
+        }
+        switch(target.gameObject.tag){
+            case Tag.InfoView:
+                this.clickViewer(target);
+                break;
+            case Tag.Character:
+                this.openProfile(target.gameObect);
+                break;
+            case Tag.MusicObj:
+                this.openMusicInfo(target.gameObject);
+                break;
+        }
+    }
+    openProfile(target){
+        const controller = target.getComponent(Components.CharacterController);
+        this.spriteRenderer.isHide = false;
+        this.textRenderer.isHide = false;
+        this.target = target.transform;
+        this.spriteRenderer.alpha = 0.7;
+        this.textRenderer.pivot.x = 0;
+        this.textRenderer.pivot.y = -30;
+        const profile = this.communicator.getUserProfile(controller.id);
+        this.textRenderer.text = 
+            profile[1] + "\n"
+            + "好み: " + profile[4]  + "\n"
+            + "Twitter: " + profile[2] + "\n"
+            + "Instagram: " + profile[3] + "\n";
+    }
+    openMusicInfo(target){
+        const musicObj = target.getComponent(Components.MusicObject);
+        const renderers = this.gameObject.getComponents(Components.SpriteRenderer);
+        renderers[0].isHide = false;
+        renderers[1].isHide = false;
+        this.textRenderer.isHide = false;
+        this.target = target.transform;
+        renderers[0].alpha = 0.7;
+        this.textRenderer.pivot.x = 0;
+        this.textRenderer.pivot.y = -30;
+        this.textRenderer.text = 
+            musicObj.title.substring(0,25) + "\n"
+            + musicObj.title.substring(25,50)  + "\n"
+            + musicObj.title.substring(50,75)  + "\n"
+            + musicObj.title.substring(75,100);
+        this.musicId = musicObj.videoId
+    }
+    clickViewer(target){
+        if(target.renderingOrder==20){
+            this.closeViewer(target);
+        }else{
+            this.favoriteRegister(target);
+        }
+    }
+    closeViewer(target){
+        const renderers = this.gameObject.getComponents(Components.SpriteRenderer);
+        for(let renderer of renderers){
+            renderer.isHide = true;
+        }
+        this.textRenderer.isHide = true;
+        this.target = null;
+    }
+    favoriteRegister(target){
+        sideMenuController.onClickFavoriteRegisterButton(this.musicId);
+        this.closeViewer(target);
+    }
+    update(dt){
+        if(this.target!=null){
+            this.gameObject.transform.position.set(this.target.position);
+            this.gameObject.transform.position.y -= 20;
+        }
     }
 }
