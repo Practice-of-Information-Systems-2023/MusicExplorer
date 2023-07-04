@@ -60,8 +60,8 @@ class Communicator {
       async: false
     }).responseText;
     const parsedData = JSON.parse(data);
-    const { user_id, name, twitter_id, instagram_id, genre_name } = parsedData;
-    return [user_id,name,twitter_id,instagram_id,genre_name]
+    const { user_id, name, twitter_id, instagram_id, genre_name, age, gender } = parsedData;
+    return [user_id,name,twitter_id,instagram_id,genre_name, age, gender]
   }
   callCharactersDataAPI(xMin, xMax, yMin, yMax) {
     // ダミーAPI

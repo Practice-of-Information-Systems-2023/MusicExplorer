@@ -12,13 +12,15 @@ class LoginController{
     const userName = document.getElementById("user_name_login").value;
     const password = document.getElementById("password_login").value;
     const result = this.callLoginAPI(userName, password);
-    if(result[0]){
+    if(result[0]==200){
       // ログイン成功
       this.password = password;
       this.userID = result[1];
       this.loginSuccess(this.userID, userName);
     }else{
       // ログイン失敗
+      const error = $(".error_message_login");
+      error.append("ユーザー名またはパスワードが不正です");
       document.getElementById("password_login").value = "";
     }
   }
@@ -27,13 +29,29 @@ class LoginController{
     document.getElementById("is-logined").checked = true;
     this.init(id,userName);
   }
-  callLoginAPI(userID, password){
+  callLoginAPI(userName, password){
     // ダミーAPI
-    const id = document.getElementById("user_name_login").value;
-    if(id==""){
-      return [false, -1];
+    const name = document.getElementById("user_name_login").value;
+    const data = $.ajax({
+      url: "http://127.0.0.1:8000/api/login/",
+      type:'POST',
+      dataType: 'json',
+      data : {
+        name:userName,
+        password:password,
+      },
+      timeout:3000,
+      async: false
+    });
+    const status = data.status;
+    if(status==200){
+      const parsedData = JSON.parse(data.responseText);
+      const { user_id } = parsedData;
+      const id = user_id;
+      return [status, id];
+    }else{
+      return [status, -1];
     }
-    return [true, id];
   }
   signup(){
     const userName = document.getElementById("user_name_signup").value;
@@ -77,10 +95,15 @@ class LoginController{
         parseInt(age),
         parseInt(gender),
       );
-      //this.loginSuccess(result, userName);
-      document.getElementById("user_name_login").value = result;
-      document.getElementById("password_login").value = password;
-      this.login();
+      if(result[0]==400){
+        error.append("何らかのエラーで登録できませんでした");
+      }else if(result[0]==418){
+        error.append("このユーザー名は既に使われています");
+      }else{
+        document.getElementById("user_name_login").value = result[1];
+        document.getElementById("password_login").value = password;
+        this.login();
+      }
     }
   }
   addEmptyError(name, string, list){
@@ -131,11 +154,18 @@ class LoginController{
       },
       timeout:3000,
       async: false
-    }).responseText;
-    const parsedData = JSON.parse(data);
-    const { user_id } = parsedData;
-    alert("内部用ユーザーIDは "+user_id+" です(開発用)");
-    return user_id;
+    });
+    const dataText = data.responseText;
+    const status = data.status;
+    if(status==418){
+      return [status, -1];
+    }else if(status==400){
+      return [status, -1];
+    }else{
+      const parsedData = JSON.parse(dataText);
+      const { user_id } = parsedData;
+      return [status, user_id]
+    }
   }
   updateProfile(communicator){
     const userID = this.userID;
@@ -183,7 +213,7 @@ class LoginController{
         parseInt(age),
         parseInt(gender)
       );
-      if(result){
+      if(result == 200){
         communicator.userName = userName;
       }
     }
@@ -205,11 +235,56 @@ class LoginController{
       },
       timeout:3000,
       async: false
+    });
+    const status = data.status;
+    const error = $(".error_message_update");
+    const success = $(".success_message_update");
+    error.empty();
+    success.empty();
+    if(status==400){
+      error.append("何らかのエラーで更新できませんでした");
+    }else if(status==418){
+      error.append("このユーザー名は既に使われています");
+    }else{
+      success.append("プロフィール更新しました");
+    }
+    return status;
+  }
+}
+
+class InitController{
+  init(){
+    this.genreID={};
+    this.setGenre();
+  }
+  setGenre(){
+    const result = this.callGenreAPI();
+    const signup = $(".genre_signup");
+    const profile = $(".genre");
+    signup.empty();
+    profile.empty();
+    for(let genre of result){
+      const addData = '<option value="'+genre[0]+'">'+genre[1]+'</option>"';
+      signup.append(addData);
+      profile.append(addData);
+      this.genreID[genre[1]]=genre[0];
+    }
+  }
+  callGenreAPI(){
+    const data = $.ajax({
+      url: "http://127.0.0.1:8000/api/get_genre_list/",
+      type:'GET',
+      dataType: 'json',
+      timeout:3000,
+      async: false
     }).responseText;
 
-    $(".error_message_update").empty();
-    $(".success_message_update").append("プロフィールを更新しました");
-    return true;
+    const parsedData = JSON.parse(data);
+    const genreList = [];
+    parsedData.forEach((item) => {
+      genreList.push(item);
+    });
+    return genreList;
   }
 }
 
@@ -225,6 +300,9 @@ class SideMenuController{
     this.userNameBox = document.getElementById("user_name");
     this.twitterBox = document.getElementById("twitter");
     this.instagramBox = document.getElementById("instagram");
+    this.genreBox = document.getElementById("genre");
+    this.ageBox = document.getElementById("age");
+    this.genderBox = document.getElementById("gender");
   }
   init(){
     this.updateFavoriteList();
@@ -378,6 +456,10 @@ class SideMenuController{
     this.userNameBox.value = profile[1];
     this.twitterBox.value = profile[2];
     this.instagramBox.value = profile[3];
+    this.genreBox.value = initController.genreID[profile[4]];
+    this.ageBox.value = profile[5];
+    console.log(profile[6]);
+    this.genderBox.value = profile[6];
   }
   updateProfile(){
     loginController.updateProfile(this.communicator);

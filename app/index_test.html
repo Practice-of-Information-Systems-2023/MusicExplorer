@@ -37,7 +37,7 @@
                                 パスワード<br>
                                 <input type="text" id="password_signup" class="login-inputbox" size="36" placeholder="パスワード"/><br>
                                 好きなジャンル<br>
-                                <select id="genre_signup">
+                                <select id="genre_signup" class="genre_signup">
                                     <option value="1">未回答</option>
                                     <option value="2">ジャンル1</option>
                                     <option value="3">ジャンル2</option>
@@ -50,9 +50,9 @@
                                 <input type="number" id="age_signup" class="profile-inputbox" size="6" value="0" min="0" max="200"/><br>
                                 性別 (任意, 非公開)<br>
                                 <select id="gender_signup">
-                                    <option value="3">未回答</option>
-                                    <option value="1">男</option>
-                                    <option value="2">女</option>
+                                    <option value="2">未回答</option>
+                                    <option value="0">男</option>
+                                    <option value="1">女</option>
                                 </select><br>
                                 <font color="red" class="error_message_signup"></font><br>
                                 <button class="login-button" onclick="loginController.signup()">登録</button><br>
@@ -95,7 +95,7 @@
                                         ユーザー名<br>
                                         <input type="text" id="user_name" class="profile-inputbox" size="36" placeholder="ユーザー名"/><br>
                                         好きなジャンル<br>
-                                        <select id = "genre">
+                                        <select id = "genre" class="genre">
                                             <option value="1">未回答</option>
                                             <option value="2">ジャンル1</option>
                                             <option value="3">ジャンル2</option>
@@ -110,9 +110,9 @@
                                         <input type="number" id="age" class="profile-inputbox" size="6" min="0" max="200"/><br>
                                         性別<br>
                                         <select id="gender">
-                                            <option value="3">未回答</option>
-                                            <option value="1">男</option>
-                                            <option value="2">女</option>
+                                            <option value="2">未回答</option>
+                                            <option value="0">男</option>
+                                            <option value="1">女</option>
                                         </select><br>
                                         <font color="red" class="error_message_update"></font><br>
                                         <font color="green" class="success_message_update"></font><br>

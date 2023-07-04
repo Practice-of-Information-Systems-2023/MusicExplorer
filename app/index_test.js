@@ -5,6 +5,8 @@ var width = canvas.width;
 var fps = 60;
 var youtubePlayer = null;
 var sideMenuController = null;
+const initController = new InitController();
+initController.init();
 const loginController = new LoginController(init);
 new YoutubePlayer("player", function (player) {
   youtubePlayer = player;
