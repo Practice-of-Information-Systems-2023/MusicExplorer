@@ -317,6 +317,8 @@ def update_user(request):
                 'twitter_id': openapi.Schema(type=openapi.TYPE_STRING),
                 'instagram_id': openapi.Schema(type=openapi.TYPE_STRING),
                 'genre_name': openapi.Schema(type=openapi.TYPE_STRING),
+                'age': openapi.Schema(type=openapi.TYPE_INTEGER),
+                'gender': openapi.Schema(type=openapi.TYPE_INTEGER),
             }
         ),
         status.HTTP_400_BAD_REQUEST: "Bad Request"
@@ -340,6 +342,8 @@ def get_profile(request):
             'twitter_id': user.twitter_id,
             'instagram_id': user.instagram_id,
             'genre_name': genre_name,
+            'age': user.age,
+            'gender': user.gender
         }
         return Response(response, status=status.HTTP_200_OK)
 
