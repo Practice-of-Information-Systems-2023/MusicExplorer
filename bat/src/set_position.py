@@ -2,6 +2,7 @@ import MF
 import sqlite3
 import pandas as pd
 import numpy as np
+import time
 
 def init_db():
     conn = sqlite3.connect("../../api/db.sqlite3", isolation_level=None)   
@@ -28,15 +29,17 @@ def set_position(data: list, c: sqlite3.Cursor) -> None:
         print("Failed to set position to database." + str(e))
     return
 
-def calc_position(rating_matrix: pd.DataFrame, music: pd.DataFrame, max_length: float = 10000):
-    np.random.seed(seed=32)
+def calc_position(rating_matrix: pd.DataFrame, music: pd.DataFrame, max_length: float = 10000, max_views: float = 300000000):
+    # np.random.seed(seed=32)
     _, H = MF.NonNegativeMatrixFactorization(rating_matrix)
     # centerize the position by median
     H[0] = H[0] - np.average(H[0])
     H[1] = H[1] - np.average(H[1])
     # the more views, the more centerize
     music["views"] = music["views"]
-    music["views"] = np.log(music["views"] + 1)
+    # music["views"] = np.log(music["views"] + 1)
+    for i in range(len(music)):
+        music.loc[i, "views"] = min(music.loc[i, "views"], max_views)
     for i in range(len(music)):
         length = np.sqrt(H[0][i]**2 + H[1][i]**2)
         views = music["views"][i]
@@ -50,11 +53,21 @@ def calc_position(rating_matrix: pd.DataFrame, music: pd.DataFrame, max_length: 
     
 
 if __name__ == "__main__":
-    conn = sqlite3.connect("../../api/db.sqlite3", isolation_level=None)   
-    c = conn.cursor()
-    music, user, ratings = get_data(c)
-    rating_matrix = MF.df2sparse(ratings, user, music)
-    data, H = calc_position(rating_matrix, music)
-    set_position(data,  c)
+    
+    while True : 
+        try :
+            # conn = sqlite3.connect("../../api/db.sqlite3", isolation_level=None)
+            conn = sqlite3.connect("/code/db.sqlite3", isolation_level=None)   
+            c = conn.cursor()
+            music, user, ratings = get_data(c)
+            rating_matrix = MF.df2sparse(ratings, user, music)
+            data, H = calc_position(rating_matrix, music)
+            set_position(data,  c)
+            conn.commit()
+            time.sleep(30)
+        except Exception as e:
+            print("Failed to set position to database." + str(e))
+            time.sleep(30)
+        conn.close()
     
     
