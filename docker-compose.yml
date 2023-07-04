@@ -1,36 +1,25 @@
-version: '3'
+version: "3"
 services:
-# API用のサーバport5000がコンテナにつながる,ホストの./apiがコンテナの/apiにマウントされる
+  # API用のサーバport5000がコンテナにつながる,ホストの./apiがコンテナの/apiにマウントされる
   api_service:
     build:
-      context: ./api/Dockerfile
-      dockerfile: api_image
+      context: ./api
+      dockerfile: ./Dockerfile
     ports:
-      - "5000:5000"
+      - "8000:8000"
     volumes:
-      - ./api:/api
-    networks:
-      main:
-        ipv4_address: 192.168.0.1/24
-# 通信用のサーバport5001がコンテナにつながる,ホストの./communicationがコンテナの/communicationにマウントされる
+      - ./api:/api/code
+    env_file:
+      - ./api/backend_app/.env
+
+  # 通信用のサーバport5001がコンテナにつながる,ホストの./communicationがコンテナの/communicationにマウントされる
   communication_service:
     build:
-      context: ./communication/Dockerfile
-      dockerfile: communication_image
+      context: .
+      dockerfile: ./communication/Dockerfile
     ports:
-      - "5001:5001"
+      - "3000:3000"
     volumes:
       - ./communication:/communication
-    networks:
-      main:
-        ipv4_address:192.168.0.2/24
-  
-networks:
-  main:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 192.168.0.0/24
-
-
-    
+      - /communication/node_modules
+      - ./app:/communication/app

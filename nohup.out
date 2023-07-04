@@ -1,0 +1,21 @@
+Starting musicexplorer_communication_service_1 ... 
+Starting musicexplorer_api_service_1           ... 
+Starting musicexplorer_communication_service_1 ... done
+Starting musicexplorer_api_service_1           ... done
+Attaching to musicexplorer_communication_service_1, musicexplorer_api_service_1
+[33mcommunication_service_1  |[0m 
+[33mcommunication_service_1  |[0m > communication@1.0.0 dev
+[33mcommunication_service_1  |[0m > ts-node-dev server/server.ts
+[33mcommunication_service_1  |[0m 
+[36mapi_service_1            |[0m Watching for file changes with StatReloader
+[33mcommunication_service_1  |[0m [INFO] 08:01:59 ts-node-dev ver. 2.0.0 (using ts-node ver. 10.9.1, typescript ver. 5.1.3)
+[33mcommunication_service_1  |[0m websocket server running at: http://15.168.10.223:3000/
+[36mapi_service_1            |[0m [04/Jul/2023 08:02:46] "POST /api/get_surrounding_music/ HTTP/1.1" 200 2
+[36mapi_service_1            |[0m [04/Jul/2023 08:02:46] "POST /api/get_surrounding_music/ HTTP/1.1" 200 3811
+[36mapi_service_1            |[0m [04/Jul/2023 08:03:46] "POST /api/get_surrounding_music/ HTTP/1.1" 200 2
+[36mapi_service_1            |[0m [04/Jul/2023 08:03:46] "POST /api/get_surrounding_music/ HTTP/1.1" 200 3811
+[36mapi_service_1            |[0m [04/Jul/2023 08:04:46] "POST /api/get_surrounding_music/ HTTP/1.1" 200 2
+[36mapi_service_1            |[0m [04/Jul/2023 08:04:46] "POST /api/get_surrounding_music/ HTTP/1.1" 200 3811
+[36mmusicexplorer_api_service_1 exited with code 0
+[0m[33mmusicexplorer_communication_service_1 exited with code 0
+[0m
