@@ -6,8 +6,8 @@ import numpy as np
 from typing import Tuple
 
 def df2sparse(X: pd.DataFrame, user: pd.DataFrame, music: pd.DataFrame) -> csr_matrix:
-    for col in X.columns:
-        X[col] = X[col].astype("int64")
+    X["rating"] = X["rating"].astype(np.int64)
+    music["views"] = music["views"].astype(np.int64)
     # map id to range 0 ~ n
     user_map = {id:i for i, id in enumerate(user["user_id"])}
     music_map = {id:i for i, id in enumerate(music["music_id"])}
@@ -17,7 +17,7 @@ def df2sparse(X: pd.DataFrame, user: pd.DataFrame, music: pd.DataFrame) -> csr_m
     
 
 def NonNegativeMatrixFactorization(X: pd.DataFrame) -> Tuple[np.ndarray, np.ndarray]:
-    model = NMF(n_components=2, init="random", random_state=1, 
+    model = NMF(n_components=2, init = "random", random_state=2, 
                 max_iter=500, solver='mu', alpha_H=0.1, alpha_W=0.1, l1_ratio=0)
     W = model.fit_transform(X)
     H = model.components_
@@ -31,5 +31,6 @@ if __name__ == "__main__":
     print(rating_matrix.shape)
     W, H = NonNegativeMatrixFactorization(rating_matrix)
     print(W.shape, H.shape)
+    
     
     
