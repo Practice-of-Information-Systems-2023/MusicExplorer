@@ -79,7 +79,7 @@ class LoginController{
       );
       if(result[0]==400){
         error.append("何らかのエラーで登録できませんでした");
-      }else if(result[1]==418){
+      }else if(result[0]==418){
         error.append("このユーザー名は既に使われています");
       }else{
         document.getElementById("user_name_login").value = result[1];
