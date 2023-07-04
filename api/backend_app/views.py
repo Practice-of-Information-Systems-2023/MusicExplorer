@@ -14,6 +14,7 @@ from drf_yasg import openapi
 from .models import Favorite, AppUser, Music
 from .serializers import AppUserSerializer, MusicSerializer, FavoriteSerializer
 from django.views.decorators.csrf import csrf_protect
+from django.db import IntegrityError
 
 
 dotenv_path = join(dirname(__file__), '.env')
@@ -205,7 +206,8 @@ def search_music(request):
                 'user_id': openapi.Schema(type=openapi.TYPE_INTEGER),
             }
         ),
-        status.HTTP_400_BAD_REQUEST: "Bad Request"
+        status.HTTP_400_BAD_REQUEST: "Bad Request",
+        status.HTTP_418_IM_A_TEAPOT: "I'm a teapot"
     },
 )
 @api_view(['POST'])
@@ -213,11 +215,25 @@ def register_user(request):
     if request.method == 'POST':
         serializer = AppUserSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            user_id = serializer.data['user_id']
-            response = {"user_id": user_id}
-            return Response(response, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            try:
+                serializer.save()
+                user_id = serializer.data['user_id']
+                response = {"user_id": user_id}
+                return Response(response, status=status.HTTP_201_CREATED)
+            except IntegrityError as e:
+                if 'UNIQUE constraint failed: backend_app_appuser.name' in str(e):
+                    return Response(status=status.HTTP_418_IM_A_TEAPOT)
+                else:
+                    return Response(status=status.HTTP_400_BAD_REQUEST)
+            except Exception as e:
+                print(e)
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+        else:
+            errors = serializer.errors
+            if 'name' in errors and 'app user with this name already exists.' in errors['name']:
+                return Response(serializer.errors, status=status.HTTP_418_IM_A_TEAPOT)
+            else:
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # ユーザ情報更新用API
@@ -240,7 +256,8 @@ def register_user(request):
     ),
     responses={
         status.HTTP_200_OK: "OK",
-        status.HTTP_400_BAD_REQUEST: "Bad Request"
+        status.HTTP_400_BAD_REQUEST: "Bad Request",
+        status.HTTP_418_IM_A_TEAPOT: "I'm a teapot"
     },
 )
 @api_view(['POST'])
@@ -267,7 +284,13 @@ def update_user(request):
         if 'gender' in request.data:
             user.gender = request.data.get('gender')
         try:
+            print(user)
             user.save()
+        except IntegrityError as e:
+            if 'UNIQUE constraint failed: backend_app_appuser.name' in str(e):
+                return Response(status=status.HTTP_418_IM_A_TEAPOT)
+            else:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             print(e)
             return Response(status=status.HTTP_400_BAD_REQUEST)
@@ -294,6 +317,8 @@ def update_user(request):
                 'twitter_id': openapi.Schema(type=openapi.TYPE_STRING),
                 'instagram_id': openapi.Schema(type=openapi.TYPE_STRING),
                 'genre_name': openapi.Schema(type=openapi.TYPE_STRING),
+                'age': openapi.Schema(type=openapi.TYPE_INTEGER),
+                'gender': openapi.Schema(type=openapi.TYPE_INTEGER),
             }
         ),
         status.HTTP_400_BAD_REQUEST: "Bad Request"
@@ -317,6 +342,8 @@ def get_profile(request):
             'twitter_id': user.twitter_id,
             'instagram_id': user.instagram_id,
             'genre_name': genre_name,
+            'age': user.age,
+            'gender': user.gender
         }
         return Response(response, status=status.HTTP_200_OK)
 
