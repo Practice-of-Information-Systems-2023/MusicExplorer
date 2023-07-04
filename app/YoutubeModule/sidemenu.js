@@ -12,13 +12,15 @@ class LoginController{
     const userName = document.getElementById("user_name_login").value;
     const password = document.getElementById("password_login").value;
     const result = this.callLoginAPI(userName, password);
-    if(result[0]){
+    if(result[0]==200){
       // ログイン成功
       this.password = password;
       this.userID = result[1];
       this.loginSuccess(this.userID, userName);
     }else{
       // ログイン失敗
+      const error = $(".error_message_login");
+      error.append("ユーザー名またはパスワードが不正です");
       document.getElementById("password_login").value = "";
     }
   }
@@ -27,13 +29,31 @@ class LoginController{
     document.getElementById("is-logined").checked = true;
     this.init(id,userName);
   }
-  callLoginAPI(userID, password){
+  callLoginAPI(userName, password){
     // ダミーAPI
-    const id = document.getElementById("user_name_login").value;
+    const name = document.getElementById("user_name_login").value;
     if(id==""){
       return [false, -1];
     }
-    return [true, id];
+    const data = $.ajax({
+      url: "http://127.0.0.1:8000/api/login/",
+      type:'POST',
+      dataType: 'json',
+      data : {
+        name:userName,
+        password:password,
+      },
+      timeout:3000,
+      async: false
+    });
+    const dataText = data.responseText;
+    const id = parseInt(dataText);
+    const status = data.status;
+    if(status==200){
+      return [status, id];
+    }else{
+      return [status, -1];
+    }
   }
   signup(){
     const userName = document.getElementById("user_name_signup").value;
