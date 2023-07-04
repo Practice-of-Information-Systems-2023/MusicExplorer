@@ -12,10 +12,10 @@ const BACK_SPRITE = new Sprite(
 );
 
 const AUDIO_SPRITE = new Sprite(
-    "Image/tree_green.png",
-    539, 735,//294, 300,
+    "Image/tv.png",
+    58, 60,
     1, 1,
-    new Vector2(0.5,0.93)
+    new Vector2(0.5,1)
 );
 
 const WINDOW_SPRITE = new Sprite(
@@ -141,7 +141,7 @@ class Prefabs{
 
     }
     static audioPlayer(name, position, context, videoId, player, audioController, musicId, title){
-        const obj = new GameObject(name, new Transform(position, new Vector2(/*1.5,1.5*/0.3,0.3)));
+        const obj = new GameObject(name, new Transform(position, new Vector2(3,3)));
         //const effectAnimator = obj.addComponent(new EffectAnimator());
         const spriteRenderer = obj.addComponent(new SpriteRenderer(context, AUDIO_SPRITE, 10/*, effectAnimator*/));
         //effectAnimator.spriteRenderer = spriteRenderer;
