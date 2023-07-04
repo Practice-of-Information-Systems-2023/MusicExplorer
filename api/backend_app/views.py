@@ -361,7 +361,12 @@ def get_profile(request):
         required=['name', 'password']
     ),
     responses={
-        status.HTTP_200_OK: "OK",
+        status.HTTP_200_OK: openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'user_id': openapi.Schema(type=openapi.TYPE_INTEGER),
+            }
+        ),
         status.HTTP_400_BAD_REQUEST: "Bad Request",
         status.HTTP_401_UNAUTHORIZED: "Unauthorized"
     },
@@ -376,7 +381,8 @@ def login(request):
         except AppUser.DoesNotExist:
             return Response(status=status.HTTP_400_BAD_REQUEST)
         if user.password == password:
-            return Response(status=status.HTTP_200_OK)
+            response = {'user_id': user.user_id}
+            return Response(response, status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
