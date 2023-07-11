@@ -441,6 +441,7 @@ class SideMenuController {
     resultArea.append(element);
   }
   onClickFavoriteRegisterButton(id) {
+    const position = this.communicator.getNewMusicPosition();
     const data = $.ajax({
       url: "http://127.0.0.1:8000/api/create_favorite/",
       type: "POST",
@@ -448,6 +449,8 @@ class SideMenuController {
       data: {
         user_id: this.userID,
         music_id: id,
+        position_x: position.x,
+        position_y: position.y,
       },
       timeout: 3000,
       async: false,
