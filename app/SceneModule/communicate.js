@@ -5,6 +5,7 @@ class Communicator {
     this.userID = userID;
     this.userName = userName;
     this.player = scene.find("Player");
+    this.musicPositions = [];
     this.CHARACTER_RECT = 1000;
     this.MUSIC_RECT = 4000;
     const url = "ws://localhost:3000/websocket";
@@ -79,14 +80,17 @@ class Communicator {
     const yMin = position.y - this.MUSIC_RECT;
     const yMax = position.y + this.MUSIC_RECT;
     const result = this.callMusicObjectsDataAPI(xMin, xMax, yMin, yMax);
-    var positions = [];
+    const positions = [];
+    this.musicPositions = [];
     for (let musicObject of result) {
+      const pos = new Vector2(musicObject[2], musicObject[3])
       positions.push([
         musicObject[0],
         musicObject[1],
-        new Vector2(musicObject[2], musicObject[3]),
+        pos,
         musicObject[4],
       ]);
+      this.musicPositions.push(pos);
     }
     return positions;
   }
@@ -139,5 +143,12 @@ class Communicator {
       action: action,
     });
     this.socket.send(message);
+  }
+  getNewMusicPosition(){
+    const result = Utils.findLowDensity(
+      this.musicPositions,
+      this.player.transform.position
+    );
+    return result;
   }
 }

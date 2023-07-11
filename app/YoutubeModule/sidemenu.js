@@ -293,11 +293,12 @@ class InitController {
 }
 
 class SideMenuController {
-  constructor(scene, audioController, userID, communicator) {
+  constructor(scene, audioController, musicObjectGenerator, userID, communicator) {
     this.scene = scene;
     this.audioController = audioController;
     this.player = scene.find("Player");
     this.youtubePlayer = audioController.youtubePlayer;
+    this.musicObjectGenerator = musicObjectGenerator;
     this.userID = userID;
     this.communicator = communicator;
 
@@ -321,13 +322,19 @@ class SideMenuController {
       this.addSearchResult(music);
     }
   }
-  updateFavoriteList() {
+  updateFavoriteList(id="") {
     const result = this.callGetFavoriteAPI();
+    var resultPosition = Vector2.zero;
     $(".favorite_area").empty();
     for (let music of result) {
       music[2] = Utils.getVideoIdFromURL(music[2]);
+      if(id==music[0]){
+        resultPosition = new Vector2(music[4],music[5]);
+      }
       this.addFavoriteResult(music);
     }
+    console.log(resultPosition);
+    return resultPosition;
   }
   callYoutubeAPI(query) {
     const data = $.ajax({
@@ -375,6 +382,9 @@ class SideMenuController {
       [5,"New Battle!!! (Full Version) – Xenoblade Chronicles 3: Future Redeemed ~ Original Soundtrack OST","https://www.youtube.com/watch?v=DeBG1g1BRMA","https://i.ytimg.com/vi/C-qoVi70ooM/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDdgffa8LI8hnciwRp_v1pj-xNj3w",-400,400],
     ];*/
     return result;
+  }
+  getMusicPosition(id){
+    const result = callGetFavoriteAPI();
   }
   addSearchResult(music) {
     const resultArea = $(".result_area");
@@ -441,6 +451,7 @@ class SideMenuController {
     resultArea.append(element);
   }
   onClickFavoriteRegisterButton(id) {
+    const position = this.communicator.getNewMusicPosition();
     const data = $.ajax({
       url: "http://127.0.0.1:8000/api/create_favorite/",
       type: "POST",
@@ -448,11 +459,14 @@ class SideMenuController {
       data: {
         user_id: this.userID,
         music_id: id,
+        position_x: position.x,
+        position_y: position.y,
       },
       timeout: 3000,
       async: false,
     });
     this.updateFavoriteList();
+    this.musicObjectGenerator.replace(this.communicator.getMusicObjectsData());
   }
   onClickFavoriteRemoveButton(id) {
     const data = $.ajax({
@@ -472,8 +486,10 @@ class SideMenuController {
     this.youtubePlayer.testListenVideoById(videoId);
   }
   onClickMoveButton(x, y, videoId) {
-    const position = new Vector2(x, y + 50);
+    const position = this.updateFavoriteList(videoId);
+    position.y+=50;
     this.player.transform.position.set(position);
+    this.musicObjectGenerator.replace(this.communicator.getMusicObjectsData());
     this.youtubePlayer.playVideoById(videoId);
   }
   setProfile() {
