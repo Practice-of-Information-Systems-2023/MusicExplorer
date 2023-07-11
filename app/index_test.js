@@ -19,7 +19,7 @@ function init(userID, userName) {
   const playerGenerator = new PlayerGenerator(scene, context);
   playerGenerator.generate(Vector2.zero);
 
-  const characterGenerator = new CharacterGenerator(scene, context);
+  const characterGenerator = new CharacterGenerator(scene, context, userID);
 
   const communicator = new Communicator(
     scene,
