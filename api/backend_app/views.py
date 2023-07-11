@@ -31,6 +31,8 @@ YOUTUBE_API_KEY = os.getenv('YOUTUBE_API_KEY')
         properties={
             'user_id': openapi.Schema(type=openapi.TYPE_INTEGER),
             'music_id': openapi.Schema(type=openapi.TYPE_STRING),
+            'position_x': openapi.Schema(type=openapi.TYPE_NUMBER),
+            'position_y': openapi.Schema(type=openapi.TYPE_NUMBER),
         },
         required=['user_id', 'music_id']
     ),
@@ -42,14 +44,14 @@ YOUTUBE_API_KEY = os.getenv('YOUTUBE_API_KEY')
 @api_view(['POST'])
 def create_favorite(request):
     if request.method == 'POST':
-        get_music_details(request.data.get('music_id'))
+        get_music_details(request.data.get('music_id'), request.data.get('position_x'), request.data.get('position_y'))
         serializer = FavoriteSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()        
+            serializer.save()
         return Response(status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-def get_music_details(music_id): 
+def get_music_details(music_id, position_x, position_y): 
     youtube = build('youtube', 'v3', developerKey=YOUTUBE_API_KEY)
 
     response = youtube.videos().list(
@@ -77,6 +79,8 @@ def get_music_details(music_id):
             music.good = likes
             #music.bad = dislikes
             music.comment_count = comment_count
+            music.position_x = position_x
+            music.position_y = position_y
             music.save()
             return Response(status=status.HTTP_200_OK)
 
@@ -87,8 +91,8 @@ def get_music_details(music_id):
             views=views,
             good=likes,
             #bad=dislikes,
-            position_x=1000000000,
-            position_y=3000000000,
+            position_x=position_x,
+            position_y=position_y,
             comment_count=comment_count
         )
         music.save()
