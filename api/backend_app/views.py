@@ -36,7 +36,6 @@ YOUTUBE_API_KEY = os.getenv('YOUTUBE_API_KEY')
     ),
     responses={
         status.HTTP_201_CREATED: "Created",
-        status.HTTP_400_BAD_REQUEST: "Bad Request",
         status.HTTP_404_NOT_FOUND: "Not Found",
     },
 )
@@ -71,7 +70,15 @@ def get_music_details(music_id):
         comment_count = int(statistics['commentCount'])
 
         if Music.objects.filter(music_id=music_id).exists():
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            music = Music.objects.get(music_id=music_id)
+            music.title = title
+            music.url = url
+            music.views = views
+            music.good = likes
+            #music.bad = dislikes
+            music.comment_count = comment_count
+            music.save()
+            return Response(status=status.HTTP_200_OK)
 
         music = Music(
             music_id=music_id,
