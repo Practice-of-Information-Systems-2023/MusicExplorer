@@ -60,6 +60,7 @@ function init(userID, userName) {
   sideMenuController = new SideMenuController(
     scene,
     audioController,
+    musicObjectGenerator,
     userID,
     communicator
   );
