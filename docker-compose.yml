@@ -1,26 +1,36 @@
-version: "3"
+version: '3'
 services:
-  # API用のサーバport8000がコンテナにつながる,ホストの./apiがコンテナの/apiにマウントされる
+# API用のサーバport5000がコンテナにつながる,ホストの./apiがコンテナの/apiにマウントされる
   api_service:
     build:
+      dockerfile: ./api/Dockerfile
       context: ./api
-      dockerfile: ./Dockerfile
-    command: python3 manage.py runserver 0.0.0.0:8000
     ports:
-      - "8000:8000"
+      - "5000:5000"
     volumes:
-      - ./api:/code
-    env_file:
-      - ./api/backend_app/.env
-
-  # 通信用のサーバport3000がコンテナにつながる,ホストの./communicationがコンテナの/communicationにマウントされる
-  communication_service:
+      - ./api:/api
+    networks:
+      main:
+        ipv4_address: 192.168.0.1/24
+# 通信用のサーバport5001がコンテナにつながる,ホストの./communicationがコンテナの/communicationにマウントされる
+  communication:
     build:
-      context: .
       dockerfile: ./communication/Dockerfile
+      context: ./communication
     ports:
       - "3000:3000"
     volumes:
       - ./communication:/communication
-      - /communication/node_modules
-      - ./app:/communication/app
+    networks:
+      main:
+        ipv4_address:192.168.0.2/24
+  
+networks:
+  main:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.0.0/24
+
+
+    

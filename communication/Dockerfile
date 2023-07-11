@@ -1,5 +1,4 @@
 # もとになるOSを作成
-# もとになるOSを作成
 FROM node:16.14.2-alpine
 
 # 公開するポートの指定
@@ -8,13 +7,14 @@ FROM node:16.14.2-alpine
 # 作業ディレクトリの指定（任意）
 WORKDIR /communication
 
-COPY ./communication/package*.json ./
+COPY package*.json ./
 
 RUN npm install
 
-COPY ./communication /communication
-
-COPY ./app ./communication
+COPY . /communication
 
 # サーバー立ち上げ時に実行されるコマンド(一つまで)
 ENTRYPOINT ["npm", "run", "dev"]
+
+
+
