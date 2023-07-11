@@ -179,7 +179,7 @@ class CharacterGenerator{
     // マップ上の他ユーザーオブジェクトを管理するクラス 定期実行
     // プレイヤーから遠いものを削除しつつ新たなものを追加する
     // さらに目的地を設定する
-    constructor(scene, context){
+    constructor(scene, context, userID){
         this.scene = scene;
         this.context = context;
         this.userIDs = new Set();
@@ -188,6 +188,7 @@ class CharacterGenerator{
         this.POSITION = 1;
         this.NAME = 1;
         this.ACTION = 1;
+        this.userID = userID;
     }
     generate(userObjects){
         this.change(userObjects, false);
@@ -200,7 +201,9 @@ class CharacterGenerator{
         var stayUserIDs = new Set();
         for(let i=0;i<userObjects.length;i++){
             if(!this.userIDs.has(userObjects[i][this.USER_ID])){
-                newUserIndexes.push(i);
+                if(userObjects[i][this.USER_ID] != this.userID){
+                    newUserIndexes.push(i);
+                }
             }else{
                 stayUserIDs.add(userObjects[i][this.USER_ID]);
             }
