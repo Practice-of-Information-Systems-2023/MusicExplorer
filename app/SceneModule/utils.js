@@ -195,12 +195,6 @@ class Vector2{
     static get down(){return new Vector2(0,-1);}
     static get right(){return new Vector2(1,0);}
     static get left(){return new Vector2(-1,0);}
-    static random(min,max){
-        return new Vector2(
-          Math.random()*(max-min)+min,
-          Math.random()*(max-min)+min,
-        );
-      }
     static direction(r){return new Vector2(Math.cos(r), Math.sin(r));}
 } 
 
@@ -219,42 +213,6 @@ class MathUtils{
 class Utils{
     static getVideoIdFromURL(url){
         const result = url.substr(url.indexOf('=')+1,url.length);
-        return result;
-    }
-    // nowPositionから開始して, pointsが密集していない座標を探索する
-    static findLowDensity(points, nowPosition){
-        const result = nowPosition.clone();
-        var counter = 0;
-        const velocity = Vector2.zero;
-        var minMax = 0;
-        var bestPosition = Vector2.zero;
-        while(true){
-            var force = Vector2.zero;
-            var minDist = 1000000;
-            for(let point of points){
-                const pos = point.clone().sub(result).times(-1);
-                minDist = Math.min(minDist, pos.magnitude);
-                if(minDist > minMax){
-                  minMax = minDist;
-                  bestPosition = result.clone();
-                }
-                if(pos.magnitude < 1000){
-                  force.add(pos.normalized().times(10/pos.magnitude));
-                }
-            }
-            if(minDist >= 1000){
-                break;
-            }
-            velocity.add(force);
-            result.add(force);
-            result.add(Vector2.random(-400,400));
-            counter+=1;
-            if(counter==400){
-                result = bestPosition.clone();
-              break;
-            }
-        }
-        console.log("minDistance:"+minDist);
         return result;
     }
 }

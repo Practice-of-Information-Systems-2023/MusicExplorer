@@ -140,7 +140,6 @@ class MusicObjectGenerator{
                 newMusicIndexes.push(i);
             }else{
                 stayMusicIDs.add(musicObjects[i][this.MUSIC_ID]);
-                this.musicObjects[musicObjects[i][this.MUSIC_ID]].gameObject.transform.position = musicObjects[i][this.POSITION];
             }
         }
         if(isDelete){
