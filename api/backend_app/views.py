@@ -79,8 +79,6 @@ def get_music_details(music_id, position_x, position_y):
             music.good = likes
             #music.bad = dislikes
             music.comment_count = comment_count
-            music.position_x = position_x
-            music.position_y = position_y
             music.save()
             return Response(status=status.HTTP_200_OK)
 
