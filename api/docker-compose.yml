@@ -10,7 +10,7 @@ services:
       - .:/code
       - ../bat/src:/bat/src
     ports:
-      - "8000:8000"
+      - "3001:3001"
     env_file:
       - ./backend_app/.env
     # depends_on:

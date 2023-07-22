@@ -1,15 +1,16 @@
 version: "3"
 services:
-  # API用のサーバport8000がコンテナにつながる,ホストの./apiがコンテナの/apiにマウントされる
+  # API用のサーバport3001がコンテナにつながる,ホストの./apiがコンテナの/apiにマウントされる
   api_service:
     build:
       context: ./api
       dockerfile: ./Dockerfile
-    command: python3 manage.py runserver 0.0.0.0:8000
+    command: bash -c "sh ./start.sh"
     ports:
-      - "8000:8000"
+      - "3001:3001"
     volumes:
       - ./api:/code
+      - ./bat/src:/bat/src
     env_file:
       - ./api/backend_app/.env
 

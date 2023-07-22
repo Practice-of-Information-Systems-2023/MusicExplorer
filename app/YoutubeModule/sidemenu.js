@@ -34,7 +34,7 @@ class LoginController {
     // ダミーAPI
     const name = document.getElementById("user_name_login").value;
     const data = $.ajax({
-      url: "http://127.0.0.1:8000/api/login/",
+      url: "http://127.0.0.1:3001/api/login/",
       type: "POST",
       dataType: "json",
       data: {
@@ -133,7 +133,7 @@ class LoginController {
   }
   callSignUpAPI(userName, password, genre, twitter, instagram, age, gender) {
     const data = $.ajax({
-      url: "http://127.0.0.1:8000/api/register_user/",
+      url: "http://127.0.0.1:3001/api/register_user/",
       type: "POST",
       dataType: "json",
       data: {
@@ -222,7 +222,7 @@ class LoginController {
     gender
   ) {
     const data = $.ajax({
-      url: "http://127.0.0.1:8000/api/update_user",
+      url: "http://127.0.0.1:3001/api/update_user",
       type: "POST",
       dataType: "json",
       data: {
@@ -267,8 +267,7 @@ class InitController {
     profile.empty();
     for (let genre of result) {
       const { genre_id, name } = genre;
-      const addData =
-        '<option value="' + genre_id + '">' + name + '</option>"';
+      const addData = '<option value="' + genre_id + '">' + name + '</option>"';
       signup.append(addData);
       profile.append(addData);
       this.genreID[name] = genre_id;
@@ -276,7 +275,7 @@ class InitController {
   }
   callGenreAPI() {
     const data = $.ajax({
-      url: "http://127.0.0.1:8000/api/get_genre_list/",
+      url: "http://127.0.0.1:3001/api/get_genre_list/",
       type: "GET",
       dataType: "json",
       timeout: 3000,
@@ -293,7 +292,13 @@ class InitController {
 }
 
 class SideMenuController {
-  constructor(scene, audioController, musicObjectGenerator, userID, communicator) {
+  constructor(
+    scene,
+    audioController,
+    musicObjectGenerator,
+    userID,
+    communicator
+  ) {
     this.scene = scene;
     this.audioController = audioController;
     this.player = scene.find("Player");
@@ -322,14 +327,14 @@ class SideMenuController {
       this.addSearchResult(music);
     }
   }
-  updateFavoriteList(id="") {
+  updateFavoriteList(id = "") {
     const result = this.callGetFavoriteAPI();
     var resultPosition = Vector2.zero;
     $(".favorite_area").empty();
     for (let music of result) {
       music[2] = Utils.getVideoIdFromURL(music[2]);
-      if(id==music[0]){
-        resultPosition = new Vector2(music[4],music[5]);
+      if (id == music[0]) {
+        resultPosition = new Vector2(music[4], music[5]);
       }
       this.addFavoriteResult(music);
     }
@@ -338,7 +343,7 @@ class SideMenuController {
   }
   callYoutubeAPI(query) {
     const data = $.ajax({
-      url: "http://127.0.0.1:8000/api/search_music/",
+      url: "http://127.0.0.1:3001/api/search_music/",
       type: "POST",
       dataType: "json",
       data: { query: query },
@@ -356,7 +361,7 @@ class SideMenuController {
   }
   callGetFavoriteAPI() {
     const data = $.ajax({
-      url: "http://127.0.0.1:8000/api/get_favorite_music/",
+      url: "http://127.0.0.1:3001/api/get_favorite_music/",
       type: "POST",
       dataType: "json",
       data: { user_id: this.userID },
@@ -383,7 +388,7 @@ class SideMenuController {
     ];*/
     return result;
   }
-  getMusicPosition(id){
+  getMusicPosition(id) {
     const result = callGetFavoriteAPI();
   }
   addSearchResult(music) {
@@ -453,7 +458,7 @@ class SideMenuController {
   onClickFavoriteRegisterButton(id) {
     const position = this.communicator.getNewMusicPosition();
     const data = $.ajax({
-      url: "http://127.0.0.1:8000/api/create_favorite/",
+      url: "http://127.0.0.1:3001/api/create_favorite/",
       type: "POST",
       dataType: "json",
       data: {
@@ -470,7 +475,7 @@ class SideMenuController {
   }
   onClickFavoriteRemoveButton(id) {
     const data = $.ajax({
-      url: "http://127.0.0.1:8000/api/delete_favorite/",
+      url: "http://127.0.0.1:3001/api/delete_favorite/",
       type: "POST",
       dataType: "json",
       data: {
@@ -487,7 +492,7 @@ class SideMenuController {
   }
   onClickMoveButton(x, y, videoId) {
     const position = this.updateFavoriteList(videoId);
-    position.y+=50;
+    position.y += 50;
     this.player.transform.position.set(position);
     this.musicObjectGenerator.replace(this.communicator.getMusicObjectsData());
     this.youtubePlayer.playVideoById(videoId);
