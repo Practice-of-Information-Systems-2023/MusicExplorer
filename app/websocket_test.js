@@ -1,5 +1,5 @@
-const URL = "ws://localhost:3000/websocket/test";
-// const httpURL = "http://localhost:3000/http/test/getUsers";
+const URL = "ws://13.208.251.106:3000/websocket/test";
+// const httpURL = "http://13.208.251.106:3000/http/test/getUsers";
 
 // ------------------------------
 // DOM 操作

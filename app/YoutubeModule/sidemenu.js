@@ -34,7 +34,7 @@ class LoginController {
     // ダミーAPI
     const name = document.getElementById("user_name_login").value;
     const data = $.ajax({
-      url: "http://127.0.0.1:3001/api/login/",
+      url: "http://13.208.251.106:3001/api/login/",
       type: "POST",
       dataType: "json",
       data: {
@@ -133,7 +133,7 @@ class LoginController {
   }
   callSignUpAPI(userName, password, genre, twitter, instagram, age, gender) {
     const data = $.ajax({
-      url: "http://127.0.0.1:3001/api/register_user/",
+      url: "http://13.208.251.106:3001/api/register_user/",
       type: "POST",
       dataType: "json",
       data: {
@@ -222,7 +222,7 @@ class LoginController {
     gender
   ) {
     const data = $.ajax({
-      url: "http://127.0.0.1:3001/api/update_user",
+      url: "http://13.208.251.106:3001/api/update_user",
       type: "POST",
       dataType: "json",
       data: {
@@ -275,7 +275,7 @@ class InitController {
   }
   callGenreAPI() {
     const data = $.ajax({
-      url: "http://127.0.0.1:3001/api/get_genre_list/",
+      url: "http://13.208.251.106:3001/api/get_genre_list/",
       type: "GET",
       dataType: "json",
       timeout: 3000,
@@ -343,7 +343,7 @@ class SideMenuController {
   }
   callYoutubeAPI(query) {
     const data = $.ajax({
-      url: "http://127.0.0.1:3001/api/search_music/",
+      url: "http://13.208.251.106:3001/api/search_music/",
       type: "POST",
       dataType: "json",
       data: { query: query },
@@ -361,7 +361,7 @@ class SideMenuController {
   }
   callGetFavoriteAPI() {
     const data = $.ajax({
-      url: "http://127.0.0.1:3001/api/get_favorite_music/",
+      url: "http://13.208.251.106:3001/api/get_favorite_music/",
       type: "POST",
       dataType: "json",
       data: { user_id: this.userID },
@@ -458,7 +458,7 @@ class SideMenuController {
   onClickFavoriteRegisterButton(id) {
     const position = this.communicator.getNewMusicPosition();
     const data = $.ajax({
-      url: "http://127.0.0.1:3001/api/create_favorite/",
+      url: "http://13.208.251.106:3001/api/create_favorite/",
       type: "POST",
       dataType: "json",
       data: {
@@ -475,7 +475,7 @@ class SideMenuController {
   }
   onClickFavoriteRemoveButton(id) {
     const data = $.ajax({
-      url: "http://127.0.0.1:3001/api/delete_favorite/",
+      url: "http://13.208.251.106:3001/api/delete_favorite/",
       type: "POST",
       dataType: "json",
       data: {

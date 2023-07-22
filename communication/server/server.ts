@@ -31,7 +31,7 @@ app.get("*", async (_req: Request, res: Response) => {
 
 try {
   app.listen(PORT, () => {
-    console.log(`websocket server running at: http://localhost:${PORT}/`);
+    console.log(`websocket server running at: http://13.208.251.106:${PORT}/`);
   });
 } catch (e) {
   if (e instanceof Error) {

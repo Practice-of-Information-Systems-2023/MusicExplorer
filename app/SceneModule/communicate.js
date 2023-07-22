@@ -8,7 +8,7 @@ class Communicator {
     this.musicPositions = [];
     this.CHARACTER_RECT = 1000;
     this.MUSIC_RECT = 4000;
-    const url = "ws://localhost:3000/websocket";
+    const url = "ws://13.208.251.106:3000/websocket";
     this.socket = new WebSocket(url);
     this.socket.addEventListener("message", this.setInfo.bind(this));
   }
@@ -53,7 +53,7 @@ class Communicator {
   }
   callProfileAPI(id) {
     const data = $.ajax({
-      url: "http://127.0.0.1:3001/api/get_profile",
+      url: "http://13.208.251.106:3001/api/get_profile",
       type: "POST",
       dataType: "json",
       data: { user_id: id },
@@ -91,7 +91,7 @@ class Communicator {
   }
   callMusicObjectsDataAPI(xMin, xMax, yMin, yMax) {
     const data = $.ajax({
-      url: "http://127.0.0.1:3001/api/get_surrounding_music/",
+      url: "http://13.208.251.106:3001/api/get_surrounding_music/",
       type: "POST",
       dataType: "json",
       data: {
