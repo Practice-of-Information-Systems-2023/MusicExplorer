@@ -35,11 +35,11 @@ def calc_position(rating_matrix: pd.DataFrame, music: pd.DataFrame, max_length: 
     # centerize the position by median
     H[0] = H[0] - np.average(H[0])
     H[1] = H[1] - np.average(H[1])
-    # the more views, the more centerize
-    music["views"] = music["views"]
     # music["views"] = np.log(music["views"] + 1)
     for i in range(len(music)):
-        music["views"][i] = min(music["views"][i], max_views)
+        # compare and set views column with max_views
+        if music["views"][i] > max_views:
+            music.loc[i, "views"] = max_views
     for i in range(len(music)):
         if H[0][i] == 0 and H[1][i] == 0:
             H[0][i] = np.random.rand()
@@ -48,8 +48,8 @@ def calc_position(rating_matrix: pd.DataFrame, music: pd.DataFrame, max_length: 
         views = music["views"][i]
         H[0][i] = (H[0][i] / length) 
         H[1][i] = (H[1][i] / length) 
-        H[0][i] = H[0][i] * (1 - (views / (music["views"].max() + 100000))) * max_length + (np.random.randint(400,800) if np.random.rand() > 0.5 else np.random.randint(-800,-400))
-        H[1][i] = H[1][i] * (1 - (views / (music["views"].max() + 100000))) * max_length + (np.random.randint(400,800) if np.random.rand() > 0.5 else np.random.randint(-800,-400))
+        H[0][i] = H[0][i] * (1 - (views / (music["views"].max() + 1000000))) * max_length + (np.random.randint(400,1200) if np.random.rand() > 0.5 else np.random.randint(-1200,-400))
+        H[1][i] = H[1][i] * (1 - (views / (music["views"].max() + 1000000))) * max_length + (np.random.randint(400,1200) if np.random.rand() > 0.5 else np.random.randint(-1200,-400))
     # floor the position to 2 decimal places
     data = [(float(round(H[0][i], 2)), float(round(H[1][i], 2)),str(music["music_id"][i])) for i in range(len(music))]
     return data, H
@@ -70,6 +70,6 @@ if __name__ == "__main__":
             conn.close()
         except Exception as e:
             print("Failed to set position to database." + str(e))
-        time.sleep(3600 * 1)
+        time.sleep(3600 * 24)
     
     
