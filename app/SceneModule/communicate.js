@@ -52,7 +52,7 @@ class Communicator {
   }
   callProfileAPI(id) {
     const data = $.ajax({
-      url: "http://127.0.0.1:8000/api/get_profile",
+      url: "http://127.0.0.1:3001/api/get_profile",
       type: "POST",
       dataType: "json",
       data: { user_id: id },
@@ -81,18 +81,15 @@ class Communicator {
     const result = this.callMusicObjectsDataAPI(xMin, xMax, yMin, yMax);
     var positions = [];
     for (let musicObject of result) {
-      positions.push([
-        musicObject[0],
-        musicObject[1],
-        new Vector2(musicObject[2], musicObject[3]),
-        musicObject[4],
-      ]);
+      const pos = new Vector2(musicObject[2], musicObject[3]);
+      positions.push([musicObject[0], musicObject[1], pos, musicObject[4]]);
+      this.musicPositions.push(pos);
     }
     return positions;
   }
   callMusicObjectsDataAPI(xMin, xMax, yMin, yMax) {
     const data = $.ajax({
-      url: "http://127.0.0.1:8000/api/get_surrounding_music/",
+      url: "http://127.0.0.1:3001/api/get_surrounding_music/",
       type: "POST",
       dataType: "json",
       data: {
@@ -139,5 +136,12 @@ class Communicator {
       action: action,
     });
     this.socket.send(message);
+  }
+  getNewMusicPosition() {
+    const result = Utils.findLowDensity(
+      this.musicPositions,
+      this.player.transform.position
+    );
+    return result;
   }
 }

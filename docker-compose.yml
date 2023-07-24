@@ -1,19 +1,22 @@
 version: '3'
 services:
-# API用のサーバport5000がコンテナにつながる,ホストの./apiがコンテナの/apiにマウントされる
+  # API用のサーバport3001がコンテナにつながる,ホストの./apiがコンテナの/apiにマウントされる
   api_service:
     build:
       dockerfile: ./api/Dockerfile
       context: ./api
+      dockerfile: ./Dockerfile
+    command: bash -c "sh ./start.sh"
     ports:
-      - "5000:5000"
+      - "3001:3001"
     volumes:
-      - ./api:/api
-    networks:
-      main:
-        ipv4_address: 192.168.0.1/24
-# 通信用のサーバport5001がコンテナにつながる,ホストの./communicationがコンテナの/communicationにマウントされる
-  communication:
+      - ./api:/code
+      - ./bat/src:/bat/src
+    env_file:
+      - ./api/backend_app/.env
+
+  # 通信用のサーバport3000がコンテナにつながる,ホストの./communicationがコンテナの/communicationにマウントされる
+  communication_service:
     build:
       dockerfile: ./communication/Dockerfile
       context: ./communication

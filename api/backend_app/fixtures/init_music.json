@@ -5,8 +5,8 @@
 		"fields": {
 			"title": "Beethoven - Symphony No. 7 - Iván Fischer | Concertgebouworkest",
 			"url": "https://www.youtube.com/watch?v=-4788Tmz9Zo",
-			"position_x": -1493.59,
-			"position_y": -10101.8,
+			"position_x": -7962.26,
+			"position_y": -5995.57,
 			"views": 12764164,
 			"good": 76487,
 			"bad": null,
@@ -19,9 +19,9 @@
 		"fields": {
 			"title": "Atelier Shallie OST: Stella ~その1~",
 			"url": "https://www.youtube.com/watch?v=-ZSSp1ZRMjE",
-			"position_x": 1148.91,
-			"position_y": 9816.03,
-			"views": 69900,
+			"position_x": 8394.24,
+			"position_y": 6046.81,
+			"views": 69902,
 			"good": 280,
 			"bad": null,
 			"comment_count": 3
@@ -33,8 +33,8 @@
 		"fields": {
 			"title": "sumika / 願い【Music Video】",
 			"url": "https://www.youtube.com/watch?v=0pQzSpOEBms",
-			"position_x": -949.95,
-			"position_y": -9282.69,
+			"position_x": -7159.56,
+			"position_y": -6571.28,
 			"views": 22238629,
 			"good": 154267,
 			"bad": null,
@@ -47,8 +47,8 @@
 		"fields": {
 			"title": "ベートーヴェン　ピアノソナタ 第１４番 「月光」",
 			"url": "https://www.youtube.com/watch?v=0siIoIWd62c",
-			"position_x": -847.72,
-			"position_y": -10040.15,
+			"position_x": -8753.4,
+			"position_y": -5930.19,
 			"views": 3990287,
 			"good": 14356,
 			"bad": null,
@@ -61,8 +61,8 @@
 		"fields": {
 			"title": "【Ado】新時代 (ウタ from ONE PIECE FILM RED)",
 			"url": "https://www.youtube.com/watch?v=1FliVTcX8bQ",
-			"position_x": -659.68,
-			"position_y": -5274.14,
+			"position_x": -4400.58,
+			"position_y": -3589.31,
 			"views": 137490074,
 			"good": 1331357,
 			"bad": null,
@@ -75,8 +75,8 @@
 		"fields": {
 			"title": "米津玄師 - 月を見ていた Kenshi Yonezu - Tsuki Wo Miteita / Moongazing",
 			"url": "https://www.youtube.com/watch?v=1kUZ0LoUELI",
-			"position_x": -1168.01,
-			"position_y": -9965.23,
+			"position_x": -7987.28,
+			"position_y": -6191.17,
 			"views": 1965832,
 			"good": 108118,
 			"bad": null,
@@ -85,12 +85,40 @@
 	},
 	{
 		"model": "backend_app.music",
+		"pk": "1wCkTnpiKTs",
+		"fields": {
+			"title": "Xenoblade Chronicles 2 OST - Kingdom of Uraya (Day)",
+			"url": "https://www.youtube.com/watch?v=1wCkTnpiKTs",
+			"position_x": 8116.45,
+			"position_y": 7008.26,
+			"views": 2079,
+			"good": 18,
+			"bad": null,
+			"comment_count": 1
+		}
+	},
+	{
+		"model": "backend_app.music",
+		"pk": "22jgNiH4ah4",
+		"fields": {
+			"title": "The Denpa Men 2&3 : Village (Mix)",
+			"url": "https://www.youtube.com/watch?v=22jgNiH4ah4",
+			"position_x": 8076.05,
+			"position_y": 5971.92,
+			"views": 755,
+			"good": 10,
+			"bad": null,
+			"comment_count": 1
+		}
+	},
+	{
+		"model": "backend_app.music",
 		"pk": "28dXEoyVNHk",
 		"fields": {
 			"title": "エルガー/行進曲「威風堂々」第1番",
 			"url": "https://www.youtube.com/watch?v=28dXEoyVNHk",
-			"position_x": -758.82,
-			"position_y": -9845.96,
+			"position_x": -7679.19,
+			"position_y": -5525.8,
 			"views": 1332492,
 			"good": 611,
 			"bad": null,
@@ -113,6 +141,20 @@
 	},
 	{
 		"model": "backend_app.music",
+		"pk": "3IvvDVQaxIQ",
+		"fields": {
+			"title": "No.EX 01 - Xenoblade Chronicles X OST",
+			"url": "https://www.youtube.com/watch?v=3IvvDVQaxIQ",
+			"position_x": 7729.66,
+			"position_y": 5530.33,
+			"views": 120805,
+			"good": 826,
+			"bad": null,
+			"comment_count": 54
+		}
+	},
+	{
+		"model": "backend_app.music",
 		"pk": "3JWTaaS7LdU",
 		"fields": {
 			"title": "Whitney Houston - I Will Always Love You (Official 4K Video)",
@@ -131,8 +173,8 @@
 		"fields": {
 			"title": "04 Limited Sazabys『swim』(Official Music Video)",
 			"url": "https://www.youtube.com/watch?v=447cO8LTq9A",
-			"position_x": -79.73,
-			"position_y": -9794.74,
+			"position_x": -7098.67,
+			"position_y": -7581.12,
 			"views": 12332554,
 			"good": 74054,
 			"bad": null,
@@ -145,8 +187,8 @@
 		"fields": {
 			"title": "Beethoven - Moonlight Sonata (FULL)",
 			"url": "https://www.youtube.com/watch?v=4Tr0otuiQuU",
-			"position_x": -630.7,
-			"position_y": -3418.82,
+			"position_x": -2489.74,
+			"position_y": -1923.08,
 			"views": 201294248,
 			"good": 1994133,
 			"bad": null,
@@ -159,8 +201,8 @@
 		"fields": {
 			"title": "【うた】「パプリカ」米津玄師×Foorin〈振り付き〉【こどものうた・童謡・手遊び・キッズ・ダンス】Japanese Children's Song/Kenshi Yonezu / Paprika",
 			"url": "https://www.youtube.com/watch?v=5JVLSXMS8fU",
-			"position_x": -472.66,
-			"position_y": -8613.39,
+			"position_x": -6361.16,
+			"position_y": -6021.55,
 			"views": 49639366,
 			"good": 86437,
 			"bad": null,
@@ -169,26 +211,12 @@
 	},
 	{
 		"model": "backend_app.music",
-		"pk": "6RsNJwSwyI8",
-		"fields": {
-			"title": "Pikmin 2 music: Wistful Wild",
-			"url": "https://www.youtube.com/watch?v=6RsNJwSwyI8",
-			"position_x": 2164.6,
-			"position_y": 9810.17,
-			"views": 158551,
-			"good": 632,
-			"bad": null,
-			"comment_count": 495
-		}
-	},
-	{
-		"model": "backend_app.music",
 		"pk": "6YZlFdTIdzM",
 		"fields": {
 			"title": "ONE OK ROCK - Clock Strikes [Official Music Video]",
 			"url": "https://www.youtube.com/watch?v=6YZlFdTIdzM",
-			"position_x": -1099.46,
-			"position_y": -6111.05,
+			"position_x": -4636.17,
+			"position_y": -3885.48,
 			"views": 123651419,
 			"good": 925106,
 			"bad": null,
@@ -201,8 +229,8 @@
 		"fields": {
 			"title": "菅田将暉 『まちがいさがし』",
 			"url": "https://www.youtube.com/watch?v=7940nuwCEYA",
-			"position_x": -230.21,
-			"position_y": -3517.36,
+			"position_x": -2400.81,
+			"position_y": -1944.49,
 			"views": 194246647,
 			"good": 757597,
 			"bad": null,
@@ -211,12 +239,26 @@
 	},
 	{
 		"model": "backend_app.music",
+		"pk": "7S0K7l4ELUo",
+		"fields": {
+			"title": "Ys: Foliage Ocean in Celceta OST - Ancient Land",
+			"url": "https://www.youtube.com/watch?v=7S0K7l4ELUo",
+			"position_x": 7542.44,
+			"position_y": 6541.38,
+			"views": 140291,
+			"good": 1139,
+			"bad": null,
+			"comment_count": 40
+		}
+	},
+	{
+		"model": "backend_app.music",
 		"pk": "8KsXPq3nedY",
 		"fields": {
 			"title": "BOLERO Ravel ラヴェルボレロOrquesta Joven de la Sinfónica de Galicia ガリシア D: Vicente Alberola. Dvořák nº 8",
 			"url": "https://www.youtube.com/watch?v=8KsXPq3nedY",
-			"position_x": -1165.48,
-			"position_y": -8442.2,
+			"position_x": -7571.03,
+			"position_y": -4745.48,
 			"views": 43254094,
 			"good": 335231,
 			"bad": null,
@@ -229,8 +271,8 @@
 		"fields": {
 			"title": "SEKAI NO OWARI「Habit」",
 			"url": "https://www.youtube.com/watch?v=8OZDgBmehbA",
-			"position_x": -834.86,
-			"position_y": -4251.75,
+			"position_x": -3345.69,
+			"position_y": -2936.56,
 			"views": 170878832,
 			"good": 1374214,
 			"bad": null,
@@ -243,8 +285,8 @@
 		"fields": {
 			"title": "Linked Horizon / 紅蓮の弓矢 歌詞付き",
 			"url": "https://www.youtube.com/watch?v=8RGI7JhWOCs",
-			"position_x": -1560.28,
-			"position_y": -9109.63,
+			"position_x": -7001.32,
+			"position_y": -5601.46,
 			"views": 27032671,
 			"good": 102914,
 			"bad": null,
@@ -253,12 +295,26 @@
 	},
 	{
 		"model": "backend_app.music",
+		"pk": "9qx5K1nrbM4",
+		"fields": {
+			"title": "Skyward Sword Levias Boss Theme",
+			"url": "https://www.youtube.com/watch?v=9qx5K1nrbM4",
+			"position_x": 6444.03,
+			"position_y": 6720.44,
+			"views": 462,
+			"good": 7,
+			"bad": null,
+			"comment_count": 0
+		}
+	},
+	{
+		"model": "backend_app.music",
 		"pk": "9vCMtNg2hHE",
 		"fields": {
 			"title": "アイアイ",
 			"url": "https://www.youtube.com/watch?v=9vCMtNg2hHE",
-			"position_x": -1738.22,
-			"position_y": -9569.79,
+			"position_x": -7107.85,
+			"position_y": -7097.5,
 			"views": 20715,
 			"good": 21,
 			"bad": null,
@@ -281,16 +337,16 @@
 	},
 	{
 		"model": "backend_app.music",
-		"pk": "DeBG1g1BRMA",
+		"pk": "AY9oc_wOhmI",
 		"fields": {
-			"title": "New Battle!!! (Full Version) – Xenoblade Chronicles 3: Future Redeemed ~ Original Soundtrack OST",
-			"url": "https://www.youtube.com/watch?v=DeBG1g1BRMA",
-			"position_x": 830.51,
-			"position_y": 10599.49,
-			"views": 501418,
-			"good": 5402,
+			"title": "Super Mario Galaxy Music - Purple Comet",
+			"url": "https://www.youtube.com/watch?v=AY9oc_wOhmI",
+			"position_x": 7513.78,
+			"position_y": 6254.19,
+			"views": 44813,
+			"good": 635,
 			"bad": null,
-			"comment_count": 414
+			"comment_count": 55
 		}
 	},
 	{
@@ -299,8 +355,8 @@
 		"fields": {
 			"title": "RADWIMPS - 愛にできることはまだあるかい [Official Music Video]",
 			"url": "https://www.youtube.com/watch?v=EQ94zflNqn4",
-			"position_x": -526.13,
-			"position_y": -6006.29,
+			"position_x": -5024.57,
+			"position_y": -4241.91,
 			"views": 113860839,
 			"good": 1045963,
 			"bad": null,
@@ -309,12 +365,26 @@
 	},
 	{
 		"model": "backend_app.music",
+		"pk": "El6PpKISLZY",
+		"fields": {
+			"title": "Pikmin 2 OST - Wistful Wild (Olimar) [Complete]",
+			"url": "https://www.youtube.com/watch?v=El6PpKISLZY",
+			"position_x": 8393.83,
+			"position_y": 5956.38,
+			"views": 112516,
+			"good": 1156,
+			"bad": null,
+			"comment_count": 137
+		}
+	},
+	{
+		"model": "backend_app.music",
 		"pk": "GTWqwSNQCcg",
 		"fields": {
 			"title": "'City of Stars' (Duet ft. Ryan Gosling, Emma Stone) - La La Land Original Motion Picture Soundtrack",
 			"url": "https://www.youtube.com/watch?v=GTWqwSNQCcg",
-			"position_x": -1238.91,
-			"position_y": -7845.86,
+			"position_x": -6254.84,
+			"position_y": -5031.87,
 			"views": 61854627,
 			"good": 488959,
 			"bad": null,
@@ -327,8 +397,8 @@
 		"fields": {
 			"title": "世界の終わり／幻の命",
 			"url": "https://www.youtube.com/watch?v=H51Xj5aEgkA",
-			"position_x": 357.5,
-			"position_y": -9217.58,
+			"position_x": -7039.12,
+			"position_y": -5296.22,
 			"views": 27087695,
 			"good": 85845,
 			"bad": null,
@@ -355,8 +425,8 @@
 		"fields": {
 			"title": "MAN WITH A MISSION×milet「絆ノ奇跡」Music Video",
 			"url": "https://www.youtube.com/watch?v=Jb6Zlg30rgk",
-			"position_x": -1198.48,
-			"position_y": -7928.71,
+			"position_x": -7020.98,
+			"position_y": -5852.85,
 			"views": 33463568,
 			"good": 400814,
 			"bad": null,
@@ -369,8 +439,8 @@
 		"fields": {
 			"title": "[달의 연인 - 보보경심 려 OST Part 1] 첸, 백현, 시우민 (EXO) - 너를 위해 MV",
 			"url": "https://www.youtube.com/watch?v=JvjWy4saR08",
-			"position_x": -1029.52,
-			"position_y": -7357.08,
+			"position_x": -5415.52,
+			"position_y": -4775.91,
 			"views": 91253521,
 			"good": 751240,
 			"bad": null,
@@ -383,8 +453,8 @@
 		"fields": {
 			"title": "可愛くてごめん feat. ちゅーたん（CV：早見沙織）／HoneyWorks",
 			"url": "https://www.youtube.com/watch?v=K4xLi8IF1FM",
-			"position_x": -1104.42,
-			"position_y": -7140.31,
+			"position_x": -5871.91,
+			"position_y": -4690.53,
 			"views": 80741736,
 			"good": 886765,
 			"bad": null,
@@ -397,8 +467,8 @@
 		"fields": {
 			"title": "スピッツ / 美しい鰭",
 			"url": "https://www.youtube.com/watch?v=KbGPM9jFeGg",
-			"position_x": -1889.82,
-			"position_y": -9348.37,
+			"position_x": -8407.08,
+			"position_y": -5690.52,
 			"views": 13914753,
 			"good": 199508,
 			"bad": null,
@@ -407,12 +477,26 @@
 	},
 	{
 		"model": "backend_app.music",
+		"pk": "LGxpXXMmLTA",
+		"fields": {
+			"title": "Atelier Totori OST 119 - Red Zone",
+			"url": "https://www.youtube.com/watch?v=LGxpXXMmLTA",
+			"position_x": 7195.6,
+			"position_y": 6738.51,
+			"views": 99266,
+			"good": 703,
+			"bad": null,
+			"comment_count": 16
+		}
+	},
+	{
+		"model": "backend_app.music",
 		"pk": "M3eGhMORIpY",
 		"fields": {
 			"title": "乃木坂46 『サヨナラの意味』",
 			"url": "https://www.youtube.com/watch?v=M3eGhMORIpY",
-			"position_x": -1198.01,
-			"position_y": -9174.05,
+			"position_x": -6763.83,
+			"position_y": -6063.43,
 			"views": 28725759,
 			"good": 166101,
 			"bad": null,
@@ -425,8 +509,8 @@
 		"fields": {
 			"title": "King Gnu - 逆夢",
 			"url": "https://www.youtube.com/watch?v=M6gcoDN9jBc",
-			"position_x": -1236.9,
-			"position_y": -7283.7,
+			"position_x": -5578.62,
+			"position_y": -4474.84,
 			"views": 87300885,
 			"good": 592152,
 			"bad": null,
@@ -435,12 +519,26 @@
 	},
 	{
 		"model": "backend_app.music",
+		"pk": "MAIh91aQipQ",
+		"fields": {
+			"title": "異形ノ末路",
+			"url": "https://www.youtube.com/watch?v=MAIh91aQipQ",
+			"position_x": 6514.99,
+			"position_y": 6809.85,
+			"views": 713293,
+			"good": 6173,
+			"bad": null,
+			"comment_count": 0
+		}
+	},
+	{
+		"model": "backend_app.music",
 		"pk": "MpYy6wwqxoo",
 		"fields": {
 			"title": "LiSA - 紅蓮華 / THE FIRST TAKE",
 			"url": "https://www.youtube.com/watch?v=MpYy6wwqxoo",
-			"position_x": -319.28,
-			"position_y": -5778,
+			"position_x": -4757.17,
+			"position_y": -3453.33,
 			"views": 132215244,
 			"good": 1421176,
 			"bad": null,
@@ -453,8 +551,8 @@
 		"fields": {
 			"title": "TVアニメ「とある科学の超電磁砲」 OP映像（only my railgun／ fripSide）【NBCユニバーサルAnime✕Music30周年記念OP/ED毎日投稿企画】",
 			"url": "https://www.youtube.com/watch?v=NOt2qxWtBv0",
-			"position_x": 305.66,
-			"position_y": -9774.74,
+			"position_x": -7631.84,
+			"position_y": -6651.88,
 			"views": 759890,
 			"good": 12676,
 			"bad": null,
@@ -481,8 +579,8 @@
 		"fields": {
 			"title": "花の子ルンルン Hana no ko Run Run OP (Cover by: SeSeHorie ^^)",
 			"url": "https://www.youtube.com/watch?v=Oi0ZrNLEx-g",
-			"position_x": -1249.25,
-			"position_y": -9955.29,
+			"position_x": -7866.65,
+			"position_y": -7023.34,
 			"views": 116581,
 			"good": 290,
 			"bad": null,
@@ -495,8 +593,8 @@
 		"fields": {
 			"title": "幻想即興曲−ショパン【Fantasie Impromptu-Chopin】ピアノ/CANACANA",
 			"url": "https://www.youtube.com/watch?v=Ol_ggsZAzU0",
-			"position_x": -1880.82,
-			"position_y": -9618.05,
+			"position_x": -6839.14,
+			"position_y": -6082.27,
 			"views": 12863826,
 			"good": 74632,
 			"bad": null,
@@ -509,8 +607,8 @@
 		"fields": {
 			"title": "Dido - Here with Me (Official Video)",
 			"url": "https://www.youtube.com/watch?v=PSu5nAQ7uZw",
-			"position_x": -1100.76,
-			"position_y": -7037.42,
+			"position_x": -4895.76,
+			"position_y": -3736.88,
 			"views": 103921696,
 			"good": 415992,
 			"bad": null,
@@ -537,12 +635,26 @@
 		"fields": {
 			"title": "【MHWorld】星に駆られて　モンスターハンターワールドメインテーマソング～Main subject music～【BGM】",
 			"url": "https://www.youtube.com/watch?v=QdZwP8ngdSQ",
-			"position_x": -800.06,
-			"position_y": -8985.7,
+			"position_x": -7837.86,
+			"position_y": -7547.24,
 			"views": 2102709,
 			"good": 21142,
 			"bad": null,
 			"comment_count": 2409
+		}
+	},
+	{
+		"model": "backend_app.music",
+		"pk": "RQxXjR0bEMI",
+		"fields": {
+			"title": "Pokemon FireRed/LeafGreen- Sevii Islands 6 & 7",
+			"url": "https://www.youtube.com/watch?v=RQxXjR0bEMI",
+			"position_x": 8282.82,
+			"position_y": 6006.12,
+			"views": 300898,
+			"good": 1817,
+			"bad": null,
+			"comment_count": 355
 		}
 	},
 	{
@@ -557,34 +669,6 @@
 			"good": 1901970,
 			"bad": null,
 			"comment_count": 99808
-		}
-	},
-	{
-		"model": "backend_app.music",
-		"pk": "TfFSDClhAxM",
-		"fields": {
-			"title": "The Power of Jin - Xenoblade Chronicles 2 Music Extended",
-			"url": "https://www.youtube.com/watch?v=TfFSDClhAxM",
-			"position_x": 1879.76,
-			"position_y": 10725.51,
-			"views": 11081,
-			"good": 135,
-			"bad": null,
-			"comment_count": 28
-		}
-	},
-	{
-		"model": "backend_app.music",
-		"pk": "V2YrUKMW3RE",
-		"fields": {
-			"title": "Frontier Village (Day) - Xenoblade Chronicles Definitive Edition",
-			"url": "https://www.youtube.com/watch?v=V2YrUKMW3RE",
-			"position_x": 878,
-			"position_y": 10339.75,
-			"views": 21574,
-			"good": 938,
-			"bad": null,
-			"comment_count": 74
 		}
 	},
 	{
@@ -607,8 +691,8 @@
 		"fields": {
 			"title": "Novelbright - ツキミソウ [Official Music Video]",
 			"url": "https://www.youtube.com/watch?v=WAMxwRtNrPY",
-			"position_x": -313.62,
-			"position_y": -7651.34,
+			"position_x": -5844.21,
+			"position_y": -4469.5,
 			"views": 69423438,
 			"good": 319327,
 			"bad": null,
@@ -621,8 +705,8 @@
 		"fields": {
 			"title": "BABYMETAL - ギミチョコ！！- Gimme chocolate!! (OFFICIAL)",
 			"url": "https://www.youtube.com/watch?v=WIKqgE4BwAY",
-			"position_x": -636.81,
-			"position_y": -3641.92,
+			"position_x": -3211.68,
+			"position_y": -2533.24,
 			"views": 179236819,
 			"good": 2489267,
 			"bad": null,
@@ -631,12 +715,26 @@
 	},
 	{
 		"model": "backend_app.music",
+		"pk": "XvI9WnLgHwQ",
+		"fields": {
+			"title": "ROOFTOP RUN : ACT1",
+			"url": "https://www.youtube.com/watch?v=XvI9WnLgHwQ",
+			"position_x": 8115.42,
+			"position_y": 7033.01,
+			"views": 257271,
+			"good": 3937,
+			"bad": null,
+			"comment_count": 0
+		}
+	},
+	{
+		"model": "backend_app.music",
 		"pk": "XyzaMpAVm3s",
 		"fields": {
 			"title": "[MV] DAVICHI(다비치) - This Love(이 사랑) l Descendants of the Sun 태양의 후예 OST",
 			"url": "https://www.youtube.com/watch?v=XyzaMpAVm3s",
-			"position_x": -428.56,
-			"position_y": -3362.21,
+			"position_x": -2399.5,
+			"position_y": -2083.11,
 			"views": 201049913,
 			"good": 1125115,
 			"bad": null,
@@ -649,8 +747,8 @@
 		"fields": {
 			"title": "LiSA「crossing field」／「ソードアート・オンライン」第1期1stクール ノンクレジットOP",
 			"url": "https://www.youtube.com/watch?v=Y4kfe8R1Iqs",
-			"position_x": -1511.64,
-			"position_y": -9497.35,
+			"position_x": -7575.56,
+			"position_y": -6109.97,
 			"views": 1849287,
 			"good": 46848,
 			"bad": null,
@@ -663,8 +761,8 @@
 		"fields": {
 			"title": "YOASOBI「アイドル」 Official Music Video",
 			"url": "https://www.youtube.com/watch?v=ZRtdQ81jPUQ",
-			"position_x": -196.6,
-			"position_y": -3410.04,
+			"position_x": -2653.91,
+			"position_y": -2217.58,
 			"views": 201396935,
 			"good": 2916058,
 			"bad": null,
@@ -673,12 +771,26 @@
 	},
 	{
 		"model": "backend_app.music",
+		"pk": "ZlQuPkFTyJw",
+		"fields": {
+			"title": "Mechonis Field - Xenoblade Chronicles: Definitive Edition Music",
+			"url": "https://www.youtube.com/watch?v=ZlQuPkFTyJw",
+			"position_x": 7650.27,
+			"position_y": 6285.08,
+			"views": 69626,
+			"good": 717,
+			"bad": null,
+			"comment_count": 40
+		}
+	},
+	{
+		"model": "backend_app.music",
 		"pk": "_d5Ad9q8FrE",
 		"fields": {
 			"title": "バグ",
 			"url": "https://www.youtube.com/watch?v=_d5Ad9q8FrE",
-			"position_x": -1160.07,
-			"position_y": -8662.9,
+			"position_x": -8000.84,
+			"position_y": -5978.31,
 			"views": 2715442,
 			"good": 23477,
 			"bad": null,
@@ -691,8 +803,8 @@
 		"fields": {
 			"title": "Taylor Swift - Anti-Hero (Official Music Video)",
 			"url": "https://www.youtube.com/watch?v=b1kbLwvqugk",
-			"position_x": -451.25,
-			"position_y": -5110.24,
+			"position_x": -4239.89,
+			"position_y": -2928.64,
 			"views": 147038264,
 			"good": 3125376,
 			"bad": null,
@@ -705,8 +817,8 @@
 		"fields": {
 			"title": "George Gershwin - Rhapsody in Blue - Leonard Bernstein, New York Philharmonic (1976)",
 			"url": "https://www.youtube.com/watch?v=cH2PH0auTUU",
-			"position_x": -1787.5,
-			"position_y": -9280.82,
+			"position_x": -7646.61,
+			"position_y": -6007.03,
 			"views": 7224162,
 			"good": 73436,
 			"bad": null,
@@ -733,40 +845,12 @@
 		"fields": {
 			"title": "緑黄色社会 / 始まりの歌",
 			"url": "https://www.youtube.com/watch?v=cjf9c6TwH6o",
-			"position_x": -1144.11,
-			"position_y": -10057.62,
+			"position_x": -6948.08,
+			"position_y": -5708.36,
 			"views": 3386675,
 			"good": 24467,
 			"bad": null,
 			"comment_count": 825
-		}
-	},
-	{
-		"model": "backend_app.music",
-		"pk": "fEXuXvlwLiA",
-		"fields": {
-			"title": "Purple Coins - Super Mario Galaxy",
-			"url": "https://www.youtube.com/watch?v=fEXuXvlwLiA",
-			"position_x": 1508.16,
-			"position_y": 9782,
-			"views": 86140,
-			"good": 3400,
-			"bad": null,
-			"comment_count": 166
-		}
-	},
-	{
-		"model": "backend_app.music",
-		"pk": "fynGjkpO92I",
-		"fields": {
-			"title": "Monk Maz Koshia (The Champions' Ballad) - The Legend of Zelda: Breath of the Wild Soundtrack",
-			"url": "https://www.youtube.com/watch?v=fynGjkpO92I",
-			"position_x": 1888.99,
-			"position_y": 9893.24,
-			"views": 512704,
-			"good": 7683,
-			"bad": null,
-			"comment_count": 623
 		}
 	},
 	{
@@ -789,8 +873,8 @@
 		"fields": {
 			"title": "miwa　『片想い』",
 			"url": "https://www.youtube.com/watch?v=gLWWXhMVuQs",
-			"position_x": -1416.4,
-			"position_y": -9842.84,
+			"position_x": -7231.71,
+			"position_y": -5752.63,
 			"views": 22514470,
 			"good": 134606,
 			"bad": null,
@@ -803,8 +887,8 @@
 		"fields": {
 			"title": "欅坂46 『不協和音』",
 			"url": "https://www.youtube.com/watch?v=gfzuzDrVRVM",
-			"position_x": -827.54,
-			"position_y": -6996.09,
+			"position_x": -5309.92,
+			"position_y": -4064.23,
 			"views": 93409386,
 			"good": 316146,
 			"bad": null,
@@ -817,8 +901,8 @@
 		"fields": {
 			"title": "Official髭男dism - Subtitle [Official Video]",
 			"url": "https://www.youtube.com/watch?v=hN5MBlGv2Ac",
-			"position_x": -888.74,
-			"position_y": -7268.25,
+			"position_x": -5187.01,
+			"position_y": -4650.74,
 			"views": 96262526,
 			"good": 473946,
 			"bad": null,
@@ -831,8 +915,8 @@
 		"fields": {
 			"title": "プランクトン - Hell Game［Music Video］",
 			"url": "https://www.youtube.com/watch?v=hTsK43fWne8",
-			"position_x": -1444.33,
-			"position_y": -10263.38,
+			"position_x": -8213.55,
+			"position_y": -6391.78,
 			"views": 28939,
 			"good": 526,
 			"bad": null,
@@ -845,8 +929,8 @@
 		"fields": {
 			"title": "クリープハイプ -「栞」(MUSIC VIDEO)",
 			"url": "https://www.youtube.com/watch?v=j4XsCJHfplg",
-			"position_x": -695.21,
-			"position_y": -9308.56,
+			"position_x": -7143.31,
+			"position_y": -6006.41,
 			"views": 24563884,
 			"good": 177798,
 			"bad": null,
@@ -859,8 +943,8 @@
 		"fields": {
 			"title": "BUMP OF CHICKEN「天体観測」",
 			"url": "https://www.youtube.com/watch?v=j7CDb610Bg0",
-			"position_x": -547.91,
-			"position_y": -5924.18,
+			"position_x": -4324.48,
+			"position_y": -3936.9,
 			"views": 121508905,
 			"good": 405104,
 			"bad": null,
@@ -873,8 +957,8 @@
 		"fields": {
 			"title": "月の光　ドビュッシー",
 			"url": "https://www.youtube.com/watch?v=jEc_r33ODos",
-			"position_x": -1476.62,
-			"position_y": -9430.45,
+			"position_x": -7825.09,
+			"position_y": -6350.31,
 			"views": 10634918,
 			"good": 45861,
 			"bad": null,
@@ -897,12 +981,26 @@
 	},
 	{
 		"model": "backend_app.music",
+		"pk": "kXllNPap39A",
+		"fields": {
+			"title": "Korok Forest (The Legend of Zelda: Breath of the Wild OST)",
+			"url": "https://www.youtube.com/watch?v=kXllNPap39A",
+			"position_x": 7587.44,
+			"position_y": 6321.05,
+			"views": 1544191,
+			"good": 19091,
+			"bad": null,
+			"comment_count": 1542
+		}
+	},
+	{
+		"model": "backend_app.music",
 		"pk": "mC5s9KcaHHY",
 		"fields": {
 			"title": "Carrying The Weight of Life – Xenoblade Chronicles 3: Original Soundtrack OST",
 			"url": "https://www.youtube.com/watch?v=mC5s9KcaHHY",
-			"position_x": -903.45,
-			"position_y": -10389.18,
+			"position_x": -7805.39,
+			"position_y": -6950.31,
 			"views": 1795534,
 			"good": 14558,
 			"bad": null,
@@ -929,8 +1027,8 @@
 		"fields": {
 			"title": "大きな栗の木の下で　　ゴスペラーズ",
 			"url": "https://www.youtube.com/watch?v=o6_8hkD_y04",
-			"position_x": -508.21,
-			"position_y": -9422.64,
+			"position_x": -7162.58,
+			"position_y": -5429.93,
 			"views": 1535375,
 			"good": 1202,
 			"bad": null,
@@ -943,8 +1041,8 @@
 		"fields": {
 			"title": "「残酷な天使のテーゼ」MUSIC VIDEO（HDver.）/Zankoku na Tenshi no Te-ze“The Cruel Angel's Thesis”",
 			"url": "https://www.youtube.com/watch?v=o6wtDPVkKqI",
-			"position_x": -1129.41,
-			"position_y": -8279.12,
+			"position_x": -6381,
+			"position_y": -4785.6,
 			"views": 52225101,
 			"good": 570927,
 			"bad": null,
@@ -985,8 +1083,8 @@
 		"fields": {
 			"title": "「ツバメ」/ YOASOBI with ミドリーズ Official Music Video",
 			"url": "https://www.youtube.com/watch?v=qDL3zhB8-MM",
-			"position_x": -1900.17,
-			"position_y": -9919.34,
+			"position_x": -7002.88,
+			"position_y": -6142.74,
 			"views": 22109289,
 			"good": 209763,
 			"bad": null,
@@ -999,8 +1097,8 @@
 		"fields": {
 			"title": "BUMP OF CHICKEN「Hello,world!」",
 			"url": "https://www.youtube.com/watch?v=rOU4YiuaxAM",
-			"position_x": -959.23,
-			"position_y": -7988.3,
+			"position_x": -5739.27,
+			"position_y": -5034.29,
 			"views": 70838415,
 			"good": 343991,
 			"bad": null,
@@ -1009,12 +1107,26 @@
 	},
 	{
 		"model": "backend_app.music",
+		"pk": "sc5tbkh7ehc",
+		"fields": {
+			"title": "A Formidable Enemy (Full Version) – Xenoblade Chronicles 3: Original Soundtrack OST",
+			"url": "https://www.youtube.com/watch?v=sc5tbkh7ehc",
+			"position_x": 7619.9,
+			"position_y": 6358.91,
+			"views": 434803,
+			"good": 4695,
+			"bad": null,
+			"comment_count": 290
+		}
+	},
+	{
+		"model": "backend_app.music",
 		"pk": "szONkV3l21g",
 		"fields": {
 			"title": "星街すいせい - みちづれ / THE FIRST TAKE",
 			"url": "https://www.youtube.com/watch?v=szONkV3l21g",
-			"position_x": -684.93,
-			"position_y": -10074.65,
+			"position_x": -6830.54,
+			"position_y": -6586.29,
 			"views": 5726477,
 			"good": 248095,
 			"bad": null,
@@ -1027,8 +1139,8 @@
 		"fields": {
 			"title": "バッハ「G線上のアリア」　Bach \"Air on G String\"",
 			"url": "https://www.youtube.com/watch?v=thQWqRDZj7E",
-			"position_x": -715.63,
-			"position_y": -8799.89,
+			"position_x": -6659.99,
+			"position_y": -5770.69,
 			"views": 25454772,
 			"good": 60590,
 			"bad": null,
@@ -1041,8 +1153,8 @@
 		"fields": {
 			"title": "milet×MAN WITH A MISSION「コイコガレ」MUSIC VIDEO(テレビアニメ「鬼滅の刃」刀鍛冶の里編 エンディングテーマ)",
 			"url": "https://www.youtube.com/watch?v=vZUyKVE9dus",
-			"position_x": -1571.74,
-			"position_y": -9697.03,
+			"position_x": -7846.1,
+			"position_y": -6618.63,
 			"views": 15194842,
 			"good": 86738,
 			"bad": null,
@@ -1055,8 +1167,8 @@
 		"fields": {
 			"title": "チグハグ",
 			"url": "https://www.youtube.com/watch?v=vq8Bfs5qqbY",
-			"position_x": -1774.65,
-			"position_y": -9739.42,
+			"position_x": -7608.98,
+			"position_y": -5344.11,
 			"views": 3587282,
 			"good": 24611,
 			"bad": null,
@@ -1069,8 +1181,8 @@
 		"fields": {
 			"title": "でんしゃだいすき！【いないいないばあソング】電車アニメーション/Japanese song",
 			"url": "https://www.youtube.com/watch?v=wYTn4kHAnzw",
-			"position_x": -1653.28,
-			"position_y": -10466.31,
+			"position_x": -8200.08,
+			"position_y": -6397.99,
 			"views": 32290,
 			"good": 59,
 			"bad": null,
@@ -1079,26 +1191,12 @@
 	},
 	{
 		"model": "backend_app.music",
-		"pk": "xWCSEQEWvAs",
-		"fields": {
-			"title": "Bamboo Island - The Legend of Zelda: Skyward Sword",
-			"url": "https://www.youtube.com/watch?v=xWCSEQEWvAs",
-			"position_x": 2151.65,
-			"position_y": 9450.02,
-			"views": 32595,
-			"good": 720,
-			"bad": null,
-			"comment_count": 39
-		}
-	},
-	{
-		"model": "backend_app.music",
 		"pk": "yGGmmYFpR4o",
 		"fields": {
 			"title": "♪はたらくくるま3〈振り付き〉- ♪のりもの　あつまれ　いろんな　くるま〜",
 			"url": "https://www.youtube.com/watch?v=yGGmmYFpR4o",
-			"position_x": -1295.89,
-			"position_y": -9234.56,
+			"position_x": -8397.08,
+			"position_y": -7371.57,
 			"views": 12420610,
 			"good": 9309,
 			"bad": null,

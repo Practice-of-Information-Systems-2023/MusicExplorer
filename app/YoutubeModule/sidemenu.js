@@ -34,7 +34,7 @@ class LoginController {
     // ダミーAPI
     const name = document.getElementById("user_name_login").value;
     const data = $.ajax({
-      url: "http://127.0.0.1:8000/api/login/",
+      url: "http://127.0.0.1:3001/api/login/",
       type: "POST",
       dataType: "json",
       data: {
@@ -133,7 +133,7 @@ class LoginController {
   }
   callSignUpAPI(userName, password, genre, twitter, instagram, age, gender) {
     const data = $.ajax({
-      url: "http://127.0.0.1:8000/api/register_user/",
+      url: "http://127.0.0.1:3001/api/register_user/",
       type: "POST",
       dataType: "json",
       data: {
@@ -222,7 +222,7 @@ class LoginController {
     gender
   ) {
     const data = $.ajax({
-      url: "http://127.0.0.1:8000/api/update_user",
+      url: "http://127.0.0.1:3001/api/update_user",
       type: "POST",
       dataType: "json",
       data: {
@@ -267,8 +267,7 @@ class InitController {
     profile.empty();
     for (let genre of result) {
       const { genre_id, name } = genre;
-      const addData =
-        '<option value="' + genre_id + '">' + name + '</option>"';
+      const addData = '<option value="' + genre_id + '">' + name + '</option>"';
       signup.append(addData);
       profile.append(addData);
       this.genreID[name] = genre_id;
@@ -276,7 +275,7 @@ class InitController {
   }
   callGenreAPI() {
     const data = $.ajax({
-      url: "http://127.0.0.1:8000/api/get_genre_list/",
+      url: "http://127.0.0.1:3001/api/get_genre_list/",
       type: "GET",
       dataType: "json",
       timeout: 3000,
@@ -293,7 +292,13 @@ class InitController {
 }
 
 class SideMenuController {
-  constructor(scene, audioController, userID, communicator) {
+  constructor(
+    scene,
+    audioController,
+    musicObjectGenerator,
+    userID,
+    communicator
+  ) {
     this.scene = scene;
     this.audioController = audioController;
     this.player = scene.find("Player");
@@ -321,17 +326,20 @@ class SideMenuController {
       this.addSearchResult(music);
     }
   }
-  updateFavoriteList() {
+  updateFavoriteList(id = "") {
     const result = this.callGetFavoriteAPI();
     $(".favorite_area").empty();
     for (let music of result) {
       music[2] = Utils.getVideoIdFromURL(music[2]);
+      if (id == music[0]) {
+        resultPosition = new Vector2(music[4], music[5]);
+      }
       this.addFavoriteResult(music);
     }
   }
   callYoutubeAPI(query) {
     const data = $.ajax({
-      url: "http://127.0.0.1:8000/api/search_music/",
+      url: "http://127.0.0.1:3001/api/search_music/",
       type: "POST",
       dataType: "json",
       data: { query: query },
@@ -349,7 +357,7 @@ class SideMenuController {
   }
   callGetFavoriteAPI() {
     const data = $.ajax({
-      url: "http://127.0.0.1:8000/api/get_favorite_music/",
+      url: "http://127.0.0.1:3001/api/get_favorite_music/",
       type: "POST",
       dataType: "json",
       data: { user_id: this.userID },
@@ -375,6 +383,9 @@ class SideMenuController {
       [5,"New Battle!!! (Full Version) – Xenoblade Chronicles 3: Future Redeemed ~ Original Soundtrack OST","https://www.youtube.com/watch?v=DeBG1g1BRMA","https://i.ytimg.com/vi/C-qoVi70ooM/hqdefault.jpg?sqp=-oaymwEcCNACELwBSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLDdgffa8LI8hnciwRp_v1pj-xNj3w",-400,400],
     ];*/
     return result;
+  }
+  getMusicPosition(id) {
+    const result = callGetFavoriteAPI();
   }
   addSearchResult(music) {
     const resultArea = $(".result_area");
@@ -442,7 +453,7 @@ class SideMenuController {
   }
   onClickFavoriteRegisterButton(id) {
     const data = $.ajax({
-      url: "http://127.0.0.1:8000/api/create_favorite/",
+      url: "http://127.0.0.1:3001/api/create_favorite/",
       type: "POST",
       dataType: "json",
       data: {
@@ -456,7 +467,7 @@ class SideMenuController {
   }
   onClickFavoriteRemoveButton(id) {
     const data = $.ajax({
-      url: "http://127.0.0.1:8000/api/delete_favorite/",
+      url: "http://127.0.0.1:3001/api/delete_favorite/",
       type: "POST",
       dataType: "json",
       data: {
@@ -472,7 +483,8 @@ class SideMenuController {
     this.youtubePlayer.testListenVideoById(videoId);
   }
   onClickMoveButton(x, y, videoId) {
-    const position = new Vector2(x, y + 50);
+    const position = this.updateFavoriteList(videoId);
+    position.y += 50;
     this.player.transform.position.set(position);
     this.youtubePlayer.playVideoById(videoId);
   }
