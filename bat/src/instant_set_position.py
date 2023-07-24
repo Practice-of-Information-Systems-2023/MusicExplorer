@@ -56,20 +56,18 @@ def calc_position(rating_matrix: pd.DataFrame, music: pd.DataFrame, max_length: 
     
 
 if __name__ == "__main__":
-    
-    while True : 
-        try :
-            # conn = sqlite3.connect("../../api/db.sqlite3", isolation_level=None)
-            conn = sqlite3.connect("/code/db.sqlite3", isolation_level=None)   
-            c = conn.cursor()
-            music, user, ratings = get_data(c)
-            rating_matrix = MF.df2sparse(ratings, user, music)
-            data, H = calc_position(rating_matrix, music)
-            set_position(data,  c)
-            conn.commit()
-            conn.close()
-        except Exception as e:
-            print("Failed to set position to database." + str(e))
-        time.sleep(3600 * 1)
+    try :
+        # conn = sqlite3.connect("../../api/db.sqlite3", isolation_level=None)
+        conn = sqlite3.connect("/code/db.sqlite3", isolation_level=None)   
+        c = conn.cursor()
+        music, user, ratings = get_data(c)
+        rating_matrix = MF.df2sparse(ratings, user, music)
+        data, H = calc_position(rating_matrix, music)
+        set_position(data,  c)
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print("Failed to set position to database." + str(e))
+
     
     
