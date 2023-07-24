@@ -48,8 +48,8 @@ def calc_position(rating_matrix: pd.DataFrame, music: pd.DataFrame, max_length: 
         views = music["views"][i]
         H[0][i] = (H[0][i] / length) 
         H[1][i] = (H[1][i] / length) 
-        H[0][i] = H[0][i] * (1 - (views / (music["views"].max() + 1000000))) * max_length + (np.random.randint(400,1200) if np.random.rand() > 0.5 else np.random.randint(-1200,-400))
-        H[1][i] = H[1][i] * (1 - (views / (music["views"].max() + 1000000))) * max_length + (np.random.randint(400,1200) if np.random.rand() > 0.5 else np.random.randint(-1200,-400))
+        H[0][i] = H[0][i] * (1 - (views / (music["views"].max() + 1000000))) * max_length + (np.random.randint(400,1000) if np.random.rand() > 0.5 else np.random.randint(-1000,-400))
+        H[1][i] = H[1][i] * (1 - (views / (music["views"].max() + 1000000))) * max_length + (np.random.randint(400,1000) if np.random.rand() > 0.5 else np.random.randint(-1000,-400))
     # floor the position to 2 decimal places
     data = [(float(round(H[0][i], 2)), float(round(H[1][i], 2)),str(music["music_id"][i])) for i in range(len(music))]
     return data, H
